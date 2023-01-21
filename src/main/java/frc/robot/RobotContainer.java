@@ -55,4 +55,12 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return Autos.exampleAuto(m_exampleSubsystem);
   }
+
+  public double leftSpeed() {
+    return m_driverController.getRawAxis(1);
+  }
+
+  public double rightSpeed() {
+    return m_driverController.getRawAxis(5);
+  }
 }
