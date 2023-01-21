@@ -6,7 +6,6 @@ package frc.robot.commands;
 import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drive; 
 
 public class TankDrive extends CommandBase {
   private final Drive drive;
