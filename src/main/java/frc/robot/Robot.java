@@ -15,7 +15,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+<<<<<<< HEAD
   public static Object drive;
+=======
+// Team 5417 Robot Code
+  private Command m_autonomousCommand;
+>>>>>>> ef205c99c85671f8b85dcb65df25bb8b2727e661
 
 private Command m_autonomousCommand;
 
