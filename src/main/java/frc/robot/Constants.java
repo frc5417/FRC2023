@@ -17,6 +17,7 @@ public final class Constants {
   public static final int DriveLeftSlave = 0;
   public static final int DriveRightMaster = 0;
   public static final int DriveRightSlave = 0;
+  public static final double degreesAllowed = 2.5;
   public static class DriverConstants {
     public static final int kDriverControllerPort = 0;
   }

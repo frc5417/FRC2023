@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
+  AHRS ahrs;
   CANSparkMax DriveLeftMaster = new CANSparkMax(Constants.DriveLeftMaster, MotorType.kBrushless);
   CANSparkMax DriveLeftSlave = new CANSparkMax(Constants.DriveLeftSlave, MotorType.kBrushless);
   CANSparkMax DriveRightMaster = new CANSparkMax(Constants.DriveRightMaster, MotorType.kBrushless);
@@ -21,6 +23,7 @@ public class Drive extends SubsystemBase {
 
   int toggle;
   int count;
+  double pitchAngleDegrees = ahrs.getPitch();
 
   /** Creates a new Drive. */
   public Drive() {
@@ -67,6 +70,16 @@ public class Drive extends SubsystemBase {
       case 1:
         Shifter.set(true);
         break;
+    }
+  }
+
+  public void balance(){
+    while(pitchAngleDegrees >= Constants.degreesAllowed){
+      AutoPower(-0.1, -0.1);
+    }
+
+    while(pitchAngleDegrees <= -(Constants.degreesAllowed)){
+      AutoPower(0.1, 0.1);
     }
   }
 
