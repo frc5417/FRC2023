@@ -15,6 +15,9 @@ package frc.robot;
 public final class Constants {
   public static class DriverConstants {
     public static final int kDriverControllerPort = 0;
+    private static final double steerMultiplier = 0.5;
+    private static final double driveMultiplier = 0.5;
+    private static final double desiredArea = 25;
   }
   public static class ManipulatorConstants {
 
