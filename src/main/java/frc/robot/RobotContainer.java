@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,11 +23,13 @@ import frc.robot.commands.AutoBalance;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final Drive m_drive = new Drive();
+  private static final Drive m_drive = new Drive();
   private final AutoBalance m_AutoBalance =  new AutoBalance();
 
+  private static final TankDrive tankDrive = new TankDrive(m_drive);
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final static CommandXboxController m_driverController =
       new CommandXboxController(DriverConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -60,18 +63,14 @@ public class RobotContainer {
     return Autos.exampleAuto(m_exampleSubsystem);
   }
 
-  public double leftSpeed() {
+  public static double getDriverLeftJoystick() {
     return m_driverController.getRawAxis(1);
   }
 
-  public double rightSpeed() {
+  public static double getDriverRightJoystick() {
     return m_driverController.getRawAxis(5);
   }
-
-  public void balanceRobot() {
-    while (m_driverController.x() != null) {
-      m_AutoBalance.execute();
-    }
-  }
-  
+  public static void initTeleopCommand(){
+    tankDrive.schedule();
+  } 
 }
