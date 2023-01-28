@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -18,24 +19,26 @@ public class Drive extends SubsystemBase {
   CANSparkMax DriveLeftSlave = new CANSparkMax(Constants.DriveLeftSlave, MotorType.kBrushless);
   CANSparkMax DriveRightMaster = new CANSparkMax(Constants.DriveRightMaster, MotorType.kBrushless);
   CANSparkMax DriveRightSlave = new CANSparkMax(Constants.DriveRightSlave, MotorType.kBrushless);
-  Solenoid Shifter = new Solenoid(null, 0);
 
-
-  int toggle;
-  int count;
-  double pitchAngleDegrees = ahrs.getPitch();
-
+  Solenoid Shifter = new Solenoid(PneumaticsModuleType.REVPH, 0);
   /** Creates a new Drive. */
   public Drive() {
     DriveRightMaster.setInverted(true);
     DriveLeftMaster.setInverted(false);
+
+    DriveRightMaster.getPIDController().setP(Constants.DriverConstants.kDriveP);
+    DriveLeftMaster.getPIDController().setP(Constants.DriverConstants.kDriveP);
+
     DriveLeftSlave.follow(DriveLeftMaster);
     DriveRightSlave.follow(DriveRightMaster);
   }
+  public double GyroPitch(){
+    return ahrs.getPitch();
+  }
 
-  public void SetPower(double leftPower, double rightPower) {
-    DriveLeftMaster.set(Math.pow(leftPower, 3));
-    DriveRightMaster.set(Math.pow(rightPower, 3));
+  public void SetSpeed(double leftSpeed, double rightSpeed) {
+    DriveLeftMaster.set(leftSpeed);
+    DriveRightMaster.set(rightSpeed);
     DriveLeftSlave.follow(DriveLeftMaster);
     DriveRightSlave.follow(DriveRightMaster);
   }
@@ -45,40 +48,16 @@ public class Drive extends SubsystemBase {
     DriveRightMaster.set(rightPower);
   }
 
-  public void Shift(boolean button) {
-    if (button) {
-      count += 1;
-    }
-
-    switch(count) {
-      case 0:
-        toggle = 0;
-        break;
-      case 1:
-        toggle = 1;
-        break;
-      case 2:
-        toggle = 0;
-        count = 0;
-        break;
-    }
-
-    switch(toggle) {
-      case 0:
-        Shifter.set(false);
-        break;
-      case 1:
-        Shifter.set(true);
-        break;
-    }
+  public void ShiftToggle() {
+    Shifter.set(!Shifter.get());
   }
 
   public void balance(){
-    while(pitchAngleDegrees >= Constants.degreesAllowed){
+    while(GyroPitch() >= Constants.degreesAllowed){
       AutoPower(-0.1, -0.1);
     }
 
-    while(pitchAngleDegrees <= -(Constants.degreesAllowed)){
+    while(GyroPitch() <= -(Constants.degreesAllowed)){
       AutoPower(0.1, 0.1);
     }
   }
