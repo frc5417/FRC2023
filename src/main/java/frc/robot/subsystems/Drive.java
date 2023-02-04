@@ -6,64 +6,110 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
-  AHRS ahrs;
-  CANSparkMax DriveLeftMaster = new CANSparkMax(Constants.DriveLeftMaster, MotorType.kBrushless);
-  CANSparkMax DriveLeftSlave = new CANSparkMax(Constants.DriveLeftSlave, MotorType.kBrushless);
-  CANSparkMax DriveRightMaster = new CANSparkMax(Constants.DriveRightMaster, MotorType.kBrushless);
-  CANSparkMax DriveRightSlave = new CANSparkMax(Constants.DriveRightSlave, MotorType.kBrushless);
+  private double LeftDistance = 0;
+  private double rightDistance = 0;
 
-  Solenoid Shifter = new Solenoid(PneumaticsModuleType.REVPH, 0);
+  private final AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
+
+  private final CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
+  private final CANSparkMax leftFollower = new CANSparkMax(Constants.DriveLeftFollower, MotorType.kBrushless);
+  private final CANSparkMax rightLeader = new CANSparkMax(Constants.DriveRightLeader, MotorType.kBrushless);
+  private final CANSparkMax rightFollower = new CANSparkMax(Constants.DriveRightFollower, MotorType.kBrushless);
+
+  private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
+  private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
+
+  private final DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+
+  private final RelativeEncoder leftEncoder = leftLeader.getEncoder();
+  private final RelativeEncoder rightEncoder = rightLeader.getEncoder();
+
+  private final DifferentialDriveOdometry odometry;
+
+  Solenoid ShifterL = new Solenoid(PneumaticsModuleType.REVPH, 0);
+  Solenoid ShifterR = new Solenoid(PneumaticsModuleType.REVPH, 1);
   /** Creates a new Drive. */
   public Drive() {
-    DriveRightMaster.setInverted(true);
-    DriveLeftMaster.setInverted(false);
+    rightMotors.setInverted(true);
+    leftMotors.setInverted(false);
 
-    DriveRightMaster.getPIDController().setP(Constants.DriverConstants.kDriveP);
-    DriveLeftMaster.getPIDController().setP(Constants.DriverConstants.kDriveP);
+    leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
+    rightEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
 
-    DriveLeftSlave.follow(DriveLeftMaster);
-    DriveRightSlave.follow(DriveRightMaster);
+    resetEncoders();
+
+    odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
   }
+
   public double GyroPitch(){
     return ahrs.getPitch();
   }
 
   public void SetSpeed(double leftSpeed, double rightSpeed) {
-    DriveLeftMaster.set(leftSpeed);
-    DriveRightMaster.set(rightSpeed);
-    DriveLeftSlave.follow(DriveLeftMaster);
-    DriveRightSlave.follow(DriveRightMaster);
+    leftMotors.set(leftSpeed);
+    rightMotors.set(rightSpeed);
   }
 
-  public void AutoPower(double leftPower, double rightPower) {
-    DriveLeftMaster.set(leftPower);
-    DriveRightMaster.set(rightPower);
+  public void resetEncoders(){
+    leftEncoder.setPosition(0);
+    rightEncoder.setPosition(0);
   }
 
   public void ShiftToggle() {
-    Shifter.set(!Shifter.get());
+    ShifterL.set(!ShifterL.get());
+    ShifterR.set(!ShifterR.get());
   }
 
   public void balance(){
     while(GyroPitch() >= Constants.degreesAllowed){
-      AutoPower(-0.1, -0.1);
+      SetSpeed(-0.1, -0.1);
     }
 
     while(GyroPitch() <= -(Constants.degreesAllowed)){
-      AutoPower(0.1, 0.1);
+      SetSpeed(0.1, 0.1);
     }
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+  }
+
+  public Pose2d getPose(){
+    return odometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),rightEncoder.getVelocity());
+  }
+
+  public void resetOdometry(Pose2d pose){
+    resetEncoders();
+    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), pose);
+  }
+
+  public void zeroHeading(){
+    ahrs.reset();
+  }
+
+  public double getHeading(){
+    return ahrs.getRotation2d().getDegrees();
   }
 }
