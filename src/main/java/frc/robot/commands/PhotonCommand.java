@@ -5,19 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.photon;
+
+import frc.robot.subsystems.PhotonSubsystem;
 import org.photonvision.PhotonCamera;
-import java.lang.Thread;
-// import frc.robot.subsystems.photon.PhotonCameraWrapper;
 
-public class photonCommand extends CommandBase {
-  /** Creates a new photonCommand. */
-
-  public photon pcw;
+public class PhotonCommand extends CommandBase {
+  /** Creates a new PhotonCommand. */
+  public PhotonSubsystem pcw;
   public PhotonCamera camera;
   public int counter = 0;
 
-  public photonCommand(photon photon) {
+  public PhotonCommand(PhotonSubsystem photon) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(photon);
   }
@@ -26,7 +24,7 @@ public class photonCommand extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("PHOTON_COMMAND_INIT");
-    pcw = new photon();
+    pcw = new PhotonSubsystem();
     camera = pcw.PhotonCameraWrapper();
     // pcw.getEstimatedGlobalPose();
   }

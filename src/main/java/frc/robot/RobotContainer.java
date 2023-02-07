@@ -5,9 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.DriverConstants;
-import frc.robot.commands.photonCommand;
+import frc.robot.commands.PhotonCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.photon;
+import frc.robot.subsystems.PhotonSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final photon m_photonsubsystem = new photon();
-  // private final photonCommand m_pPhotonCommand = new photonCommand(m_photonsubsystem);
+  private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
+  private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -48,8 +48,9 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     System.out.println("CONFIGURE BINDINGS ON");
-    System.out.println(m_driverController.a());
-    m_driverController.a().whileTrue(new photonCommand(m_photonsubsystem));
+    // System.out.println(m_driverController());
+    m_driverController.rightBumper().onTrue(m_pPhotonCommand);
+    // m_driverController.povDown().onTruenew photonCommand(m_photonsubsystem));
   }
 
   /**

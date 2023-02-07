@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,13 +20,12 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
-public class photon extends SubsystemBase {
-  /** Creates a new photon. */
-
+public class PhotonSubsystem extends SubsystemBase {
+  /** Creates a new PhotonSubsystem. */
   public PhotonCamera photonCamera;
   public PhotonPoseEstimator photonPoseEstimator;
 
-  public photon() {}
+  public PhotonSubsystem() {}
 
   @Override
   public void periodic() {
@@ -67,26 +65,26 @@ public class photon extends SubsystemBase {
     photonPoseEstimator =
             new PhotonPoseEstimator(
                     atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, photonCamera, VisionConstants.robotToCam);
-  System.out.println(photonCamera.isConnected());
+  // System.out.println(photonCamera.isConnected());
   return photonCamera;
 }
-public double getYaw(PhotonCamera camera) {
-  var result = camera.getLatestResult();
-  if(result.hasTargets()) {
-    return result.getBestTarget().getYaw();
+  public double getYaw(PhotonCamera camera) {
+    var result = camera.getLatestResult();
+    if(result.hasTargets()) {
+      return result.getBestTarget().getYaw();
+    }
+    else{
+      return 0;
+    }
   }
-  else{
-    return 0;
-  }
-}
 
-/**
- * @param estimatedRobotPose The current best guess at robot pose
- * @return A pair of the fused camera observations to a single Pose2d on the field, and the time
- *     of the observation. Assumes a planar field and the robot is always firmly on the ground
- */
-public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-    photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-    return photonPoseEstimator.update();
-}
+  /**
+   * @param estimatedRobotPose The current best guess at robot pose
+   * @return A pair of the fused camera observations to a single Pose2d on the field, and the time
+   *     of the observation. Assumes a planar field and the robot is always firmly on the ground
+   */
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+      photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+      return photonPoseEstimator.update();
+  }
 }
