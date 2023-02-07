@@ -5,8 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.DriverConstants;
-import frc.robot.commands.Autos;
+import frc.robot.commands.photonCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.photon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final photon m_photonsubsystem = new photon();
+  // private final photonCommand m_pPhotonCommand = new photonCommand(m_photonsubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -28,6 +31,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    System.out.println("HIIIIIII===================");
     configureBindings();
   }
 
@@ -43,7 +47,9 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    System.out.println("CONFIGURE BINDINGS ON");
+    System.out.println(m_driverController.a());
+    m_driverController.a().whileTrue(new photonCommand(m_photonsubsystem));
   }
 
   /**
@@ -51,8 +57,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public void getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return m;
   }
 }
