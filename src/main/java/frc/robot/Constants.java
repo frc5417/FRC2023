@@ -13,10 +13,51 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final int DriveLeftLeader = 3;
+  public static final int DriveLeftFollower = 4;
+  public static final int DriveRightLeader = 1;
+  public static final int DriveRightFollower = 2;
+  public static final double degreesAllowed = 2.5;
+  public static final double maxVoltage = 10;
+  public static final double maxSpeed = 3; // m/s
+  public static final double maxAcceleration =  3;//m/s^2
+  public static final double trackWidth = .599426775;
+
   public static class DriverConstants {
     public static final int kDriverControllerPort = 0;
-  }
-  public static class ManipulatorConstants {
 
+    public static final double kDriveP = 0.5;
+
+    public static final double kTreadLength = 5 * Math.PI; 
+  }
+
+  public static class AutonConstants{
+    public static final double kS = 0.21842;
+    public static final double kV = 0.010489;
+    public static final double kA = 0.0043684;
+    public static final double kP = 0.0115;
+  }
+
+  public static class ManipulatorConstants {
+    public static final int kManipulatorControllerPort = 1;
+    public static final double kManipulatorControllerDeadZone = 0.1;
+
+    public static final double armMaxSpeed = 0.3;
+    public static final double manipulatorSpeed = 0.5;
+
+    public static final int armLeaderPort = 1;
+    public static final int armFollowerPort = 2;
+    public static final int manipulatorPort = 3;
+    public static final int intakeLimitPort = 4;
+    public static final int kClaw1Solenoid = 0;
+    public static final int kClaw2Solenoid = 1;
+
+    public static final int armEncoderPort = 0;
+
+    public static final double maxVoltage = 4.0;
+    public static final double cycleTime = 50.0;
+    public static final double kArmP = 0.25;
+    public static final double kArmI = 0;
+    public static final double kArmD = 700.0;
   }
 }
