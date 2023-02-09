@@ -28,7 +28,11 @@ public class Manipulator extends SubsystemBase {
     manipulatorMotor.set(speed); 
   }
 
-  public void setClaw(){
+  public void setClaw(boolean piston1State, boolean piston2State){
+    claw1.set(piston1State);
+    claw2.set(piston2State);
+  }
+  public void toggleClaw(){
     claw1.set(!claw1.get());
     claw2.set(!claw2.get());
   }
