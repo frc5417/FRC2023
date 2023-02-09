@@ -33,7 +33,7 @@ public class PhotonCommand extends CommandBase {
   @Override
   public void execute() {
     if (counter++ > 10) {
-      System.out.println(pcw.getYaw(camera));
+      pcw.getPose(camera);
       counter = 0;
     } 
   }

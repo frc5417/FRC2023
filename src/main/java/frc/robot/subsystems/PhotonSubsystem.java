@@ -11,19 +11,28 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTablesJNI;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.common.networktables.*;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
+import java.lang.Math;
 
 public class PhotonSubsystem extends SubsystemBase {
   /** Creates a new PhotonSubsystem. */
   public PhotonCamera photonCamera;
   public PhotonPoseEstimator photonPoseEstimator;
+
+  private double[][] cameraInfo = new double[9][4]; // 1 indexed
 
   public PhotonSubsystem() {}
 
@@ -77,6 +86,53 @@ public class PhotonSubsystem extends SubsystemBase {
       return 0;
     }
   }
+
+  public double getDistance(PhotonCamera camera) {
+    var result = camera.getLatestResult();
+    if(result.hasTargets()) {
+      return PhotonUtils.calculateDistanceToTargetMeters(
+              Constants.CAMERA_HEIGHT_METERS,
+              Constants.TARGET_HEIGHT_METERS,
+              Constants.CAMERA_PITCH_RADIANS,
+              Math.toRadians(result.getBestTarget().getPitch()));
+    }
+    else{
+      return 0;
+    }
+  }
+    public void getPose(PhotonCamera camera) {
+      var result = camera.getLatestResult();
+      if(result.hasTargets()) {
+        for (PhotonTrackedTarget target : result.getTargets()) {
+          cameraInfo[target.getFiducialId()][0] = target.getBestCameraToTarget().getX();
+          cameraInfo[target.getFiducialId()][1] = target.getBestCameraToTarget().getY();
+          cameraInfo[target.getFiducialId()][2] = target.getBestCameraToTarget().getZ();
+          cameraInfo[target.getFiducialId()][3] = target.getYaw();
+
+          System.out.print("FID: ");
+          System.out.print(target.getFiducialId());
+          System.out.print(", ");
+          System.out.print("X: ");
+          System.out.print(cameraInfo[target.getFiducialId()][0]);
+          System.out.print(", ");
+          System.out.print("Y: ");
+          System.out.print(cameraInfo[target.getFiducialId()][1]);
+          System.out.print(", ");
+          System.out.print("Z: ");
+          System.out.print(cameraInfo[target.getFiducialId()][2]);
+          System.out.print(", ");
+          System.out.print("Yaw: ");
+          System.out.print(cameraInfo[target.getFiducialId()][3]);
+          System.out.println("");
+        }
+        
+        // System.out.println(result.getTargets().get(0).getrFiducialId());
+      }
+  }
+
+
+
+
 
   /**
    * @param estimatedRobotPose The current best guess at robot pose
