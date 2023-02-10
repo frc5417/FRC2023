@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ManipulatorConstants;
+import frc.robot.Constants.ManipulatorConstants;;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -30,12 +30,8 @@ public class RobotContainer {
   private final static ArmSetPos armSetPos8 = new ArmSetPos(0.8d, armSubsystem);
   private final static ArmSetPos armSetPos85 = new ArmSetPos(0.85d, armSubsystem);
   private final static ArmSetPos armSetPos9 = new ArmSetPos(0.9d, armSubsystem);
-  private final static ManipulatorInOpen manipulatorInOpen = new ManipulatorInOpen(manipulatorSubsystem);
-  private final static ManipulatorInClosed manipulatorInClosed = new ManipulatorInClosed(manipulatorSubsystem);
-  private final static ManipulatorOffOpen manipulatorOffOpen = new ManipulatorOffOpen(manipulatorSubsystem);
-  private final static ManipulatorOffClosed manipulatorOffClosed = new ManipulatorOffClosed(manipulatorSubsystem);
-  private final static ManipulatorOutOpen manipulatorOutOpen = new ManipulatorOutOpen(manipulatorSubsystem);
-  private final static ManipulatorOutClosed manipulatorOutClosed = new ManipulatorOutClosed(manipulatorSubsystem);
+  private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
+  private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -68,12 +64,8 @@ public class RobotContainer {
     m_manipulatorController.x().whileTrue(armSetPos75);
     m_manipulatorController.rightBumper().whileTrue(armSetPos7);
 
-    m_manipulatorController.leftTrigger().whileTrue(manipulatorInOpen);
-    m_manipulatorController.rightTrigger().whileTrue(manipulatorOffClosed);
-
-    //testing for removal of objects in the intake:
-    //m_manipulatorController.leftTrigger().whileTrue(manipulatorInClosed);
-    //m_manipulatorController.rightTrigger().whileTrue(manipulatorOutClosed);
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorIn);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorOut);
 
     System.out.println("Buttons Configured");
   }
