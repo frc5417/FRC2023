@@ -4,11 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ManipulatorConstants;;
+import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -32,6 +31,9 @@ public class RobotContainer {
   private final static ArmSetPos armSetPos9 = new ArmSetPos(0.9d, armSubsystem);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -63,6 +65,10 @@ public class RobotContainer {
     m_manipulatorController.y().whileTrue(armSetPos8);
     m_manipulatorController.x().whileTrue(armSetPos75);
     m_manipulatorController.rightBumper().whileTrue(armSetPos7);
+
+    m_manipulatorController.povUp().onTrue(clawConfig1);
+    m_manipulatorController.povRight().onTrue(clawConfig2);
+    m_manipulatorController.povDown().onTrue(clawConfig3);
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorIn);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorOut);

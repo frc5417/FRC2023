@@ -18,10 +18,15 @@ public class Manipulator extends SubsystemBase {
   private final static DigitalInput manipulatorSwitch = new DigitalInput(ManipulatorConstants.intakeLimitPort);
   private final static Solenoid claw1 = new Solenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw1Solenoid);
   private final static Solenoid claw2 = new Solenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw2Solenoid);
+  private final static Solenoid claw3 = new Solenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw3Solenoid);
 
   /** Creates a new Manipulator. */
   public Manipulator() {
     manipulatorMotor.setIdleMode(IdleMode.kBrake);
+
+    claw1.set(false);
+    claw2.set(false);
+    claw3.set(false);
   }
 
   public void setIntake(double speed) {
@@ -32,6 +37,23 @@ public class Manipulator extends SubsystemBase {
     claw1.set(!claw1.get());
     claw2.set(!claw2.get());
   }
+
+  public void setClaw(int configType) {
+    if (configType == 1) {
+      claw1.set(true);
+      claw2.set(false);
+      claw3.set(true);
+    } else if (configType == 2) {
+      claw1.set(true);
+      claw2.set(true);
+      claw3.set(false);
+    } if (configType == 3) {
+      claw1.set(false);
+      claw2.set(false);
+      claw3.set(true);
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

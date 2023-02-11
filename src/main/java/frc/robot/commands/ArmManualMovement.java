@@ -23,12 +23,14 @@ public class ArmManualMovement extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armSubystem.setArm(RobotContainer.getManipulatorLeftJoystick() * ManipulatorConstants.armMaxSpeed);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    armSubystem.setArm(RobotContainer.getManipulatorLeftJoystick() * ManipulatorConstants.armMaxSpeed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override

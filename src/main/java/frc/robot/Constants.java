@@ -45,12 +45,14 @@ public final class Constants {
     public static final double armMaxSpeed = 0.3;
     public static final double manipulatorSpeed = 0.5;
 
-    public static final int armLeaderPort = 1;
-    public static final int armFollowerPort = 2;
-    public static final int manipulatorPort = 3;
-    public static final int intakeLimitPort = 4;
+    public static final int armLeaderPort = 21;
+    public static final int armFollower1Port = 22;
+    public static final int armFollower2Port = 23;
+    public static final int manipulatorPort = 24;
+    public static final int intakeLimitPort = 1;
     public static final int kClaw1Solenoid = 0;
     public static final int kClaw2Solenoid = 1;
+    public static final int kClaw3Solenoid = 2;
 
     public static final int armEncoderPort = 0;
 
