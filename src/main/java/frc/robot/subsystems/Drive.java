@@ -57,6 +57,9 @@ public class Drive extends SubsystemBase {
     resetEncoders();
 
     odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+
+    ShifterL.set(DoubleSolenoid.Value.kReverse);
+    ShifterR.set(DoubleSolenoid.Value.kReverse);
   }
 
   public double GyroPitch(){
