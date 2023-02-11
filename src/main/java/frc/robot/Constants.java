@@ -14,10 +14,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final int DriveLeftLeader = 3;
-  public static final int DriveLeftFollower = 4;
-  public static final int DriveRightLeader = 1;
-  public static final int DriveRightFollower = 2;
+  public static final int DriveLeftLeader = 11;
+  public static final int DriveLeftFollower = 12;
+  public static final int DriveRightLeader = 13;
+  public static final int DriveRightFollower = 14;
   public static final double degreesAllowed = 2.5;
   public static final double maxVoltage = 10;
   public static final double maxSpeed = 3; // m/s

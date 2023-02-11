@@ -6,8 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ShiftDrivetrain;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -22,11 +25,13 @@ import frc.robot.commands.AutoBalance;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private static final Drive m_drive = new Drive();
   private final AutoBalance m_AutoBalance =  new AutoBalance();
 
   private static final TankDrive tankDrive = new TankDrive(m_drive);
+  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
+
+  private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -34,6 +39,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    compressor.enableDigital();
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -50,7 +57,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.b().whileTrue(shiftDrivetrain);
   }
 
   /**
@@ -60,7 +67,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return null;
   }
 
   public static double getDriverLeftJoystick() {

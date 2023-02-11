@@ -3,39 +3,40 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TankDrive extends CommandBase {
-  private final Drive drive;
-  /** Creates a new TankDrive. */
-  public TankDrive(Drive subsystem) {
+public class ShiftDrivetrain extends CommandBase {
+  private final Drive driveSubsystem;
+  /** Creates a new ShiftDrivetrain. */
+  public ShiftDrivetrain(Drive subsystem) {
+    driveSubsystem = subsystem;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    drive = subsystem;
-    addRequirements(drive);
-    
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveSubsystem.shiftToggle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    // drive.SetSpeed(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
-    drive.SetSpeed(0, 0);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    RobotContainer.initTeleopCommand(); 
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
-

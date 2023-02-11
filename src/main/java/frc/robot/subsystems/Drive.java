@@ -18,33 +18,34 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
-  private double LeftDistance = 0;
-  private double rightDistance = 0;
+  private static double LeftDistance = 0;
+  private static double rightDistance = 0;
 
-  private final AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
+  private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
-  private final CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
-  private final CANSparkMax leftFollower = new CANSparkMax(Constants.DriveLeftFollower, MotorType.kBrushless);
-  private final CANSparkMax rightLeader = new CANSparkMax(Constants.DriveRightLeader, MotorType.kBrushless);
-  private final CANSparkMax rightFollower = new CANSparkMax(Constants.DriveRightFollower, MotorType.kBrushless);
+  private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
+  private final static CANSparkMax leftFollower = new CANSparkMax(Constants.DriveLeftFollower, MotorType.kBrushless);
+  private final static CANSparkMax rightLeader = new CANSparkMax(Constants.DriveRightLeader, MotorType.kBrushless);
+  private final static CANSparkMax rightFollower = new CANSparkMax(Constants.DriveRightFollower, MotorType.kBrushless);
 
-  private final MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
-  private final MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
+  private final static MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
+  private final static MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
 
-  private final DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+  //private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
 
-  private final RelativeEncoder leftEncoder = leftLeader.getEncoder();
-  private final RelativeEncoder rightEncoder = rightLeader.getEncoder();
+  private final static RelativeEncoder leftEncoder = leftLeader.getEncoder();
+  private final static RelativeEncoder rightEncoder = rightLeader.getEncoder();
 
-  private final DifferentialDriveOdometry odometry;
+  private static DifferentialDriveOdometry odometry;
 
-  Solenoid ShifterL = new Solenoid(PneumaticsModuleType.REVPH, 0);
-  Solenoid ShifterR = new Solenoid(PneumaticsModuleType.REVPH, 1);
+  private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 7, 8);
+  private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
   public Drive() {
     rightMotors.setInverted(true);
@@ -72,9 +73,9 @@ public class Drive extends SubsystemBase {
     rightEncoder.setPosition(0);
   }
 
-  public void ShiftToggle() {
-    ShifterL.set(!ShifterL.get());
-    ShifterR.set(!ShifterR.get());
+  public void shiftToggle() {
+    ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
   }
 
   public void balance(){
