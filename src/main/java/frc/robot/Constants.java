@@ -67,5 +67,6 @@ public final class Constants {
     // from center.
     public static final String cameraName = "OV5647";
 
+
 }
 }

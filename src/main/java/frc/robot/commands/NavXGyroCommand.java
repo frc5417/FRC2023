@@ -4,40 +4,35 @@
 
 package frc.robot.commands;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.PhotonSubsystem;
-import org.photonvision.PhotonCamera;
+import frc.robot.subsystems.NavXGyro;
+import com.kauailabs.navx.frc.AHRS;
 
-public class PhotonCommand extends CommandBase {
-  /** Creates a new PhotonCommand. */
-  public PhotonSubsystem pcw;
-  public PhotonCamera camera;
+public class NavXGyroCommand extends CommandBase {
+  /** Creates a new NavXGyroCommand. */
 
-  public int counter = 0;
+  NavXGyro m_NavXGyro;
+  AHRS ahrs;
 
-  public PhotonCommand(PhotonSubsystem photon) {
+  public NavXGyroCommand(NavXGyro m_NavXGyro, AHRS ahrs_passed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(photon);
+    addRequirements(m_NavXGyro);
+    ahrs = ahrs_passed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("PHOTON_COMMAND_INIT");
-    pcw = new PhotonSubsystem();
-    camera = pcw.PhotonCameraWrapper();
-    // ahrs.reset();
-    // pcw.getEstimatedGlobalPose();
+    m_NavXGyro = new NavXGyro();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (counter++ > 10) {
-      pcw.getPose(camera);
-      counter = 0;
-    } 
+    m_NavXGyro.printGyro(ahrs);
   }
 
   // Called once the command ends or is interrupted.
