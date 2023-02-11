@@ -38,10 +38,6 @@ public final class Constants {
   }
 
   public static class PIDConstants {
-    public static final double kArmP = 0.25d;
-    public static final double kArmI = 0d;
-    public static final double kArmD = 700.0d;
-
     public static final double cycleTime = 50.0;
 
     public static final double kDriveP = 0.0075;

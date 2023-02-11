@@ -65,6 +65,10 @@ public class RobotContainer {
     return m_driverController.a().getAsBoolean();
   }
 
+  public static boolean getButtonX() {
+    return m_driverController.x().getAsBoolean();
+  }
+
   public static double getDriverRightJoystick() {
     return m_driverController.getRawAxis(5);
   }

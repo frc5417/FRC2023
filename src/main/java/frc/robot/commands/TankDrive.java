@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 
 /** An example command that uses an example subsystem. */
 public class TankDrive extends CommandBase {
@@ -25,6 +27,12 @@ public class TankDrive extends CommandBase {
   public static final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   private final NavXGyro m_NavXGyro = new NavXGyro();
   private final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs);
+
+  private static final double kP = 2;
+  private static final double kI = 0;
+  private static final double kD = 0;
+
+  private static final PIDController pid = new PIDController(kP, kI, kD);
 
   private final Drive drive;
   public TankDrive(Drive subsystem) {
@@ -51,6 +59,20 @@ public class TankDrive extends CommandBase {
     } else {
       m_pPhotonCommand.cancel();
       m_NavXGyroCommand.cancel();
+    }
+    if(RobotContainer.getButtonX()) {
+      ahrs.reset();
+      ahrs.calibrate();
+      final double angle_snapshot = m_NavXGyro.getGyroAngle(ahrs);
+      pid.setSetpoint(90);
+      pid.setTolerance(1, 10);
+      
+      while (!pid.atSetpoint()) {
+        double leftPower = -MathUtil.clamp(pid.calculate(m_NavXGyro.getGyroAngle(ahrs)), -0.3, 0.3);
+        double rightPower = MathUtil.clamp(pid.calculate(m_NavXGyro.getGyroAngle(ahrs)), -0.3, 0.3);
+        drive.setPower(leftPower, rightPower);
+      }
+      drive.setPower(0, 0);
     }
   }
 
