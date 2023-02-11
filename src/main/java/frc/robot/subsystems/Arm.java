@@ -40,7 +40,6 @@ public class Arm extends SubsystemBase {
 
   public void setArm(double speed) {
     armMotor1.set(speed);
-    System.out.println(speed + " | " + enc.getAbsolutePosition());
   }
 
   public void setArmPos(double pos) {
@@ -61,8 +60,8 @@ public class Arm extends SubsystemBase {
     // makes the lower limit -3.0 and upper 1 
     if(voltage < -Constants.ManipulatorConstants.maxVoltage) {
       voltage = -Constants.ManipulatorConstants.maxVoltage;
-    } else if (voltage > 0) {
-      voltage = 0;
+    } else if (voltage > Constants.ManipulatorConstants.maxVoltage * 3 / 4) {
+      voltage = Constants.ManipulatorConstants.maxVoltage * 3 / 4;
     }
 
     return voltage;
@@ -71,5 +70,6 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(enc.getAbsolutePosition());
   }
 }
