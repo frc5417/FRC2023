@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -21,6 +23,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
+
+  private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
   // private final static TankDrive tankDrive = new TankDrive(m_drive);
@@ -43,6 +47,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    compressor.enableDigital();
     // Configure the trigger bindings
     configureBindings();
   }
