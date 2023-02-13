@@ -5,48 +5,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drive;
 
-public class ArmSetPos extends CommandBase {
-  private final Arm manipulatorSubsystem;
-
-  private final double setPoint;
-
-  /** Creates a new ArmCommand. */
-  public ArmSetPos(double pos, Arm subsystem) {
-    manipulatorSubsystem = subsystem;
-
-    if (pos > Constants.ManipulatorConstants.maxSetPoint) {
-      pos = Constants.ManipulatorConstants.maxSetPoint;
-    }
-    setPoint = pos;
+public class ShiftDrivetrain extends CommandBase {
+  private final Drive driveSubsystem;
+  /** Creates a new ShiftDrivetrain. */
+  public ShiftDrivetrain(Drive subsystem) {
+    driveSubsystem = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(manipulatorSubsystem);
+    addRequirements(driveSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveSubsystem.shiftToggle();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    manipulatorSubsystem.setArmPos(setPoint);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulatorSubsystem.setArm(0.0d);
-    RobotContainer.initArmMovement();
+    RobotContainer.initTeleopCommand(); 
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

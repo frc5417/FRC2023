@@ -21,18 +21,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private static final Drive m_drive = new Drive();
+  
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
 
   private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
-  // private final static TankDrive tankDrive = new TankDrive(m_drive);
+  private static final TankDrive tankDrive = new TankDrive(m_drive);
+  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmSetPos armSetPos3 = new ArmSetPos(0.3d, armSubsystem);
   private final static ArmSetPos armSetPos25 = new ArmSetPos(0.25d, armSubsystem);
   private final static ArmSetPos armSetPos2 = new ArmSetPos(0.2d, armSubsystem);
   private final static ArmSetPos armSetPos15 = new ArmSetPos(0.15d, armSubsystem);
   private final static ArmSetPos armSetPos1 = new ArmSetPos(0.1d, armSubsystem);
+  private final static ArmSetPos armSetPos0 = new ArmSetPos(0.0d, armSubsystem);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorSpeedOff manipulatorSpeedOff = new ManipulatorSpeedOff(manipulatorSubsystem);
@@ -66,10 +70,13 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     
+    m_driverController.b().whileTrue(shiftDrivetrain);
+
     m_manipulatorController.a().whileTrue(armSetPos3);
     m_manipulatorController.b().whileTrue(armSetPos25);
     m_manipulatorController.y().whileTrue(armSetPos2);
     m_manipulatorController.x().whileTrue(armSetPos15);
+    m_manipulatorController.leftBumper().whileTrue(armSetPos0);
     m_manipulatorController.rightBumper().whileTrue(armSetPos1);
 
     m_manipulatorController.povUp().onTrue(clawConfig1);
@@ -83,11 +90,23 @@ public class RobotContainer {
   }
 
   public static double getDriverLeftJoystick() {
-    return m_driverController.getRawAxis(1);
+    double value = m_driverController.getRawAxis(1);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
   }
 
   public static double getDriverRightJoystick() {
-    return m_driverController.getRawAxis(5);
+    double value = m_driverController.getRawAxis(5);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
   }
 
   public static double getManipulatorLeftJoystick() {
@@ -113,4 +132,8 @@ public class RobotContainer {
   public static void initArmMovement() {
     armManualCommand.schedule();
   }
+
+  public static void initTeleopCommand(){
+    tankDrive.schedule();
+  } 
 }

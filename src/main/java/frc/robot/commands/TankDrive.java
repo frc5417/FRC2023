@@ -3,28 +3,18 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Drive;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ArmSetPos extends CommandBase {
-  private final Arm manipulatorSubsystem;
-
-  private final double setPoint;
-
-  /** Creates a new ArmCommand. */
-  public ArmSetPos(double pos, Arm subsystem) {
-    manipulatorSubsystem = subsystem;
-
-    if (pos > Constants.ManipulatorConstants.maxSetPoint) {
-      pos = Constants.ManipulatorConstants.maxSetPoint;
-    }
-    setPoint = pos;
-
+public class TankDrive extends CommandBase {
+  private final Drive drive;
+  /** Creates a new TankDrive. */
+  public TankDrive(Drive subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(manipulatorSubsystem);
+    drive = subsystem;
+    addRequirements(drive);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -34,15 +24,13 @@ public class ArmSetPos extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    manipulatorSubsystem.setArmPos(setPoint);
+    drive.SetSpeed(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
+    //drive.SetSpeed(0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    manipulatorSubsystem.setArm(0.0d);
-    RobotContainer.initArmMovement();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
