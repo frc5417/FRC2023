@@ -15,6 +15,7 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase {
   private final CANSparkMax armMotor1;
   private final CANSparkMax armMotor2;
+  private final CANSparkMax armMotor3;
 
   private final static DutyCycleEncoder enc = new DutyCycleEncoder(Constants.ManipulatorConstants.armEncoderPort);
   
@@ -26,12 +27,15 @@ public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   public Arm() {
     armMotor1 = new CANSparkMax(Constants.ManipulatorConstants.armLeaderPort, MotorType.kBrushless);
-    armMotor2 = new CANSparkMax(Constants.ManipulatorConstants.armFollowerPort, MotorType.kBrushless);
+    armMotor2 = new CANSparkMax(Constants.ManipulatorConstants.armFollower1Port, MotorType.kBrushless);
+    armMotor3 = new CANSparkMax(Constants.ManipulatorConstants.armFollower2Port, MotorType.kBrushless);
 
     armMotor1.setIdleMode(IdleMode.kBrake);
     armMotor2.setIdleMode(IdleMode.kBrake);
+    armMotor3.setIdleMode(IdleMode.kBrake);
 
     armMotor2.follow(armMotor1);
+    armMotor3.follow(armMotor1);
   }
 
   public void setArm(double speed) {
@@ -56,8 +60,8 @@ public class Arm extends SubsystemBase {
     // makes the lower limit -3.0 and upper 1 
     if(voltage < -Constants.ManipulatorConstants.maxVoltage) {
       voltage = -Constants.ManipulatorConstants.maxVoltage;
-    } else if (voltage > 0) {
-      voltage = 0;
+    } else if (voltage > Constants.ManipulatorConstants.maxVoltage * 3 / 4) {
+      voltage = Constants.ManipulatorConstants.maxVoltage * 3 / 4;
     }
 
     return voltage;
@@ -66,5 +70,6 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(enc.getAbsolutePosition());
   }
 }

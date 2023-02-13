@@ -5,16 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.subsystems.Manipulator;
 
-public class ManipulatorOffClosed extends CommandBase {
+public class ManipulatorSpeedOff extends CommandBase {
   private final Manipulator manipulatorSubsystem;
 
-  private boolean doFinish = false;
-
   /** Creates a new ManipulatorToggle. */
-  public ManipulatorOffClosed(Manipulator subsystem) {
+  public ManipulatorSpeedOff(Manipulator subsystem) {
     manipulatorSubsystem = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,28 +21,22 @@ public class ManipulatorOffClosed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //stop the intake wheels
-    manipulatorSubsystem.setIntake(0.0);
-    //sets the claw to be closed
-    manipulatorSubsystem.setClaw(true, true);
-    System.out.println("manipulator off and closing");
+    manipulatorSubsystem.setIntake(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    doFinish = manipulatorSubsystem.cancelIfLimitTriggered();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulatorSubsystem.setIntake(0);
+    //manipulatorSubsystem.setIntake(0);
   }
 
   // Returns true when the command should end.
-  @Override
+  /*@Override
   public boolean isFinished() {
-    return doFinish;
-  }
+    return false;
+  }*/
 }
