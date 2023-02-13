@@ -31,13 +31,38 @@ public final class Constants {
 
     public static final double kTreadLength = 5 * Math.PI; 
   }
+  
   public static class AutonConstants{
     public static final double kS = 0.21842;
     public static final double kV = 0.010489;
     public static final double kA = 0.0043684;
     public static final double kP = 0.0115;
   }
-  public static class ManipulatorConstants {
 
+  public static class ManipulatorConstants {
+    public static final int kManipulatorControllerPort = 1;
+    public static final double kManipulatorControllerDeadZone = 0.1;
+
+    public static final double armMaxSpeed = 0.3;
+    public static final double manipulatorSpeed = 0.75;
+
+    public static final int armLeaderPort = 21;
+    public static final int armFollower1Port = 22;
+    public static final int armFollower2Port = 23;
+    public static final int manipulatorPort = 24;
+    public static final int intakeLimitPort = 1;
+
+    public static final int kClaw1Solenoid = 0;
+    public static final int kClaw2Solenoid = 1;
+    public static final int kClaw3Solenoid = 2;
+    public static final int kClaw4Solenoid = 3;
+    
+    public static final int armEncoderPort = 0;
+
+    public static final double maxVoltage = 4.0;
+    public static final double cycleTime = 50.0;
+    public static final double kArmP = 0.25;
+    public static final double kArmI = 0;
+    public static final double kArmD = 1500.0;
   }
 }
