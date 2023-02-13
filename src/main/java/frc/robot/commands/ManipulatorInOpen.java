@@ -29,6 +29,7 @@ public class ManipulatorInOpen extends CommandBase {
     manipulatorSubsystem.setIntake(ManipulatorConstants.manipulatorSpeed);
     //sets the claw to be open
     manipulatorSubsystem.setClaw(false, false);
+    System.out.println("intaking open");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

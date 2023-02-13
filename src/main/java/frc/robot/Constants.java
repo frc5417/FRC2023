@@ -47,7 +47,7 @@ public final class Constants {
 
     public static final int armLeaderPort = 1;
     public static final int armFollowerPort = 2;
-    public static final int manipulatorPort = 3;
+    public static final int manipulatorPort = 5;//used to be 3
     public static final int intakeLimitPort = 4;
     public static final int kClaw1Solenoid = 0;
     public static final int kClaw2Solenoid = 1;

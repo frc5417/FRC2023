@@ -22,10 +22,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
-  private static final Drive m_drive = new Drive();
 
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
-  // private final static TankDrive tankDrive = new TankDrive(m_drive);
   private final static ArmSetPos armSetPos7 = new ArmSetPos(0.7d, armSubsystem);
   private final static ArmSetPos armSetPos75 = new ArmSetPos(0.75d, armSubsystem);
   private final static ArmSetPos armSetPos8 = new ArmSetPos(0.8d, armSubsystem);
@@ -37,7 +35,6 @@ public class RobotContainer {
   private final static ManipulatorOffClosed manipulatorOffClosed = new ManipulatorOffClosed(manipulatorSubsystem);
   private final static ManipulatorOutOpen manipulatorOutOpen = new ManipulatorOutOpen(manipulatorSubsystem);
   private final static ManipulatorOutClosed manipulatorOutClosed = new ManipulatorOutClosed(manipulatorSubsystem);
-  private static final TankDrive tankDrive = new TankDrive(m_drive);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -110,9 +107,5 @@ public class RobotContainer {
 
   public static void initArmMovement() {
     armManualCommand.schedule();
-  }
-
-  public static void initTeleopCommand(){
-    tankDrive.schedule();
   }
 }

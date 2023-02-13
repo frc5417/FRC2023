@@ -28,6 +28,7 @@ public class ManipulatorOffClosed extends CommandBase {
     manipulatorSubsystem.setIntake(0.0);
     //sets the claw to be closed
     manipulatorSubsystem.setClaw(true, true);
+    System.out.println("manipulator off and closing");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
