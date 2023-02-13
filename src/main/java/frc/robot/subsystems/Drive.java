@@ -44,12 +44,12 @@ public class Drive extends SubsystemBase {
 
   private static DifferentialDriveOdometry odometry;
 
-  private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 7, 8);
+  private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
   private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
   public Drive() {
-    rightMotors.setInverted(true);
-    leftMotors.setInverted(false);
+    rightMotors.setInverted(false);
+    leftMotors.setInverted(true);
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
     rightEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
