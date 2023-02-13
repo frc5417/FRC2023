@@ -63,6 +63,8 @@ public final class Constants {
     public static final double cycleTime = 50.0;
     public static final double kArmP = 0.25;
     public static final double kArmI = 0;
-    public static final double kArmD = 1500.0;
+    public static final double kArmD = 850.0;
+
+    public static final double maxSetPoint = 0.4d;
   }
 }

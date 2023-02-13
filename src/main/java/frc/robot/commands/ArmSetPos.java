@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class ArmSetPos extends CommandBase {
@@ -17,6 +18,10 @@ public class ArmSetPos extends CommandBase {
   public ArmSetPos(double pos, Arm subsystem) {
     manipulatorSubsystem = subsystem;
 
+    if (pos > Constants.ManipulatorConstants.maxSetPoint) {
+      pos = Constants.ManipulatorConstants.maxSetPoint;
+    }
+    
     setPoint = pos;
 
     // Use addRequirements() here to declare subsystem dependencies.

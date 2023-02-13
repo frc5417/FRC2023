@@ -48,6 +48,7 @@ public class RobotContainer {
   private final static ArmSetPos armSetPos1 = new ArmSetPos(0.1d, armSubsystem);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
+  private final static ManipulatorSpeedOff manipulatorSpeedOff = new ManipulatorSpeedOff(manipulatorSubsystem);
   private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
@@ -90,8 +91,8 @@ public class RobotContainer {
     m_manipulatorController.povRight().onTrue(clawConfig2);
     m_manipulatorController.povDown().onTrue(clawConfig3);
 
-    m_manipulatorController.leftTrigger().whileTrue(manipulatorIn);
-    m_manipulatorController.rightTrigger().whileTrue(manipulatorOut);
+    m_manipulatorController.leftTrigger().onTrue(manipulatorIn).onFalse(manipulatorSpeedOff);
+    m_manipulatorController.rightTrigger().onTrue(manipulatorOut).onFalse(manipulatorSpeedOff);
 
     System.out.println("Buttons Configured");
   }
@@ -111,11 +112,23 @@ public class RobotContainer {
     
 
   public static double getDriverLeftJoystick() {
-    return m_driverController.getRawAxis(1);
+    double value = m_driverController.getRawAxis(1);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
   }
 
   public static double getDriverRightJoystick() {
-    return m_driverController.getRawAxis(5);
+    double value = m_driverController.getRawAxis(5);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
   }
 
   public static double getManipulatorLeftJoystick() {
