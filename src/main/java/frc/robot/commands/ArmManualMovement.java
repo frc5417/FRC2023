@@ -29,12 +29,7 @@ public class ArmManualMovement extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftJoystick = RobotContainer.getManipulatorLeftJoystick() * ManipulatorConstants.armMaxSpeed;
-    if (leftJoystick >= ManipulatorConstants.armMaxSpeed) {
-      leftJoystick = ManipulatorConstants.armMaxSpeed;
-    }
-    armSubystem.setArm(leftJoystick);
-    //also putting the tank drive command in here to make things easier
+    armSubystem.setArm(RobotContainer.getManipulatorLeftJoystick() * ManipulatorConstants.armMaxSpeed);
   }
 
   // Called once the command ends or is interrupted.

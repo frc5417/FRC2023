@@ -63,8 +63,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    //RobotContainer.initArmMovement();
-    RobotContainer.initTeleopCommand();
+    RobotContainer.initArmMovement();
+    //RobotContainer.initTeleopCommand();
   }
 
   /** This function is called periodically during operator control. */
