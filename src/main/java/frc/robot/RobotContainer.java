@@ -39,14 +39,13 @@ public class RobotContainer {
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
-  private final static ArmSetPos armSetPos3 = new ArmSetPos(0.3d, armSubsystem);
-  private final static ArmSetPos armSetPos25 = new ArmSetPos(0.25d, armSubsystem);
-  private final static ArmSetPos armSetPos2 = new ArmSetPos(0.2d, armSubsystem);
-  private final static ArmSetPos armSetPos15 = new ArmSetPos(0.15d, armSubsystem);
-  private final static ArmSetPos armSetPos1 = new ArmSetPos(0.1d, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.308d, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.1073d, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.04877d, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.07901d, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.092708d, armSubsystem);
   private final static ManipulatorOut manipulatorIn = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorIn manipulatorOut = new ManipulatorIn(manipulatorSubsystem);
-  private final static ManipulatorSpeedOff manipulatorSpeedOff = new ManipulatorSpeedOff(manipulatorSubsystem);
   private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
@@ -79,11 +78,11 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(shiftDrivetrain);
     
-    m_manipulatorController.a().whileTrue(armSetPos3);
-    m_manipulatorController.b().whileTrue(armSetPos25);
-    m_manipulatorController.y().whileTrue(armSetPos2) ;
-    m_manipulatorController.x().whileTrue(armSetPos15);
-    m_manipulatorController.rightBumper().whileTrue(armSetPos1);
+    m_manipulatorController.a().whileTrue(armSetPointIntake);
+    m_manipulatorController.b().whileTrue(armSetPointSecondScore);
+    m_manipulatorController.y().whileTrue(armSetPointHumanCube) ;
+    m_manipulatorController.x().whileTrue(armSetPointHumanCone);
+    m_manipulatorController.rightBumper().whileTrue(armSetPointThirdScore);
 
     m_manipulatorController.povUp().onTrue(clawConfig1);
     m_manipulatorController.povRight().onTrue(clawConfig2);
