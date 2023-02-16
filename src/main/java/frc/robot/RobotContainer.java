@@ -31,23 +31,21 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final Drive m_drive = new Drive();
   private final AutoBalance m_AutoBalance =  new AutoBalance();
-
-  private static final TankDrive tankDrive = new TankDrive(m_drive);
-  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
-
   private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
-  
+
+  private static final TankDrive tankDrive = new TankDrive(m_drive);
+  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
-  // private final static TankDrive tankDrive = new TankDrive(m_drive);
+
   private final static ArmSetPos armSetPos3 = new ArmSetPos(0.3d, armSubsystem);
   private final static ArmSetPos armSetPos25 = new ArmSetPos(0.25d, armSubsystem);
   private final static ArmSetPos armSetPos2 = new ArmSetPos(0.2d, armSubsystem);
   private final static ArmSetPos armSetPos15 = new ArmSetPos(0.15d, armSubsystem);
   private final static ArmSetPos armSetPos1 = new ArmSetPos(0.1d, armSubsystem);
-  private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
-  private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
+  private final static ManipulatorOut manipulatorIn = new ManipulatorOut(manipulatorSubsystem);
+  private final static ManipulatorIn manipulatorOut = new ManipulatorIn(manipulatorSubsystem);
   private final static ManipulatorSpeedOff manipulatorSpeedOff = new ManipulatorSpeedOff(manipulatorSubsystem);
   private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
@@ -83,7 +81,7 @@ public class RobotContainer {
     
     m_manipulatorController.a().whileTrue(armSetPos3);
     m_manipulatorController.b().whileTrue(armSetPos25);
-    m_manipulatorController.y().whileTrue(armSetPos2);
+    m_manipulatorController.y().whileTrue(armSetPos2) ;
     m_manipulatorController.x().whileTrue(armSetPos15);
     m_manipulatorController.rightBumper().whileTrue(armSetPos1);
 
@@ -91,8 +89,8 @@ public class RobotContainer {
     m_manipulatorController.povRight().onTrue(clawConfig2);
     m_manipulatorController.povDown().onTrue(clawConfig3);
 
-    m_manipulatorController.leftTrigger().onTrue(manipulatorIn).onFalse(manipulatorSpeedOff);
-    m_manipulatorController.rightTrigger().onTrue(manipulatorOut).onFalse(manipulatorSpeedOff);
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
 
     System.out.println("Buttons Configured");
   }
@@ -154,6 +152,7 @@ public class RobotContainer {
   public static void initArmMovement() {
     armManualCommand.schedule();
   }
+
   public static void initTeleopCommand(){
     tankDrive.schedule();
   } 
