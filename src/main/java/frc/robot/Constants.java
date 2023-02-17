@@ -62,7 +62,9 @@ public final class Constants {
                             0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
     public static final String cameraName = "OV5647";
-
+    public static final double maxDistanceAway = 2.0;
+    public static final double forwardKP = 0.1;
+    public static final double forwardToAngleRatio = 0.5;
 
 }
 }

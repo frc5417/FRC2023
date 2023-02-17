@@ -21,6 +21,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   // private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+  private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
+  private final Drive m_drivesubsystem = new Drive();
+  private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drivesubsystem);
 
   private static final Drive m_drive = new Drive();
   private static TankDrive tankDrive = new TankDrive(m_drive);
@@ -50,7 +53,7 @@ public class RobotContainer {
     // cancelling on release.
     System.out.println("CONFIGURE BINDINGS ON");
     // System.out.println(m_driverController());
-    // m_driverController.rightBumper().onTrue(m_pPhotonCommand);
+    m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
     // m_driverController.povDown().onTruenew photonCommand(m_photonsubsystem));
   }
 
