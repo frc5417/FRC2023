@@ -7,6 +7,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -50,6 +51,12 @@ public class Drive extends SubsystemBase {
   public Drive() {
     rightMotors.setInverted(false);
     leftMotors.setInverted(true);
+/*
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
+*/
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
     rightEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
