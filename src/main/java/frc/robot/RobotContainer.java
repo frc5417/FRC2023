@@ -4,17 +4,16 @@
 
 package frc.robot;
 
+import java.util.concurrent.TimeUnit.*;
+
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ShiftDrivetrain;
-import frc.robot.commands.TankDrive;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,6 +36,9 @@ public class RobotContainer {
 
   private static final TankDrive tankDrive = new TankDrive(m_drive);
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
+  //private static final Autos chargeAutons = new Autos(m_drive);
+  private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
+  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.308d, armSubsystem);
@@ -44,8 +46,9 @@ public class RobotContainer {
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.04877d, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.07901d, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.092708d, armSubsystem);
-  private final static ManipulatorOut manipulatorIn = new ManipulatorOut(manipulatorSubsystem);
-  private final static ManipulatorIn manipulatorOut = new ManipulatorIn(manipulatorSubsystem);
+  private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
+  private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
+  private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
   private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
@@ -88,8 +91,8 @@ public class RobotContainer {
     m_manipulatorController.povRight().onTrue(clawConfig2);
     m_manipulatorController.povDown().onTrue(clawConfig3);
 
-    m_manipulatorController.leftTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
-    m_manipulatorController.rightTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
 
     System.out.println("Buttons Configured");
   }
@@ -100,13 +103,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    // return Autos.exampleAuto(m_exampleSubsystem);
-    return null;
+    return autoStack1.getRamseteCommand()
+                     .andThen(armSetPointSecondScore)
+                     .andThen(manipulatorOutAuton1)
+                     .andThen(armSetPointIntake)
+                     .andThen(autoStack2.getRamseteCommand());
   }
-
-    
-    
 
   public static double getDriverLeftJoystick() {
     double value = m_driverController.getRawAxis(1);
