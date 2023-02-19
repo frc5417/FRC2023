@@ -25,11 +25,15 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class Autos extends CommandBase {
-  RamseteCommand ramseteCommand;
+public class AutoStack extends CommandBase {
+  RamseteCommand ramseteCommand1;
+  RamseteCommand ramseteCommand2;
   Drive drive;
 
-  public Autos(Drive drive) {
+  Trajectory moveBack;
+  Trajectory moveCharging;
+
+  public AutoStack(Drive drive) {
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
@@ -41,33 +45,47 @@ public class Autos extends CommandBase {
       new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
 
-    /*Trajectory extendedSCurve = TrajectoryGenerator.generateTrajectory(
+    //first step is to move back slightly
+    moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(2,-1),
-        new Translation2d(3,0),
-        new Translation2d(4,1)
+        new Translation2d(1,0)
       ), 
-      new Pose2d(6,0, new Rotation2d(0)), 
-      config);*/
-      //chargeb is for auton on blue side
-        //chargeb1 drives from the right side starting point to the left spot on the charging station
-        //chargeb2 is the safest and drives from the middle starting point on to the charging station
-        //chargeb3 drives from the left side starting point to the right spot on the charging station
-      //chargea is for auton on red side
-        //charger1 drives from the right side starting point to the left spot on the charging station
-        //charger2 is the safest and drives from the middle starting point on to the charging station
-        //charger3 drives from the left side starting point to the right spot on the charging station
-    Trajectory chargeStationOnly = PathPlanner.loadPath("chargeb1", Constants.maxSpeed, Constants.maxAcceleration);
+      new Pose2d(1,0, new Rotation2d(0)), 
+      config);
 
-    drive.resetOdometry(chargeStationOnly.getInitialPose());
+    //final step is to move back onto charging station
+    moveCharging = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(0,0,new Rotation2d(0)), 
+      List.of(
+        new Translation2d(1,0)
+      ), 
+      new Pose2d(1,0, new Rotation2d(0)), 
+      config);
+    
 
-    RamseteController ramseteControl = new RamseteController();
+    drive.resetOdometry(moveBack.getInitialPose());
 
-    ramseteCommand = new RamseteCommand(
-      chargeStationOnly, 
+    RamseteController ramseteControl1 = new RamseteController();
+
+    ramseteCommand1 = new RamseteCommand(
+      moveBack, 
       drive::getPose,
-      ramseteControl, 
+      ramseteControl1, 
+      motorFF,
+      Constants.kinematics, 
+      drive::getWheelSpeeds, 
+      new PIDController(Constants.AutonConstants.kP, 0, 0), 
+      new PIDController(Constants.AutonConstants.kP, 0, 0), 
+      drive::SetSpeed, 
+      drive);
+
+    RamseteController ramseteControl2 = new RamseteController();
+
+    ramseteCommand2 = new RamseteCommand(
+      moveCharging, 
+      drive::getPose,
+      ramseteControl2, 
       motorFF,
       Constants.kinematics, 
       drive::getWheelSpeeds, 
@@ -77,7 +95,8 @@ public class Autos extends CommandBase {
       drive);
   }
 
-  public CommandBase getRamseteCommand (){
-    return ramseteCommand.andThen(() -> drive.SetSpeed(0, 0));
+  public CommandBase getRamseteCommands (){
+    //first part of auto stack implementation, moving backwards on ramsete
+    return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
   }
 }
