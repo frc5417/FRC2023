@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
 
+
+
 public class NavXGyro extends SubsystemBase {
   /** Creates a new NavXGyro. */
+
   public NavXGyro() {}
 
   @Override
@@ -24,4 +27,5 @@ public class NavXGyro extends SubsystemBase {
   public double getGyroAngle(AHRS ahrs) {
     return ahrs.getAngle();
   }
+
 }

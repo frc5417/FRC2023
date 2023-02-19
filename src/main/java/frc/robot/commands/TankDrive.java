@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+
 
 /** An example command that uses an example subsystem. */
 public class TankDrive extends CommandBase {
@@ -24,22 +23,22 @@ public class TankDrive extends CommandBase {
   private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
 
+  private final Drive drive;
+
   public static final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   private final NavXGyro m_NavXGyro = new NavXGyro();
-  private final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs);
+  private final NavXGyroCommand m_NavXGyroCommand;
 
-  private static final double kP = 2;
-  private static final double kI = 0;
-  private static final double kD = 0;
 
-  private static final PIDController pid = new PIDController(kP, kI, kD);
 
-  private final Drive drive;
+  
   public TankDrive(Drive subsystem) {
     drive = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
+
+    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive);
   }
 
   // Called when the command is initially scheduled.
@@ -47,6 +46,10 @@ public class TankDrive extends CommandBase {
   public void initialize() {
     ahrs.reset();
     ahrs.calibrate();
+    m_NavXGyroCommand.setAngle(0);
+    CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
+    // m_NavXGyroCommand.setAngle(180);
+    // CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,25 +58,19 @@ public class TankDrive extends CommandBase {
     drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
     if(RobotContainer.getButtonA()) {
       CommandScheduler.getInstance().schedule(m_pPhotonCommand);
-      CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
     } else {
       m_pPhotonCommand.cancel();
-      m_NavXGyroCommand.cancel();
     }
     if(RobotContainer.getButtonX()) {
-      ahrs.reset();
-      ahrs.calibrate();
-      final double angle_snapshot = m_NavXGyro.getGyroAngle(ahrs);
-      pid.setSetpoint(90);
-      pid.setTolerance(1, 10);
+      System.out.println("Button Press Detected");
+      m_NavXGyroCommand.setAngle(180);
       
-      while (!pid.atSetpoint()) {
-        double leftPower = -MathUtil.clamp(pid.calculate(m_NavXGyro.getGyroAngle(ahrs)), -0.3, 0.3);
-        double rightPower = MathUtil.clamp(pid.calculate(m_NavXGyro.getGyroAngle(ahrs)), -0.3, 0.3);
-        drive.setPower(leftPower, rightPower);
-      }
-      drive.setPower(0, 0);
-    }
+      //   try {
+      //     Thread.sleep(2000);
+      //   } catch (Exception e) {
+      //     System.out.println(e);
+      //   }
+    } 
   }
 
   // Called once the command ends or is interrupted.
