@@ -9,7 +9,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavXGyro;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,9 +20,9 @@ public class NavXGyroCommand extends CommandBase {
   AHRS ahrs;
   Drive drive;
 
-  private static final double kP = 0.8;
-  private static final double kI = 0.1;
-  private static final double kD = 0.4;
+  private static final double kP = 0.05;
+  private static final double kI = 0.0;
+  private static final double kD = 0.1;
 
   private static final PIDController pid = new PIDController(kP, kI, kD);
 
@@ -48,11 +47,24 @@ public class NavXGyroCommand extends CommandBase {
   public void execute() {
     // m_NavXGyro.printGyro(ahrs);
     // while (!this.isFinished()) {
-      turn2Angle(drive, ahrs);
+      // turn2Angle(drive, ahrs);
       // System.out.println("THIS FINISHED NOT");
     // };
     // turn2Angle(drive, ahrs);
     // this.cancel();
+
+    if (this.setAnglePassed != 0 && !pid.atSetpoint()) {
+      double leftPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
+      double rightPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
+      
+      drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
+    } else {
+      if (pid.atSetpoint()) {
+        System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
+      }
+      drive.setPower(0, 0);
+      pid.reset();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -66,7 +78,7 @@ public class NavXGyroCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-
+/* 
   public void turn2Angle(Drive drive, AHRS ahrs) {
     if (this.setAnglePassed == 0) return;
     // System.out.printf("Got value %f\n", this.setAnglePassed);
@@ -84,12 +96,13 @@ public class NavXGyroCommand extends CommandBase {
     }
     drive.setPower(0, 0);
     // System.out.println("Droppped out of loop");
-  }
+  }*/
   public void setAngle(double set_point) {
     // System.out.printf("Set to: %f\n", set_point);
     this.setAnglePassed = set_point;
     pid.setSetpoint(this.setAnglePassed);
-    pid.setTolerance(0.01, 0);
+    pid.setTolerance(5, 0.5); // stops at <= 25 deg/s error
+    pid.enableContinuousInput(-90, 90);
     // turn2Angle(drive, ahrs);
   }
 }

@@ -48,6 +48,7 @@ public class TankDrive extends CommandBase {
     ahrs.calibrate();
     m_NavXGyroCommand.setAngle(0);
     CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
+    CommandScheduler.getInstance().schedule(m_pPhotonCommand);
     // m_NavXGyroCommand.setAngle(180);
     // CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
   }
@@ -55,22 +56,29 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
     if(RobotContainer.getButtonA()) {
       CommandScheduler.getInstance().schedule(m_pPhotonCommand);
     } else {
       m_pPhotonCommand.cancel();
     }
-    if(RobotContainer.getButtonX()) {
-      System.out.println("Button Press Detected");
-      m_NavXGyroCommand.setAngle(180);
-      
-      //   try {
-      //     Thread.sleep(2000);
-      //   } catch (Exception e) {
-      //     System.out.println(e);
-      //   }
+    if(RobotContainer.getButtonX()) { 
+      m_NavXGyro.resetGyroAngle(ahrs);
+      // System.out.println("Button Press Detected");
+      // System.out.println(m_pPhotonCommand.getYawFromSubsystem());
+      double angle =  90;//m_pPhotonCommand.getYawFromSubsystem();
+      // System.out.println(angle);
+      if (angle != 0) {
+        m_NavXGyroCommand.setAngle(angle);
+      } 
     } 
+    if (Math.abs(RobotContainer.getDriverLeftJoystick()) > 0.1 || Math.abs(RobotContainer.getDriverRightJoystick()) > 0.1) {
+      m_NavXGyroCommand.cancel();
+      drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
+    } else {
+      drive.setPower(0, 0);
+      // m_NavXGyro.resetGyroAngle(ahrs);
+      CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
+    }
   }
 
   // Called once the command ends or is interrupted.

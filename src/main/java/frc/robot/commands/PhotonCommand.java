@@ -20,13 +20,13 @@ public class PhotonCommand extends CommandBase {
   public PhotonCommand(PhotonSubsystem photon) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(photon);
+    pcw = photon;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     System.out.println("PHOTON_COMMAND_INIT");
-    pcw = new PhotonSubsystem();
     camera = pcw.PhotonCameraWrapper();
     // ahrs.reset();
     // pcw.getEstimatedGlobalPose();
@@ -35,10 +35,10 @@ public class PhotonCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (counter++ > 10) {
-      pcw.getPose(camera);
-      counter = 0;
-    } 
+    // if (counter++ > 10) {
+      // pcw.getPose(camera);
+      // counter = 0;
+    // } 
   }
 
   // Called once the command ends or is interrupted.
@@ -51,5 +51,11 @@ public class PhotonCommand extends CommandBase {
     return false;
   }
 
+  public double getYawFromSubsystem() {
+    double angle = pcw.getYaw(camera);
+    // System.out.println(angle);
+
+    return angle;
+  }
 
 }

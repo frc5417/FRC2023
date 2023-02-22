@@ -33,7 +33,7 @@ public class PhotonSubsystem extends SubsystemBase {
   /** Creates a new PhotonSubsystem. */
   public PhotonCamera photonCamera;
   public PhotonPoseEstimator photonPoseEstimator;
-
+  private int cnt = 0;
   private double[][] cameraInfo = new double[9][4]; // 1 indexed
 
   public PhotonSubsystem() {}
@@ -80,8 +80,11 @@ public class PhotonSubsystem extends SubsystemBase {
   return photonCamera;
 }
   public double getYaw(PhotonCamera camera) {
+    if ((this.cnt++ % 10) != 0)
+      return 0; 
     var result = camera.getLatestResult();
     if(result.hasTargets()) {
+      // System.out.println("We GOT THE TARGET!!! :)");
       return result.getBestTarget().getYaw();
     }
     else{

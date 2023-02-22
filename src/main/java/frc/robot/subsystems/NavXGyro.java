@@ -27,5 +27,8 @@ public class NavXGyro extends SubsystemBase {
   public double getGyroAngle(AHRS ahrs) {
     return ahrs.getAngle();
   }
+  public void resetGyroAngle(AHRS ahrs) {
+    ahrs.reset();
+  }
 
 }
