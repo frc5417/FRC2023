@@ -28,6 +28,10 @@ public class Drive extends SubsystemBase {
   }
   
   public void setPower(double leftPower, double rightPower) {
+
+    leftPower *= -1;
+    rightPower *= -1;
+
     if (Math.abs(leftPower) < Constants.OperatorConstants.deadBand) {
       leftPower = 0;
     }

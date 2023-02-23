@@ -21,12 +21,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   // private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
-  private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
-  private final Drive m_drivesubsystem = new Drive();
-  private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drivesubsystem);
-
+  private static final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   private static final Drive m_drive = new Drive();
-  private static TankDrive tankDrive = new TankDrive(m_drive);
+  private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
+
+  
+  private static TankDrive tankDrive = new TankDrive(m_drive, m_photonsubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private static final CommandXboxController m_driverController =
@@ -66,6 +66,10 @@ public class RobotContainer {
 
   public static boolean getButtonA() {
     return m_driverController.a().getAsBoolean();
+  }
+  
+  public static boolean getRtBumper() {
+    return m_driverController.rightBumper().getAsBoolean();
   }
 
   public static boolean getButtonX() {

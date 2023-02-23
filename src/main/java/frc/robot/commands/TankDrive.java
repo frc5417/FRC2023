@@ -12,6 +12,8 @@ import frc.robot.subsystems.NavXGyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import org.photonvision.PhotonCamera;
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -20,8 +22,9 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class TankDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
-  private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
-  private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+  private final PhotonSubsystem m_photonsubsystem;
+  private final PhotonCommand m_pPhotonCommand;
+  private final PhotonCamera camera;
 
   private final Drive drive;
 
@@ -32,8 +35,13 @@ public class TankDrive extends CommandBase {
 
 
   
-  public TankDrive(Drive subsystem) {
+  public TankDrive(Drive subsystem, PhotonSubsystem photonsub) {
     drive = subsystem;
+    m_photonsubsystem = photonsub;
+
+    camera = m_photonsubsystem.PhotonCameraWrapper();
+
+    m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
@@ -61,12 +69,13 @@ public class TankDrive extends CommandBase {
     } else {
       m_pPhotonCommand.cancel();
     }
+
     if(RobotContainer.getButtonX()) { 
       m_NavXGyro.resetGyroAngle(ahrs);
       // System.out.println("Button Press Detected");
       // System.out.println(m_pPhotonCommand.getYawFromSubsystem());
-      double angle =  90;//m_pPhotonCommand.getYawFromSubsystem();
-      // System.out.println(angle);
+      double angle =  m_photonsubsystem.getYaw(camera);
+      System.out.println(angle);
       if (angle != 0) {
         m_NavXGyroCommand.setAngle(angle);
       } 

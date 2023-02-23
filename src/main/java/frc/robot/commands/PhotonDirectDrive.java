@@ -30,6 +30,8 @@ public class PhotonDirectDrive extends CommandBase {
   @Override
   public void initialize() {
     camera = pcw.PhotonCameraWrapper();
+    
+    System.out.println("PHOTON DRIVE INIT");
     // ahrs.reset();
     // pcw.getEstimatedGlobalPose();
   }
@@ -38,6 +40,7 @@ public class PhotonDirectDrive extends CommandBase {
   //Basic code to make the robot go up to maxDistanceAway from the target in a straight line
   @Override
   public void execute() {
+    
     double leftCommand = 0.0;
     double rightCommand = 0.0;
     //gets the difference in the current distance away from what it should be
@@ -50,10 +53,17 @@ public class PhotonDirectDrive extends CommandBase {
     }
     if (angleError > 0.0) {
       //if positive angle error (rotated clockwise of target), then we need to correct it by turning counterclockwise
-      leftCommand = Constants.VisionConstants.forwardToAngleRatio - (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
-      rightCommand = Constants.VisionConstants.forwardToAngleRatio + (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
+      leftCommand = Constants.VisionConstants.forwardToAngleRatio + (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
+      rightCommand = Constants.VisionConstants.forwardToAngleRatio - (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
     }
-    drive.setPower(leftCommand*Constants.VisionConstants.forwardKP, rightCommand*Constants.VisionConstants.forwardKP);
+
+    if ((counter++ % 3) == 0){
+      System.out.printf("F_Err: %f, A_Err %f \n", forwardError, angleError);
+      System.out.printf("Left: %f, Right %f \n", leftCommand*Constants.VisionConstants.forwardKP, rightCommand*Constants.VisionConstants.forwardKP);
+    }
+
+    
+    drive.setPower(Math.abs(leftCommand*0.5), Math.abs(rightCommand*0.5));
   }
 
   // Called once the command ends or is interrupted.

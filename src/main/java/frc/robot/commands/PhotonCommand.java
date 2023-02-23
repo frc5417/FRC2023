@@ -53,7 +53,7 @@ public class PhotonCommand extends CommandBase {
 
   public double getYawFromSubsystem() {
     double angle = pcw.getYaw(camera);
-    // System.out.println(angle);
+    System.out.println(angle);
 
     return angle;
   }

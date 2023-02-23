@@ -59,9 +59,9 @@ public class NavXGyroCommand extends CommandBase {
       
       drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
     } else {
-      if (pid.atSetpoint()) {
-        System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
-      }
+      // if (pid.atSetpoint()) {
+      //   System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
+      // }
       drive.setPower(0, 0);
       pid.reset();
     }
