@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -11,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutoBalance extends CommandBase {
   private final static Drive drive = new Drive();
   /** Creates a new AutoBalance. */
+
+  private static Boolean doFinish = false;
   public AutoBalance() {
     // Use addRequirements() here to declare subsystem dependencies.
     
@@ -24,16 +27,19 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.balance();
+    doFinish = drive.balance();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drive.SetSpeed(0,0);
+    RobotContainer.initTeleopCommand();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return doFinish;
   }
 }

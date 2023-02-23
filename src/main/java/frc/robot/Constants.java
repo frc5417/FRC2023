@@ -18,7 +18,7 @@ public final class Constants {
   public static final int DriveLeftFollower = 12;
   public static final int DriveRightLeader = 13;
   public static final int DriveRightFollower = 14;
-  public static final double degreesAllowed = 2.5;
+  public static final double degreesAllowed = 5;
   public static final double maxVoltage = 10;
   public static final double maxSpeed = 3; // m/s
   public static final double maxAcceleration =  3;//m/s^2

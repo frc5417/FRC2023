@@ -48,7 +48,9 @@ public class Drive extends SubsystemBase {
   private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
   private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
+
   public Drive() {
+    
     rightMotors.setInverted(false);
     leftMotors.setInverted(true);
 /*
@@ -67,10 +69,19 @@ public class Drive extends SubsystemBase {
 
     ShifterL.set(DoubleSolenoid.Value.kReverse);
     ShifterR.set(DoubleSolenoid.Value.kReverse);
+    ahrs.calibrate();
+
+
+    System.out.println(ahrs.getPitch());
+    
   }
 
   public double GyroPitch(){
     return ahrs.getPitch();
+  }
+  
+  public double GyroRoll(){
+    return ahrs.getRoll();
   }
 
   public void SetSpeed(double leftSpeed, double rightSpeed) {
@@ -88,14 +99,30 @@ public class Drive extends SubsystemBase {
     ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
   }
 
-  public void balance(){
-    while(GyroPitch() >= Constants.degreesAllowed){
-      SetSpeed(-0.1, -0.1);
-    }
+  public static double clamp(double val, double min, double max) {
+    return Math.max(min, Math.min(max, val));
+  }
 
-    while(GyroPitch() <= -(Constants.degreesAllowed)){
-      SetSpeed(0.1, 0.1);
+  public double getPowerFromTilt(double tilt){
+    return Math.abs(tilt/90);
+  }
+
+
+  public boolean balance(){
+
+    if(GyroRoll() >= Constants.degreesAllowed && !ahrs.isCalibrating()){
+      SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
     }
+    System.out.println(GyroRoll());
+
+    if(GyroRoll() <= -(Constants.degreesAllowed) && !ahrs.isCalibrating()){
+      SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
+    } 
+    
+    if(Math.abs(GyroRoll()) <= Constants.degreesAllowed && !ahrs.isCalibrating()){
+      return true;
+    } 
+    return false;
   }
 
   @Override
