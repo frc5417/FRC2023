@@ -4,12 +4,21 @@
 
 package frc.robot;
 
+import java.util.concurrent.TimeUnit.*;
+
+import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.commands.Autos;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Drive;
+import frc.robot.commands.AutoBalance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,14 +28,41 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private static final Drive m_drive = new Drive();
+  private final AutoBalance m_AutoBalance =  new AutoBalance();
+  private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+  private final static Arm armSubsystem = new Arm();
+  private final static Manipulator manipulatorSubsystem = new Manipulator();
+
+  private static final TankDrive tankDrive = new TankDrive(m_drive);
+  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
+  //private static final Autos chargeAutons = new Autos(m_drive);
+  private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
+  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
+  private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
+
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.308d, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.1073d, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.04877d, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.07901d, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.092708d, armSubsystem);
+  private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
+  private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
+  private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
+  private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
+  private final static CommandXboxController m_driverController =
       new CommandXboxController(DriverConstants.kDriverControllerPort);
+  private final static CommandXboxController m_manipulatorController =
+      new CommandXboxController(ManipulatorConstants.kManipulatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    compressor.enableDigital();
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -43,7 +79,23 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.a().whileTrue(m_AutoBalance);
+    m_driverController.b().whileTrue(shiftDrivetrain);
+    
+    m_manipulatorController.a().whileTrue(armSetPointIntake);
+    m_manipulatorController.b().whileTrue(armSetPointSecondScore);
+    m_manipulatorController.y().whileTrue(armSetPointHumanCube) ;
+    m_manipulatorController.x().whileTrue(armSetPointHumanCone);
+    m_manipulatorController.rightBumper().whileTrue(armSetPointThirdScore);
+
+    m_manipulatorController.povUp().onTrue(clawConfig1);
+    m_manipulatorController.povRight().onTrue(clawConfig2);
+    m_manipulatorController.povDown().onTrue(clawConfig3);
+
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
+
+    System.out.println("Buttons Configured");
   }
 
   /**
@@ -52,7 +104,58 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return autoStack1.getRamseteCommand()
+                     .andThen(armSetPointSecondScore)
+                     .andThen(manipulatorOutAuton1)
+                     .andThen(armSetPointIntake)
+                     .andThen(autoStack2.getRamseteCommand());
   }
+
+  public static double getDriverLeftJoystick() {
+    double value = m_driverController.getRawAxis(1);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
+  }
+
+  public static double getDriverRightJoystick() {
+    double value = m_driverController.getRawAxis(5);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
+  }
+
+  public static double getManipulatorLeftJoystick() {
+    double value = m_manipulatorController.getRawAxis(1);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
+  }
+  
+  public static double getManipulatorRightJoystick() {
+    double value = m_manipulatorController.getRawAxis(5);
+
+    if(Math.abs(value) < ManipulatorConstants.kManipulatorControllerDeadZone) {
+      value = 0;
+    }
+
+    return value;
+  }
+
+  public static void initArmMovement() {
+    armManualCommand.schedule();
+  }
+
+  public static void initTeleopCommand(){
+    tankDrive.schedule();
+  } 
 }

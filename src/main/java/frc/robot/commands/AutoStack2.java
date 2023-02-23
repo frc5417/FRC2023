@@ -9,8 +9,7 @@ import java.util.List;
 import com.pathplanner.lib.PathPlanner;
 
 import frc.robot.subsystems.Drive;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -24,11 +23,13 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class Autos extends CommandBase {
-  RamseteCommand ramseteCommand;
+public class AutoStack2 extends CommandBase {
+  RamseteCommand ramseteCommand2;
   Drive drive;
 
-  public Autos(Drive drive) {
+  Trajectory moveCharging;
+
+  public AutoStack2(Drive drive) {
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
@@ -40,33 +41,24 @@ public class Autos extends CommandBase {
       new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
 
-    /*Trajectory extendedSCurve = TrajectoryGenerator.generateTrajectory(
+    //final step is to move back onto charging station
+    moveCharging = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(2,-1),
-        new Translation2d(3,0),
-        new Translation2d(4,1)
+        new Translation2d(1,0)
       ), 
-      new Pose2d(6,0, new Rotation2d(0)), 
-      config);*/
-      //chargeb is for auton on blue side
-        //chargeb1 drives from the right side starting point to the left spot on the charging station
-        //chargeb2 is the safest and drives from the middle starting point on to the charging station
-        //chargeb3 drives from the left side starting point to the right spot on the charging station
-      //chargea is for auton on red side
-        //charger1 drives from the right side starting point to the left spot on the charging station
-        //charger2 is the safest and drives from the middle starting point on to the charging station
-        //charger3 drives from the left side starting point to the right spot on the charging station
-    Trajectory chargeStationOnly = PathPlanner.loadPath("chargeb1", Constants.maxSpeed, Constants.maxAcceleration);
+      new Pose2d(1,0, new Rotation2d(0)), 
+      config);
+    
 
-    drive.resetOdometry(chargeStationOnly.getInitialPose());
+    drive.resetOdometry(moveCharging.getInitialPose());
 
-    RamseteController ramseteControl = new RamseteController();
+    RamseteController ramseteControl2 = new RamseteController();
 
-    ramseteCommand = new RamseteCommand(
-      chargeStationOnly, 
+    ramseteCommand2 = new RamseteCommand(
+      moveCharging, 
       drive::getPose,
-      ramseteControl, 
+      ramseteControl2, 
       motorFF,
       Constants.kinematics, 
       drive::getWheelSpeeds, 
@@ -76,7 +68,7 @@ public class Autos extends CommandBase {
       drive);
   }
 
-  public CommandBase getRamseteCommand (){
-    return ramseteCommand.andThen(() -> drive.SetSpeed(0, 0));
+  public Command getRamseteCommand (){
+    return ramseteCommand2.andThen(() -> drive.SetSpeed(0, 0));
   }
 }
