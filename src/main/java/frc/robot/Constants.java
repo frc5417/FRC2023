@@ -33,10 +33,13 @@ public final class Constants {
   }
   
   public static class AutonConstants{
-    public static final double kS = 0.21842;
-    public static final double kV = 0.010489;
-    public static final double kA = 0.0043684;
-    public static final double kP = 0.0115;
+    //values for higher-shifted gear
+    public static final double kS = 0.077111;
+    public static final double kV = 0.12511;
+    public static final double kA = 0.0;
+    public static final double kP = 0.00015607;
+
+    //values for lower-shifted gear
   }
 
   public static class ManipulatorConstants {
