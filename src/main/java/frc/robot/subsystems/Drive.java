@@ -52,7 +52,7 @@ public class Drive extends SubsystemBase {
   public Drive() {
     
     rightMotors.setInverted(true);
-    leftMotors.setInverted(true);
+    leftMotors.setInverted(false);
 /*
     leftLeader.setIdleMode(IdleMode.kBrake);
     leftFollower.setIdleMode(IdleMode.kBrake);
