@@ -43,7 +43,7 @@ public class TankDrive extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
 
-    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive);
+    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive, m_photonsubsystem);
   }
 
   // Called when the command is initially scheduled.
