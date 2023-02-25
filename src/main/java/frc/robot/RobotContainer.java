@@ -36,6 +36,7 @@ public class RobotContainer {
 
   private static final TankDrive tankDrive = new TankDrive(m_drive);
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
+  private static final ShiftDown shiftDown = new ShiftDown(m_drive);
   //private static final Autos chargeAutons = new Autos(m_drive);
   private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
   private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);

@@ -29,7 +29,8 @@ public class AutoStack1 extends CommandBase {
   Trajectory moveBack;
 
   public AutoStack1(Drive drive) {
-    this.drive = drive;
+    try {
+      this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
@@ -44,15 +45,23 @@ public class AutoStack1 extends CommandBase {
     moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(0.5,0)
+        //new Translation2d(0.25,0),
+        new Translation2d(2.5,0)
       ), 
-      new Pose2d(0.5,0, new Rotation2d(0)), 
+      new Pose2d(2.5,0, new Rotation2d(0)), 
       config);
     
 
     drive.resetOdometry(moveBack.getInitialPose());
 
     RamseteController ramseteControl1 = new RamseteController();
+
+    //reset the pose:
+    System.out.println("hello! this is going to go now");
+    Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
+    drive.resetOdometry(resetPose);
+    
+    System.out.println("works");
 
     ramseteCommand1 = new RamseteCommand(
       moveBack, 
@@ -61,10 +70,16 @@ public class AutoStack1 extends CommandBase {
       motorFF,
       Constants.kinematics, 
       drive::getWheelSpeeds, 
-      new PIDController(Constants.AutonConstants.kP, 0, 0), 
-      new PIDController(Constants.AutonConstants.kP, 0, 0), 
+      new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD), 
+      new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD),
       drive::SetSpeed, 
       drive);
+      System.out.println("following path");
+    }
+    catch (Exception e) {
+      System.out.println("auto stack error: "+e);
+    }
+    
   }
 
   public Command getRamseteCommand (){

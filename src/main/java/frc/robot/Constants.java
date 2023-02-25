@@ -34,12 +34,15 @@ public final class Constants {
   
   public static class AutonConstants{
     //values for higher-shifted gear
-    public static final double kS = 0.15043;
-    public static final double kV = 0.26301;
-    public static final double kA = 0.019672;
-    public static final double kP = 0.05298;
-    public static final double autoMaxSpeed = 0.5; // m/s
-    public static final double autoMaxAcceleration =  0.1;//m/s^2
+    public static final double kS = 0.14161;
+    public static final double kV = 3.3727;
+    public static final double kA = 0.31905;
+      //feedforward characterization kP = 4.8456E-06
+    public static final double kP = 4.8456*Math.pow(10,-6);
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double autoMaxSpeed = 0.001; // m/s
+    public static final double autoMaxAcceleration = 0.01;//m/s^2
     //values for lower-shifted gear
   }
 

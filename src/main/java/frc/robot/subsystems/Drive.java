@@ -51,8 +51,8 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     
-    rightMotors.setInverted(true);
-    leftMotors.setInverted(false);
+    rightMotors.setInverted(false);
+    leftMotors.setInverted(true);
 /*
     leftLeader.setIdleMode(IdleMode.kBrake);
     leftFollower.setIdleMode(IdleMode.kBrake);
@@ -72,7 +72,7 @@ public class Drive extends SubsystemBase {
     ahrs.calibrate();
 
 
-    System.out.println(ahrs.getPitch());
+    //System.out.println(ahrs.getPitch());
     
   }
 
@@ -87,6 +87,7 @@ public class Drive extends SubsystemBase {
   public void SetSpeed(double leftSpeed, double rightSpeed) {
     leftMotors.set(leftSpeed);
     rightMotors.set(rightSpeed);
+    //System.out.println("left speed " + leftSpeed + "right speed " + rightSpeed);
   }
 
   public void resetEncoders(){
@@ -97,6 +98,14 @@ public class Drive extends SubsystemBase {
   public void shiftToggle() {
     ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+  }
+  public void shiftDown() {
+    if (ShifterL.get() != DoubleSolenoid.Value.kReverse) { 
+      ShifterL.set(DoubleSolenoid.Value.kReverse); 
+    }
+    if (ShifterR.get() != DoubleSolenoid.Value.kReverse) { 
+      ShifterR.set(DoubleSolenoid.Value.kReverse); 
+    }
   }
 
   public static double clamp(double val, double min, double max) {
@@ -113,7 +122,7 @@ public class Drive extends SubsystemBase {
     if(GyroRoll() >= Constants.degreesAllowed && !ahrs.isCalibrating()){
       SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
     }
-    System.out.println(GyroRoll());
+    //System.out.println(GyroRoll());
 
     if(GyroRoll() <= -(Constants.degreesAllowed) && !ahrs.isCalibrating()){
       SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
@@ -127,10 +136,12 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    //System.out.println("shift L: "+ShifterL.get()+" shifter R: "+ShifterR.get());
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
   }
 
   public Pose2d getPose(){
+    System.out.println("get pose: "+odometry.getPoseMeters());
     return odometry.getPoseMeters();
   }
 
