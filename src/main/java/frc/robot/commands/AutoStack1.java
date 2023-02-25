@@ -37,16 +37,16 @@ public class AutoStack1 extends CommandBase {
         Constants.kinematics, Constants.maxVoltage);
 
     TrajectoryConfig config = 
-      new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
+      new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
 
     //first step is to move back slightly
     moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(1,0)
+        new Translation2d(-0.5,0)
       ), 
-      new Pose2d(1,0, new Rotation2d(0)), 
+      new Pose2d(-0.5,0, new Rotation2d(0)), 
       config);
     
 

@@ -38,7 +38,8 @@ public final class Constants {
     public static final double kV = 0.12511;
     public static final double kA = 0.0;
     public static final double kP = 0.00015607;
-
+    public static final double autoMaxSpeed = 1; // m/s
+    public static final double autoMaxAcceleration =  3;//m/s^2
     //values for lower-shifted gear
   }
 
