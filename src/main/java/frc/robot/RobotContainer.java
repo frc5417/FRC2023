@@ -104,11 +104,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoStack1.getRamseteCommand()
+    /*return autoStack1.getRamseteCommand()
                      .andThen(armSetPointSecondScore)
                      .andThen(manipulatorOutAuton1)
                      .andThen(armSetPointIntake)
-                     .andThen(autoStack2.getRamseteCommand());
+                     .andThen(autoStack2.getRamseteCommand());*/
+    return autoStack1.getRamseteCommand();
   }
 
   public static double getDriverLeftJoystick() {

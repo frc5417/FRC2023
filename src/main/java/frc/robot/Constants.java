@@ -21,7 +21,7 @@ public final class Constants {
   public static final double degreesAllowed = 5;
   public static final double maxVoltage = 10;
   public static final double maxSpeed = 3; // m/s
-  public static final double maxAcceleration =  3;//m/s^2
+  public static final double maxAcceleration =  2;//m/s^2
   public static final double trackWidth = .524;
   public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.trackWidth);
   public static class DriverConstants {
@@ -34,12 +34,12 @@ public final class Constants {
   
   public static class AutonConstants{
     //values for higher-shifted gear
-    public static final double kS = 0.077111;
-    public static final double kV = 0.12511;
-    public static final double kA = 0.0;
-    public static final double kP = 0.00015607;
-    public static final double autoMaxSpeed = 1; // m/s
-    public static final double autoMaxAcceleration =  3;//m/s^2
+    public static final double kS = 0.15043;
+    public static final double kV = 0.26301;
+    public static final double kA = 0.019672;
+    public static final double kP = 0.05298;
+    public static final double autoMaxSpeed = 0.5; // m/s
+    public static final double autoMaxAcceleration =  0.1;//m/s^2
     //values for lower-shifted gear
   }
 
