@@ -42,13 +42,22 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArm(double speed) {
-    if (armLimitSwitch.get()) { armMotor1.set(0.0); } 
-    else { armMotor1.set(speed); }
+    armMotor1.set(speed);
+    if (armLimitSwitch.get()) { 
+      armMotor1.set(0.0); 
+    } else { 
+      armMotor1.set(speed); 
+    }
   }
 
   public void setArmPos(double pos) {
-    if (armLimitSwitch.get()) { armMotor1.setVoltage(0.0); }
-    else { armMotor1.setVoltage(PID(pos)); }
+    armMotor1.setVoltage(PID(pos));
+    if (armLimitSwitch.get()) { 
+      armMotor1.setVoltage(0.0); 
+    }
+    else { 
+      armMotor1.setVoltage(PID(pos)); 
+    }
   }
 
   public double PID(double setPoint) {
