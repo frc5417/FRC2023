@@ -22,6 +22,7 @@ public class Arm extends SubsystemBase {
 
   private final static DutyCycleEncoder enc = new DutyCycleEncoder(Constants.ManipulatorConstants.armEncoderPort);
   
+  private double runningAverage = 0.0;
   private double voltage = 0.0;
   private double integral = 0.0;
   private double derivative = 0.0;
@@ -42,15 +43,21 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArm(double speed) {
-    armMotor1.set(speed);
-    if (armLimitSwitch.get()) { 
+    if (armLimitSwitch.get() || runningAverage <= 0.017 || runningAverage >= 0.95) { 
       armMotor1.set(0.0); 
     } else { 
       armMotor1.set(speed); 
     }
   }
 
+  public void filteredAbsolutePosition(){
+    runningAverage = enc.getAbsolutePosition() * 0.1 + runningAverage * 0.9;
+  }
+
   public void setArmPos(double pos) {
+    if(runningAverage >= 0.017){
+      armMotor1.set(0);
+    }
     armMotor1.setVoltage(PID(pos));
     if (armLimitSwitch.get()) { 
       armMotor1.setVoltage(0.0); 
@@ -84,6 +91,7 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(enc.getAbsolutePosition());
+    System.out.println(runningAverage);
+    filteredAbsolutePosition();
   }
 }
