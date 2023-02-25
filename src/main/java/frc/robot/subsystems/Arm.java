@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,6 +17,8 @@ public class Arm extends SubsystemBase {
   private final CANSparkMax armMotor1;
   private final CANSparkMax armMotor2;
   private final CANSparkMax armMotor3;
+
+  private final DigitalInput armLimitSwitch = new DigitalInput(2);
 
   private final static DutyCycleEncoder enc = new DutyCycleEncoder(Constants.ManipulatorConstants.armEncoderPort);
   
@@ -40,10 +43,21 @@ public class Arm extends SubsystemBase {
 
   public void setArm(double speed) {
     armMotor1.set(speed);
+    if (armLimitSwitch.get()) { 
+      armMotor1.set(0.0); 
+    } else { 
+      armMotor1.set(speed); 
+    }
   }
 
   public void setArmPos(double pos) {
     armMotor1.setVoltage(PID(pos));
+    if (armLimitSwitch.get()) { 
+      armMotor1.setVoltage(0.0); 
+    }
+    else { 
+      armMotor1.setVoltage(PID(pos)); 
+    }
   }
 
   public double PID(double setPoint) {
