@@ -20,9 +20,9 @@ public class NavXGyroCommand extends CommandBase {
   AHRS ahrs;
   Drive drive;
 
-  private static final double kP = 0.05;
+  private static final double kP = 0.2;
   private static final double kI = 0.0;
-  private static final double kD = 0.1;
+  private static final double kD = 3.0;
 
   private static final PIDController pid = new PIDController(kP, kI, kD);
 
@@ -52,19 +52,23 @@ public class NavXGyroCommand extends CommandBase {
     // };
     // turn2Angle(drive, ahrs);
     // this.cancel();
-
     if (this.setAnglePassed != 0 && !pid.atSetpoint()) {
+      if (Math.abs(Math.abs(m_NavXGyro.getGyroAngle(ahrs)) - Math.abs(this.setAnglePassed)) < 2.5) {
+        drive.setPower(0, 0);
+        this.setAngle(0);
+        System.out.println("STOP");
+      }
       double leftPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
       double rightPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
       
       drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
-    } else {
-      // if (pid.atSetpoint()) {
-      //   System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
-      // }
-      drive.setPower(0, 0);
-      pid.reset();
-    }
+    } 
+    // else {
+    //   // if (pid.atSetpoint()) {
+    //   //   System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
+    //   // }
+    //   drive.setPower(0, 0);
+    // }
   }
 
   // Called once the command ends or is interrupted.
@@ -98,11 +102,12 @@ public class NavXGyroCommand extends CommandBase {
     // System.out.println("Droppped out of loop");
   }*/
   public void setAngle(double set_point) {
-    // System.out.printf("Set to: %f\n", set_point);
-    this.setAnglePassed = set_point;
-    pid.setSetpoint(this.setAnglePassed);
-    pid.setTolerance(5, 0.5); // stops at <= 25 deg/s error
-    pid.enableContinuousInput(-90, 90);
-    // turn2Angle(drive, ahrs);
+      m_NavXGyro.resetGyroAngle(ahrs);
+      this.setAnglePassed = set_point*0.1 + this.setAnglePassed*0.9;
+      // System.out.printf("Setpoint inside PID %f \n", set_point);
+      pid.setSetpoint(this.setAnglePassed);
+      pid.setTolerance(5, 1); // stops at <= 25 deg/s error
+      // pid.enableContinuousInput(-90, 90);
+
   }
 }

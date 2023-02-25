@@ -35,10 +35,11 @@ public class PhotonCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (counter++ > 10) {
-      // pcw.getPose(camera);
-      // counter = 0;
-    // } 
+    if (counter++ > 10) {
+      // System.out.println(getYawFromSubsystem());
+      pcw.getPose(camera);
+      counter = 0;
+    } 
   }
 
   // Called once the command ends or is interrupted.
@@ -53,7 +54,6 @@ public class PhotonCommand extends CommandBase {
 
   public double getYawFromSubsystem() {
     double angle = pcw.getYaw(camera);
-    System.out.println(angle);
 
     return angle;
   }
