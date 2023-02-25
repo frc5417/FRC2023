@@ -31,9 +31,6 @@ public class TankDrive extends CommandBase {
   public static final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   private final NavXGyro m_NavXGyro = new NavXGyro();
   private final NavXGyroCommand m_NavXGyroCommand;
-
-
-
   
   public TankDrive(Drive subsystem, PhotonSubsystem photonsub) {
     drive = subsystem;
@@ -46,7 +43,7 @@ public class TankDrive extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
 
-    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive);
+    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive, m_photonsubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -70,16 +67,20 @@ public class TankDrive extends CommandBase {
       m_pPhotonCommand.cancel();
     }
 
-    if(RobotContainer.getButtonX()) { 
-      m_NavXGyro.resetGyroAngle(ahrs);
-      // System.out.println("Button Press Detected");
-      // System.out.println(m_pPhotonCommand.getYawFromSubsystem());
-      double angle =  m_photonsubsystem.getYaw(camera);
+    if(RobotContainer.getButtonX()) {
+      double angle = m_pPhotonCommand.getYawFromSubsystem() * -1;
       System.out.println(angle);
-      if (angle != 0) {
-        m_NavXGyroCommand.setAngle(angle);
-      } 
-    } 
+      if (angle < 0) {
+        angle -= 90;
+      } else if (angle > 0) {
+        angle += 90;
+      }
+      
+      m_NavXGyroCommand.setAngle(angle);
+    } else {
+      m_NavXGyroCommand.setAngle(0);
+      drive.setPower(0, 0);
+    }
     if (Math.abs(RobotContainer.getDriverLeftJoystick()) > 0.1 || Math.abs(RobotContainer.getDriverRightJoystick()) > 0.1) {
       m_NavXGyroCommand.cancel();
       drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());

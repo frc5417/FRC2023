@@ -80,8 +80,6 @@ public class PhotonSubsystem extends SubsystemBase {
   return photonCamera;
 }
   public double getYaw(PhotonCamera camera) {
-    if ((this.cnt++ % 10) != 0)
-      return 0; 
     var result = camera.getLatestResult();
     if(result.hasTargets()) {
       // System.out.println("We GOT THE TARGET!!! :)");

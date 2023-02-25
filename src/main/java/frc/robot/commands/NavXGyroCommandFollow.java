@@ -72,6 +72,43 @@ public class NavXGyroCommand extends CommandBase {
       drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
     } 
 
+
+
+
+
+
+
+
+
+    double leftCommand = 0.0;
+    double rightCommand = 0.0;
+    //gets the difference in the current distance away from what it should be
+    double forwardError = pcw.getDistance(camera) - Constants.VisionConstants.maxDistanceAway;
+    double angleError = pcw.getYaw(camera);
+    if (forwardError > 0.0) {
+      //if positive forward error, then we need to correct it by driving more forwards
+      leftCommand = 1.0;
+      rightCommand = 1.0;
+    }
+    if (angleError > 0.0) {
+      //if positive angle error (rotated clockwise of target), then we need to correct it by turning counterclockwise
+      leftCommand = Constants.VisionConstants.forwardToAngleRatio + (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
+      rightCommand = Constants.VisionConstants.forwardToAngleRatio - (angleError/90.0)*(1-Constants.VisionConstants.forwardToAngleRatio);
+    }
+
+    if ((counter++ % 3) == 0){
+      System.out.printf("F_Err: %f, A_Err %f \n", forwardError, angleError);
+      System.out.printf("Left: %f, Right %f \n", leftCommand*Constants.VisionConstants.forwardKP, rightCommand*Constants.VisionConstants.forwardKP);
+    }
+
+    
+    drive.setPower(Math.abs(leftCommand*0.5), Math.abs(rightCommand*0.5));
+    // else {
+    //   // if (pid.atSetpoint()) {
+    //   //   System.out.printf("P error: %f, V error: %f\n", pid.getPositionError(), pid.getVelocityError());
+    //   // }
+    //   drive.setPower(0, 0);
+    // }
   }
 
   // Called once the command ends or is interrupted.
