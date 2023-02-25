@@ -111,12 +111,11 @@ public class Drive extends SubsystemBase {
   public boolean balance(){
 
     if(GyroRoll() >= Constants.degreesAllowed && !ahrs.isCalibrating()){
-      SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
+      SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
     }
-    System.out.println(GyroRoll());
 
     if(GyroRoll() <= -(Constants.degreesAllowed) && !ahrs.isCalibrating()){
-      SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
+      SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
     } 
     
     if(Math.abs(GyroRoll()) <= Constants.degreesAllowed && !ahrs.isCalibrating()){
