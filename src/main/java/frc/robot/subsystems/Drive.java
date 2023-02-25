@@ -38,7 +38,7 @@ public class Drive extends SubsystemBase {
   private final static MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
   private final static MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
 
-  //private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+  private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
 
   private final static RelativeEncoder leftEncoder = leftLeader.getEncoder();
   private final static RelativeEncoder rightEncoder = rightLeader.getEncoder();
@@ -51,8 +51,8 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     
-    rightMotors.setInverted(false);
-    leftMotors.setInverted(true);
+    rightMotors.setInverted(true);
+    leftMotors.setInverted(false);
 /*
     leftLeader.setIdleMode(IdleMode.kBrake);
     leftFollower.setIdleMode(IdleMode.kBrake);
@@ -87,7 +87,14 @@ public class Drive extends SubsystemBase {
   public void SetSpeed(double leftSpeed, double rightSpeed) {
     leftMotors.set(leftSpeed);
     rightMotors.set(rightSpeed);
+    drive.feed();
     //System.out.println("left speed " + leftSpeed + "right speed " + rightSpeed);
+  }
+
+  public void setDriveVolts(double leftVolts, double rightVolts){
+    leftMotors.setVoltage(leftVolts);
+    rightMotors.setVoltage(rightVolts);
+    drive.feed();
   }
 
   public void resetEncoders(){

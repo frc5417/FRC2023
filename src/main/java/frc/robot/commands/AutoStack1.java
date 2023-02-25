@@ -25,7 +25,6 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 public class AutoStack1 extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
-
   Trajectory moveBack;
 
   public AutoStack1(Drive drive) {
@@ -35,34 +34,30 @@ public class AutoStack1 extends CommandBase {
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
         motorFF, 
-        Constants.kinematics, Constants.maxVoltage);
+        Constants.kinematics, 10);
 
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
-          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
-
+          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(false);
     //first step is to move back slightly
     moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        //new Translation2d(0.25,0),
-        new Translation2d(2.5,0)
+        new Translation2d(10.0,0),
+        new Translation2d(15,0)
       ), 
-      new Pose2d(2.5,0, new Rotation2d(0)), 
+      new Pose2d(20,0, new Rotation2d(0)), 
       config);
     
-
+    
     drive.resetOdometry(moveBack.getInitialPose());
 
     RamseteController ramseteControl1 = new RamseteController();
 
     //reset the pose:
-    System.out.println("hello! this is going to go now");
     Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
     drive.resetOdometry(resetPose);
     
-    System.out.println("works");
-
     ramseteCommand1 = new RamseteCommand(
       moveBack, 
       drive::getPose,
@@ -72,12 +67,11 @@ public class AutoStack1 extends CommandBase {
       drive::getWheelSpeeds, 
       new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD), 
       new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD),
-      drive::SetSpeed, 
+      drive::setDriveVolts, 
       drive);
-      System.out.println("following path");
     }
     catch (Exception e) {
-      System.out.println("auto stack error: "+e);
+      System.out.println("auto stack error: "+ e);
     }
     
   }

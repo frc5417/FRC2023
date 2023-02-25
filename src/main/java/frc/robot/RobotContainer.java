@@ -39,7 +39,7 @@ public class RobotContainer {
   private static final ShiftDown shiftDown = new ShiftDown(m_drive);
   //private static final Autos chargeAutons = new Autos(m_drive);
   private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
-  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
+  //private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.308d, armSubsystem);
