@@ -38,19 +38,19 @@ public class AutoStack2 extends CommandBase {
 
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
-          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
+          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
 
     //final step is to move back onto charging station
     moveCharging = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(-1,0)
+        new Translation2d(-0.25,0)
       ), 
-      new Pose2d(-1,0, new Rotation2d(0)), 
+      new Pose2d(-0.75,0, new Rotation2d(0)), 
       config);
     
 
-    drive.resetOdometry(moveCharging.getInitialPose());
+    //drive.resetOdometry(moveCharging.getInitialPose());
 
     RamseteController ramseteControl2 = new RamseteController();
 

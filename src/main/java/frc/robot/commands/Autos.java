@@ -59,7 +59,7 @@ public class Autos extends CommandBase {
         //charger3 drives from the left side starting point to the right spot on the charging station
     Trajectory chargeStationOnly = PathPlanner.loadPath("chargeb1", Constants.maxSpeed, Constants.maxAcceleration);
 
-    drive.resetOdometry(chargeStationOnly.getInitialPose());
+    //drive.resetOdometry(chargeStationOnly.getInitialPose());
 
     RamseteController ramseteControl = new RamseteController();
 

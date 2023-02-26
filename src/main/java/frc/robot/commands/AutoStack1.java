@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -25,11 +26,13 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 public class AutoStack1 extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
-  Trajectory moveBack;
+  Trajectory translatedMoveBack;
 
   public AutoStack1(Drive drive) {
     try {
       this.drive = drive;
+      //reset odometry to be zero here
+      //drive.resetOdometry(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0)));
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
@@ -38,25 +41,24 @@ public class AutoStack1 extends CommandBase {
 
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
-          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(false);
-    //first step is to move back slightly
-    moveBack = TrajectoryGenerator.generateTrajectory(
+          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
+    //first step is to move back slightly, old moveBack
+    Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(10.0,0),
-        new Translation2d(15,0)
+        new Translation2d(-0.25,0)
       ), 
-      new Pose2d(20,0, new Rotation2d(0)), 
+      new Pose2d(-0.5,0, new Rotation2d(0)), 
       config);
     
     
-    drive.resetOdometry(moveBack.getInitialPose());
+    //drive.resetOdometry(moveBack.getInitialPose());
 
     RamseteController ramseteControl1 = new RamseteController();
 
     //reset the pose:
-    Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
-    drive.resetOdometry(resetPose);
+    //Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
+    //drive.resetOdometry(resetPose);
     
     ramseteCommand1 = new RamseteCommand(
       moveBack, 
@@ -77,6 +79,7 @@ public class AutoStack1 extends CommandBase {
   }
 
   public Command getRamseteCommand (){
+    //return new StopAuton(drive);
     return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
   }
 }

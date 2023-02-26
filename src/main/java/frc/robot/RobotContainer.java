@@ -39,14 +39,14 @@ public class RobotContainer {
   private static final ShiftDown shiftDown = new ShiftDown(m_drive);
   //private static final Autos chargeAutons = new Autos(m_drive);
   private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
-  //private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
+  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.308d, armSubsystem);
-  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.1073d, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.04877d, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.07901d, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.092708d, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.344, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.139, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.077, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.095, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.105, armSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
@@ -105,12 +105,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    /*return autoStack1.getRamseteCommand()
+    return autoStack1.getRamseteCommand()
                      .andThen(armSetPointSecondScore)
                      .andThen(manipulatorOutAuton1)
                      .andThen(armSetPointIntake)
-                     .andThen(autoStack2.getRamseteCommand());*/
-    return autoStack1.getRamseteCommand();
+                     .andThen(autoStack2.getRamseteCommand());
   }
 
   public static double getDriverLeftJoystick() {

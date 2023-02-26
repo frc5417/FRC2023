@@ -28,6 +28,8 @@ public class Drive extends SubsystemBase {
   private static double LeftDistance = 0;
   private static double rightDistance = 0;
 
+  private int count = 0;
+
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
@@ -144,21 +146,22 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     //System.out.println("shift L: "+ShifterL.get()+" shifter R: "+ShifterR.get());
-    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+    if (count++ % 20 == 0) { System.out.println("pose: "+getPose()); }
+    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition());
   }
 
   public Pose2d getPose(){
-    System.out.println("get pose: "+odometry.getPoseMeters());
+    //System.out.println("get pose: "+odometry.getPoseMeters());
     return odometry.getPoseMeters();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),rightEncoder.getVelocity());
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),-rightEncoder.getVelocity());
   }
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), pose);
+    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition(), pose);
   }
 
   public void zeroHeading(){
