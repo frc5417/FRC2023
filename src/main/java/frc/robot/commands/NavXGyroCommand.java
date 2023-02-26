@@ -13,7 +13,6 @@ import frc.robot.subsystems.PhotonSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 
-import frc.robot.Constants;
 import org.photonvision.PhotonCamera;
 
 public class NavXGyroCommand extends CommandBase {
@@ -40,7 +39,7 @@ public class NavXGyroCommand extends CommandBase {
     ahrs = ahrs_passed;
     drive = drive_passed;
     pcw =  pcw_passed;
-    addRequirements(m_NavXGyro);
+    addRequirements(m_NavXGyro, drive, pcw);
   }
 
   // Called when the command is initially scheduled.
@@ -53,13 +52,6 @@ public class NavXGyroCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_NavXGyro.printGyro(ahrs);
-    // while (!this.isFinished()) {
-      // turn2Angle(drive, ahrs);
-      // System.out.println("THIS FINISHED NOT");
-    // };
-    // turn2Angle(drive, ahrs);
-    // this.cancel();
     if (this.setAnglePassed != 0 && !pid.atSetpoint()) {
       if (Math.abs(Math.abs(m_NavXGyro.getGyroAngle(ahrs)) - Math.abs(this.setAnglePassed)) < 2.5) {
         drive.setPower(0, 0);
@@ -71,7 +63,6 @@ public class NavXGyroCommand extends CommandBase {
       
       drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
     } 
-
   }
 
   // Called once the command ends or is interrupted.
@@ -85,29 +76,10 @@ public class NavXGyroCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-/* 
-  public void turn2Angle(Drive drive, AHRS ahrs) {
-    if (this.setAnglePassed == 0) return;
-    // System.out.printf("Got value %f\n", this.setAnglePassed);
-    ahrs.reset();
-    while (!pid.atSetpoint()) {
-      double leftPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs))/Math.abs(this.setAnglePassed);
-      double rightPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs))/Math.abs(this.setAnglePassed);
-      
-      drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
-      
-      // System.out.println("In LOOP!!! :(" + " " + this.setAnglePassed);
 
-      // System.out.println(m_NavXGyro.getGyroAngle(ahrs));
-      // System.out.println(pid.atSetpoint());
-    }
-    drive.setPower(0, 0);
-    // System.out.println("Droppped out of loop");
-  }*/
   public void setAngle(double set_point) {
       m_NavXGyro.resetGyroAngle(ahrs);
       this.setAnglePassed = set_point*0.1 + this.setAnglePassed*0.9;
-      // System.out.printf("Setpoint inside PID %f \n", set_point);
       pid.setSetpoint(this.setAnglePassed);
       pid.setTolerance(5, 1); // stops at <= 25 deg/s error
       // pid.enableContinuousInput(-90, 90);

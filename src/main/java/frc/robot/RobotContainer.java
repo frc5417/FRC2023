@@ -11,6 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import org.photonvision.PhotonCamera;
+
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SerialPort;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -21,12 +26,24 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   // private final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+
+  public static final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
+
   private static final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   private static final Drive m_drive = new Drive();
+  private static final NavXGyro m_NavXGyro = new NavXGyro();
+
   private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
+  private static final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+  private static final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, m_drive, m_photonsubsystem);
+  private static TankDrive tankDrive = new TankDrive(m_drive, ahrs, m_pPhotonCommand, m_NavXGyroCommand);
+
+  private final PhotonCamera camera = m_photonsubsystem.PhotonCameraWrapper();
+
 
   
-  private static TankDrive tankDrive = new TankDrive(m_drive, m_photonsubsystem);
+  
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private static final CommandXboxController m_driverController =
@@ -34,8 +51,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    System.out.println("HIIIIIII===================");
+    // Configure the trigger bindings\
     configureBindings();
   }
 
@@ -51,10 +67,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    System.out.println("CONFIGURE BINDINGS ON");
-    // System.out.println(m_driverController());
     m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
-    // m_driverController.povDown().onTruenew photonCommand(m_photonsubsystem));
   }
 
   public static CommandXboxController getDriverController() {
@@ -82,7 +95,6 @@ public class RobotContainer {
   
   public static void initTelopCommands() {
     tankDrive.schedule();
-    // armCommand.schedule();
   }
 
   public static void initTankDrive() {

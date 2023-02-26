@@ -16,7 +16,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import org.photonvision.PhotonCamera;
 
-public class NavXGyroCommand extends CommandBase {
+public class NavXGyroCommandFollow extends CommandBase {
   /** Creates a new NavXGyroCommand. */
 
   NavXGyro m_NavXGyro;
@@ -34,13 +34,13 @@ public class NavXGyroCommand extends CommandBase {
   public double setAnglePassed;
   public int counter = 0;
 
-  public NavXGyroCommand(NavXGyro m_NavXGyro_passed, AHRS ahrs_passed, Drive drive_passed, PhotonSubsystem pcw_passed) {
+  public NavXGyroCommandFollow(NavXGyro m_NavXGyro_passed, AHRS ahrs_passed, Drive drive_passed, PhotonSubsystem pcw_passed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_NavXGyro = m_NavXGyro_passed;
     ahrs = ahrs_passed;
     drive = drive_passed;
     pcw =  pcw_passed;
-    addRequirements(m_NavXGyro);
+    addRequirements(m_NavXGyro, drive, pcw);
   }
 
   // Called when the command is initially scheduled.

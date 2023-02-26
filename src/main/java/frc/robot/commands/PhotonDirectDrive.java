@@ -22,8 +22,7 @@ public class PhotonDirectDrive extends CommandBase {
     pcw = photon;
     drive = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(pcw);
-    addRequirements(drive);
+    addRequirements(pcw, drive);
   }
 
   // Called when the command is initially scheduled.
