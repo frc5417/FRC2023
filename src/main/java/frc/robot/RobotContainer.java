@@ -40,7 +40,7 @@ public class RobotContainer {
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.344, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.139, armSubsystem);
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.077, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.099, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.095, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.105, armSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
