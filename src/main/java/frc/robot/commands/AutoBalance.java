@@ -13,7 +13,7 @@ public class AutoBalance extends CommandBase {
   private final static Drive drive = new Drive();
   /** Creates a new AutoBalance. */
 
-  private static Boolean doFinish = false;
+  //private static Boolean doFinish = false;
   public AutoBalance() {
     // Use addRequirements() here to declare subsystem dependencies.
     
@@ -27,7 +27,8 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    doFinish = drive.balance();
+    //doFinish = 
+    drive.balance();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +41,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return doFinish;
+    return false;
   }
 }
