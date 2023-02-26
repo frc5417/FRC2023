@@ -53,12 +53,6 @@ public class Drive extends SubsystemBase {
     
     rightMotors.setInverted(true);
     leftMotors.setInverted(false);
-/*
-    leftLeader.setIdleMode(IdleMode.kBrake);
-    leftFollower.setIdleMode(IdleMode.kBrake);
-    rightLeader.setIdleMode(IdleMode.kBrake);
-    rightFollower.setIdleMode(IdleMode.kBrake);
-*/
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
     rightEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
@@ -69,11 +63,20 @@ public class Drive extends SubsystemBase {
 
     ShifterL.set(DoubleSolenoid.Value.kReverse);
     ShifterR.set(DoubleSolenoid.Value.kReverse);
-    ahrs.calibrate();
+    ahrs.calibrate();    
+  }
+  public void setDriveBreak(){
+    leftLeader.setIdleMode(IdleMode.kBrake);
+    leftFollower.setIdleMode(IdleMode.kBrake);
+    rightLeader.setIdleMode(IdleMode.kBrake);
+    rightFollower.setIdleMode(IdleMode.kBrake);
+  }
 
-
-    System.out.println(ahrs.getPitch());
-    
+  public void setDriveCoast(){
+    leftLeader.setIdleMode(IdleMode.kCoast);
+    leftFollower.setIdleMode(IdleMode.kCoast);
+    rightLeader.setIdleMode(IdleMode.kCoast);
+    rightFollower.setIdleMode(IdleMode.kCoast);
   }
 
   public double GyroPitch(){
@@ -106,7 +109,6 @@ public class Drive extends SubsystemBase {
   public double getPowerFromTilt(double tilt){
     return Math.abs(tilt/90);
   }
-
 
   public boolean balance(){
 

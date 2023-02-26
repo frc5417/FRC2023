@@ -18,7 +18,6 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drive;
-import frc.robot.commands.AutoBalance;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,19 +28,18 @@ import frc.robot.commands.AutoBalance;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final Drive m_drive = new Drive();
-  private final AutoBalance m_AutoBalance =  new AutoBalance();
   private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
-
   private static final TankDrive tankDrive = new TankDrive(m_drive);
+  private final AutoBalance m_AutoBalance =  new AutoBalance();
+  private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
-  //private static final Autos chargeAutons = new Autos(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.344, armSubsystem);
-  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.133, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.139, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.139, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.077, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.099, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.105, armSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
@@ -78,6 +76,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.a().whileTrue(m_AutoBalance);
+    m_driverController.x().toggleOnTrue(driveBreak);
     m_driverController.b().whileTrue(shiftDrivetrain);
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
