@@ -140,6 +140,10 @@ public class RobotContainer {
     return value;
   }
 
+  /*public Command getAutonomousCommand() {
+    
+  }*/
+
   public static void initArmMovement() {
     armManualCommand.schedule();
   }

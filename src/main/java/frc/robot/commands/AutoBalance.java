@@ -11,12 +11,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoBalance extends CommandBase {
   private final static Drive drive = new Drive();
-  /** Creates a new AutoBalance. */
 
   //private static Boolean doFinish = false;
   public AutoBalance() {
     // Use addRequirements() here to declare subsystem dependencies.
-    
+
     addRequirements(drive);
   }
 
@@ -27,15 +26,15 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //doFinish = 
     drive.balance();
+    //drive.pidBalance();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drive.SetSpeed(0,0);
-    RobotContainer.initTeleopCommand();
+    //RobotContainer.initTeleopCommand();
   }
 
   // Returns true when the command should end.

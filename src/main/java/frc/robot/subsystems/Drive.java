@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -49,6 +50,9 @@ public class Drive extends SubsystemBase {
   private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
 
+  //initializes PID controller for balancing
+  private final static PIDController balancePID = new PIDController(Constants.BalanceConstants.kP,Constants.BalanceConstants.kI,Constants.BalanceConstants.kD);
+
   public Drive() {
     
     rightMotors.setInverted(true);
@@ -63,7 +67,11 @@ public class Drive extends SubsystemBase {
 
     ShifterL.set(DoubleSolenoid.Value.kReverse);
     ShifterR.set(DoubleSolenoid.Value.kReverse);
-    ahrs.calibrate();    
+    ahrs.calibrate();
+    
+    //set balance PID controller setpoint to 0 and have a max degrees allowed set in Constants
+    balancePID.setSetpoint(0.0);
+    balancePID.setTolerance(Constants.BalanceConstants.degreesAllowed);
   }
   public void setDriveBreak(){
     leftLeader.setIdleMode(IdleMode.kBrake);
@@ -112,17 +120,40 @@ public class Drive extends SubsystemBase {
 
   public boolean balance(){
 
-    if(GyroRoll() >= Constants.degreesAllowed && !ahrs.isCalibrating()){
+    if(GyroRoll() >= Constants.BalanceConstants.degreesAllowed && !ahrs.isCalibrating()){
       SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
     }
 
-    if(GyroRoll() <= -(Constants.degreesAllowed) && !ahrs.isCalibrating()){
+    if(GyroRoll() <= -(Constants.BalanceConstants.degreesAllowed) && !ahrs.isCalibrating()){
       SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
     } 
     
-    if(Math.abs(GyroRoll()) <= Constants.degreesAllowed && !ahrs.isCalibrating()){
+    if(Math.abs(GyroRoll()) <= Constants.BalanceConstants.degreesAllowed && !ahrs.isCalibrating()){
       return true;
     } 
+    return false;
+  }
+
+  //used for more fine-tuned balancing in low gear and high gear modes
+  public boolean pidBalance() {
+    //if current gyro roll is positive then we want to set motor power forward to correct for the error
+    double leftPower = balancePID.calculate(-GyroRoll());
+    double rightPower = balancePID.calculate(-GyroRoll());
+
+    if (balancePID.atSetpoint()) {
+      //if less than degreesAllowed in Constants then stop moving
+      return true;
+    }
+
+    //default to low gear clamps
+    double clampOutput = Constants.BalanceConstants.lowGearClamp;
+    //switch to high gear clamps
+    if (ShifterL.get() == DoubleSolenoid.Value.kForward && ShifterR.get() == DoubleSolenoid.Value.kForward) {
+      clampOutput = Constants.BalanceConstants.highGearClamp;
+    }
+
+    //if greater than degreesAllowed in Constants then move based on PID calculations
+    SetSpeed(clamp(leftPower, -clampOutput, clampOutput),clamp(rightPower, -clampOutput, clampOutput));
     return false;
   }
 

@@ -18,7 +18,7 @@ public final class Constants {
   public static final int DriveLeftFollower = 12;
   public static final int DriveRightLeader = 13;
   public static final int DriveRightFollower = 14;
-  public static final double degreesAllowed = 5;
+  
   public static final double maxVoltage = 10;
   public static final double maxSpeed = 3; // m/s
   public static final double maxAcceleration =  3;//m/s^2
@@ -66,5 +66,14 @@ public final class Constants {
     public static final double kArmD = 1475.0;
 
     public static final double maxSetPoint = 0.4d;
+  }
+
+  public static class BalanceConstants {
+    public static final double degreesAllowed = 5.0;
+    public static final double kP = 1.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double lowGearClamp = 0.3;
+    public static final double highGearClamp = 0.1;
   }
 }
