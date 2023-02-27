@@ -3,47 +3,38 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.PhotonSubsystem;
 
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.NavXGyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import org.photonvision.PhotonCamera;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SerialPort;
 
 
 /** An example command that uses an example subsystem. */
 public class TankDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
-  private final PhotonSubsystem m_photonsubsystem;
   private final PhotonCommand m_pPhotonCommand;
-  private final PhotonCamera camera;
 
   private final Drive drive;
 
-  public static final AHRS ahrs = new AHRS(SerialPort.Port.kMXP); /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
-  private final NavXGyro m_NavXGyro = new NavXGyro();
+  public static AHRS ahrs; /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
   private final NavXGyroCommand m_NavXGyroCommand;
   
-  public TankDrive(Drive subsystem, PhotonSubsystem photonsub) {
+  public TankDrive(Drive subsystem, AHRS ahrs_passed, PhotonCommand photon_command_passed, NavXGyroCommand gyro_command_passed) {
     drive = subsystem;
-    m_photonsubsystem = photonsub;
 
-    camera = m_photonsubsystem.PhotonCameraWrapper();
+    ahrs = ahrs_passed;
 
-    m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+    m_pPhotonCommand = photon_command_passed;
+    m_NavXGyroCommand = gyro_command_passed;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
-
-    m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, drive, m_photonsubsystem);
   }
 
   // Called when the command is initially scheduled.
