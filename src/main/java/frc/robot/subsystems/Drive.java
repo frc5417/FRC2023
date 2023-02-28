@@ -29,8 +29,6 @@ public class Drive extends SubsystemBase {
   private static double LeftDistance = 0;
   private static double rightDistance = 0;
 
-  private static int counter = 0;
-
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
@@ -127,38 +125,13 @@ public class Drive extends SubsystemBase {
       double sign = outputVolts/Math.abs(outputVolts);
       outputVolts = sign*Constants.BalanceConstants.balanceMaxVoltage;
     }
-    /*if (Math.abs(outputVolts) <= Constants.BalanceConstants.voltageDeadband) {
-      outputVolts = 0.0;
-    }*/
     return outputVolts;
   }
 
-  public double getPowerFromTilt(double tilt){
-    return Math.abs(tilt/90);
-  }
-
-  public boolean balance(){
-    if(GyroRoll() >= Constants.BalanceConstants.degreesAllowed && !ahrs.isCalibrating()){
-      SetSpeed(clamp(getPowerFromTilt(GyroRoll()), -.3, .3), clamp(getPowerFromTilt(GyroRoll()), -.3, .3));
-    }
-
-    if(GyroRoll() <= -(Constants.BalanceConstants.degreesAllowed) && !ahrs.isCalibrating()){
-      SetSpeed(clamp(-getPowerFromTilt(GyroRoll()), -.3, .3), clamp(-getPowerFromTilt(GyroRoll()), -.3, .3));
-    } 
-    
-    if(Math.abs(GyroRoll()) <= Constants.BalanceConstants.degreesAllowed && !ahrs.isCalibrating()){
-      return true;
-    } 
-    return false;
-  }
-
-  //used for more fine-tuned balancing in low gear and high gear modes
   public boolean pidBalance() {
     //if current gyro roll is positive then we want to set motor power forward to correct for the error
     double leftPower = angleToVolts(-balancePID.calculate(GyroRoll()));
-    if (counter++ % 10 == 0) { System.out.println("volts: "+leftPower); }
     double rightPower = leftPower;
-    //if (counter++ % 10 == 0) { System.out.println("roll: "+GyroRoll()+" left: "+balancePID.calculate(GyroRoll())+" right: "+balancePID.calculate(GyroRoll())); }
 
     if (balancePID.atSetpoint()) {
       //if less than degreesAllowed in Constants then stop moving
@@ -172,7 +145,6 @@ public class Drive extends SubsystemBase {
 
     //if greater than degreesAllowed in Constants then move based on PID calculations
     setDriveVolts(leftPower, rightPower);
-    //setDriveVolts(clamp(leftPower, -Constants.BalanceConstants.lowGearClamp, Constants.BalanceConstants.lowGearClamp),clamp(rightPower, -Constants.BalanceConstants.lowGearClamp, Constants.BalanceConstants.lowGearClamp));
     return false;
   }
 
