@@ -76,6 +76,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     
+    RobotContainer.setCoastMode();
     RobotContainer.initArmMovement();
     RobotContainer.initTeleopCommand();
   }

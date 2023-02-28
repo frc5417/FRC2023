@@ -10,6 +10,7 @@ import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -32,7 +33,7 @@ public class RobotContainer {
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
   private static final TankDrive tankDrive = new TankDrive(m_drive);
-  private final AutoBalance m_AutoBalance =  new AutoBalance();
+  private final AutoBalance m_AutoBalance =  new AutoBalance(m_drive);
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
@@ -100,6 +101,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  /*public static double setDriverRumble(double rumbleVal) {
+    m_driverController.setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
+    m_driverController.setRumble()
+  }*/
+
   public static double getDriverLeftJoystick() {
     double value = m_driverController.getRawAxis(1);
 
@@ -149,6 +155,11 @@ public class RobotContainer {
   }
 
   public static void initTeleopCommand(){
+    m_drive.setDriveCoast();
     tankDrive.schedule();
   } 
+
+  public static void setCoastMode() {
+    m_drive.setDriveCoast();
+  }
 }

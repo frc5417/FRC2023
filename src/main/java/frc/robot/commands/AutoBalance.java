@@ -10,31 +10,34 @@ import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutoBalance extends CommandBase {
-  private final static Drive drive = new Drive();
+  private final Drive drive;
 
   //private static Boolean doFinish = false;
-  public AutoBalance() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public AutoBalance(Drive m_drive) {
+    drive = m_drive;
 
     addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    drive.setDriveBreak();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.balance();
-    //drive.pidBalance();
+    //drive.balance();
+    drive.pidBalance();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drive.SetSpeed(0,0);
-    //RobotContainer.initTeleopCommand();
+    drive.setDriveBreak();
+    RobotContainer.initTeleopCommand();
   }
 
   // Returns true when the command should end.
