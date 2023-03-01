@@ -53,6 +53,7 @@ public class Drive extends SubsystemBase {
 
   //initializes PID controller for balancing
   private final static PIDController balancePID = new PIDController(Constants.BalanceConstants.kP,Constants.BalanceConstants.kI,Constants.BalanceConstants.kD);
+  private static int balanceCount = 0;
 
   //used for determining the acceleraton for controller rumble
   private static double lastSpeed = 0.0;
@@ -142,8 +143,15 @@ public class Drive extends SubsystemBase {
 
     if (balancePID.atSetpoint()) {
       //if less than degreesAllowed in Constants then stop moving
+      balanceCount++;
+      if (balanceCount == 25) {
+        setDriveVolts(0.0, 0.0);
+      }
       return true;
+    } else {
+      balanceCount = 0;
     }
+    
     
     if (ShifterL.get() == DoubleSolenoid.Value.kForward && ShifterR.get() == DoubleSolenoid.Value.kForward) {
       ShifterL.set(DoubleSolenoid.Value.kReverse);
