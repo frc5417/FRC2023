@@ -23,6 +23,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
@@ -52,6 +53,12 @@ public class Drive extends SubsystemBase {
 
   //initializes PID controller for balancing
   private final static PIDController balancePID = new PIDController(Constants.BalanceConstants.kP,Constants.BalanceConstants.kI,Constants.BalanceConstants.kD);
+
+  //used for determining the acceleraton for controller rumble
+  private static double lastSpeed = 0.0;
+  private static double calculatedAcceleration = 0.0;
+  private static int counter = 0;
+  private static boolean firstRun = true;
 
   public Drive() {
     
@@ -151,6 +158,20 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+    double combinedSpeed = (getWheelSpeedsDouble()[0] + getWheelSpeedsDouble()[1]) / 2.0;
+    //updates roughly every 3 times per second
+    if (counter++ % 15 == 0) { lastSpeed = combinedSpeed; }  
+    if (firstRun) { firstRun = false; }
+    else {
+      calculatedAcceleration = combinedSpeed - lastSpeed;
+      double rumble = (calculatedAcceleration / Constants.maxAcceleration) * Constants.maxRumble;
+      if (calculatedAcceleration < 0.2) {
+        RobotContainer.setDriverRumble(0.0);
+      } if (rumble > Constants.maxAcceleration) {
+        rumble = Constants.maxRumble;
+      }
+      RobotContainer.setDriverRumble(rumble);
+    }
   }
 
   public Pose2d getPose(){
@@ -159,6 +180,11 @@ public class Drive extends SubsystemBase {
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),rightEncoder.getVelocity());
+  }
+
+  public double[] getWheelSpeedsDouble() {
+    double[] wheelSpeeds = {leftEncoder.getVelocity(), rightEncoder.getVelocity()};
+    return wheelSpeeds;
   }
 
   public void resetOdometry(Pose2d pose){

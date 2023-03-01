@@ -101,10 +101,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  /*public static double setDriverRumble(double rumbleVal) {
-    m_driverController.setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
-    m_driverController.setRumble()
-  }*/
+  public static void setDriverRumble(double rumbleVal) {
+    m_driverController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, rumbleVal);
+    m_driverController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
+  }
 
   public static double getDriverLeftJoystick() {
     double value = m_driverController.getRawAxis(1);
