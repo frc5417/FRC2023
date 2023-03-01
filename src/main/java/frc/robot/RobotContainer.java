@@ -38,11 +38,11 @@ public class RobotContainer {
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.344, armSubsystem);
-  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.139, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.077, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.095, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.105, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.767, armSubsystem);
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);

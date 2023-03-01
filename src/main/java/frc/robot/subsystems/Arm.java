@@ -43,23 +43,21 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArm(double speed) {
-    if (armLimitSwitch.get() || runningAverage <= 0.017 || runningAverage >= 0.95) { 
+    if (armLimitSwitch.get() || (runningAverage < 0.7 && runningAverage >= 0.4)) { 
       armMotor1.set(0.0); 
     } else { 
-      armMotor1.set(speed); 
+      armMotor1.set(speed);
     }
   }
 
-  public void filteredAbsolutePosition(){
+  public void filteredAbsolutePosition() {
     runningAverage = enc.getAbsolutePosition() * 0.1 + runningAverage * 0.9;
   }
 
   public void setArmPos(double pos) {
-    if(runningAverage >= 0.017){
+    if(runningAverage < 0.7 && runningAverage >= 0.4) {
       armMotor1.set(0);
-    }
-    armMotor1.setVoltage(PID(pos));
-    if (armLimitSwitch.get()) { 
+    } else if (armLimitSwitch.get()) { 
       armMotor1.setVoltage(0.0); 
     }
     else { 
@@ -70,12 +68,18 @@ public class Arm extends SubsystemBase {
   public double PID(double setPoint) {
     // System.out.println(setPoint + ", " + enc.getAbsolutePosition() + ", " + (setPoint - enc.getAbsolutePosition()));
 
-    double error = setPoint - enc.getAbsolutePosition();
+    double encPos = enc.getAbsolutePosition();
+    if (encPos >= 0 && encPos <= 0.1) encPos += 1;
+
+    double error = setPoint - encPos;
+
     double proportional = error * Constants.ManipulatorConstants.kArmP;
     integral += error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime;
     derivative = Constants.ManipulatorConstants.kArmD * (error - oldError) / Constants.ManipulatorConstants.cycleTime;
 
     voltage += proportional + integral + derivative;
+
+    System.out.println(encPos + " | " + setPoint + " | " + error + " | " + voltage);
 
     oldError = error;
     // makes the lower limit -3.0 and upper 1 

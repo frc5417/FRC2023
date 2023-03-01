@@ -30,9 +30,6 @@ public class ArmManualMovement extends CommandBase {
   @Override
   public void execute() {
     double leftJoystick = RobotContainer.getManipulatorLeftJoystick() * ManipulatorConstants.armMaxSpeed;
-    if (leftJoystick >= ManipulatorConstants.armMaxSpeed) {
-      leftJoystick = ManipulatorConstants.armMaxSpeed;
-    }
     armSubystem.setArm(leftJoystick);
   }
 

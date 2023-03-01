@@ -20,7 +20,6 @@ public class Manipulator extends SubsystemBase {
   private final static DoubleSolenoid claw1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw1Solenoid, ManipulatorConstants.kClaw2Solenoid);
   private final static DoubleSolenoid claw2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw3Solenoid, ManipulatorConstants.kClaw4Solenoid);
 
-  
   /** Creates a new Manipulator. */
   public Manipulator() {
     manipulatorMotor.setIdleMode(IdleMode.kBrake);

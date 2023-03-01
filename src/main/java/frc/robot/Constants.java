@@ -22,7 +22,7 @@ public final class Constants {
   public static final double maxVoltage = 10;
   public static final double maxSpeed = 3; // m/s
   public static final double maxAcceleration =  3;//m/s^2
-  public static final double maxRumble = 1.0;
+  public static final double maxRumble = 0.5;
   public static final double trackWidth = .524;
   public static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.trackWidth);
   public static class DriverConstants {
@@ -62,11 +62,11 @@ public final class Constants {
 
     public static final double maxVoltage = 4.0;
     public static final double cycleTime = 50.0;
-    public static final double kArmP = 0.25;
+    public static final double kArmP = 0.20;
     public static final double kArmI = 0;
-    public static final double kArmD = 1475.0;
+    public static final double kArmD = 1150.0;
 
-    public static final double maxSetPoint = 0.4d;
+    public static final double minSetPoint = 0.1d;
   }
 
   public static class BalanceConstants {

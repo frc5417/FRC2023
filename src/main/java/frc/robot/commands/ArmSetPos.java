@@ -18,8 +18,8 @@ public class ArmSetPos extends CommandBase {
   public ArmSetPos(double pos, Arm subsystem) {
     manipulatorSubsystem = subsystem;
 
-    if (pos > Constants.ManipulatorConstants.maxSetPoint) {
-      pos = Constants.ManipulatorConstants.maxSetPoint;
+    if (pos < Constants.ManipulatorConstants.minSetPoint) {
+      pos = Constants.ManipulatorConstants.minSetPoint;
     }
     
     setPoint = pos;
