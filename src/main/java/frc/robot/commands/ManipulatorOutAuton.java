@@ -12,12 +12,14 @@ import frc.robot.subsystems.Manipulator;
 public class ManipulatorOutAuton extends CommandBase {
   private final Manipulator manipulatorSubsystem;
   private int codeSleep;
+  private long startTime;
 
   private boolean doFinish = false;
 
   /** Creates a new ManipulatorToggle. */
   public ManipulatorOutAuton(Manipulator subsystem, int sleepTime) {
     manipulatorSubsystem = subsystem;
+    startTime = System.currentTimeMillis();
     codeSleep = sleepTime;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -28,17 +30,14 @@ public class ManipulatorOutAuton extends CommandBase {
   @Override
   public void initialize() {
     manipulatorSubsystem.setIntake(ManipulatorConstants.manipulatorSpeed);
-    try { 
-      Thread.sleep(codeSleep); 
-    }
-    catch (InterruptedException e) { 
-      System.out.println("Sleep got interrupted!"); 
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (System.currentTimeMillis() - startTime > codeSleep) {
+      doFinish = true;
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -37,6 +37,12 @@ public class RobotContainer {
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
   private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
+  private static final ShiftDown shiftDown = new ShiftDown(m_drive);
+  //private static final Autos chargeAutons = new Autos(m_drive);
+  private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
+  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
+
+  private final SequentialAuton sequentialAuton = new SequentialAuton(m_drive, armSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
@@ -79,6 +85,7 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_AutoBalance);
     m_driverController.x().toggleOnTrue(driveBreak);
     m_driverController.b().whileTrue(shiftDrivetrain);
+    //m_driverController.leftBumper().onTrue(getAutonomousCommand());
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
@@ -101,6 +108,25 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+  public Command sequentialAutonomousCommand() {
+    return sequentialAuton;
+  }
+
+   //public Command getAutonomousCommand() {
+  //  return Commands.sequence(shiftDown, armSetPointThirdScore);
+    /*return shiftDown
+                  .andThen(armSetPointThirdScore)
+                  .andThen(autoStack1.getRamseteCommand());*/
+                              //.andThen(manipulatorOutAuton1)
+                              //.andThen(autoStack2.getRamseteCommand())
+                              //.andThen(armSetPointIntake);
+    /*return autoStack1.getRamseteCommand()
+                     .andThen(armSetPointSecondScore)
+                     .andThen(manipulatorOutAuton1)
+                     .andThen(armSetPointIntake)
+                     .andThen(autoStack2.getRamseteCommand());*/
+  //}
+
   public static void setDriverRumble(double rumbleVal) {
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, rumbleVal);
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);

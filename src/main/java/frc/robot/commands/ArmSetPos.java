@@ -13,6 +13,7 @@ public class ArmSetPos extends CommandBase {
   private final Arm manipulatorSubsystem;
 
   private final double setPoint;
+  private boolean doFinish = false;
 
   /** Creates a new ArmCommand. */
   public ArmSetPos(double pos, Arm subsystem) {
@@ -35,6 +36,9 @@ public class ArmSetPos extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05) {
+      doFinish = true;
+    }
     manipulatorSubsystem.setArmPos(setPoint);
   }
 
@@ -43,6 +47,7 @@ public class ArmSetPos extends CommandBase {
   public void end(boolean interrupted) {
     manipulatorSubsystem.setArm(0.0d);
     RobotContainer.initArmMovement();
+    System.out.println("ending set position");
   }
 
   // Returns true when the command should end.

@@ -30,14 +30,22 @@ public final class Constants {
 
     public static final double kDriveP = 0.5;
 
-    public static final double kTreadLength = 5 * Math.PI; 
+    public static final double kTreadLength = 0.0778 * 0.1524 * Math.PI;
+    //public static final double kTreadLength = 1.0;
   }
   
   public static class AutonConstants{
-    public static final double kS = 0.21842;
-    public static final double kV = 0.010489;
-    public static final double kA = 0.0043684;
-    public static final double kP = 0.0115;
+    //values for higher-shifted gear
+    public static final double kS = 0.14161;
+    public static final double kV = 3.3727;
+    public static final double kA = 0.31905;
+      //feedforward characterization kP = 4.8456E-06
+    public static final double kP = 4.8456*Math.pow(10,-6);
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double autoMaxSpeed = 1.5; // m/s
+    public static final double autoMaxAcceleration = 0.5;//m/s^2
+    //values for lower-shifted gear
   }
 
   public static class ManipulatorConstants {

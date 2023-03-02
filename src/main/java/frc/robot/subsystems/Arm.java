@@ -22,7 +22,7 @@ public class Arm extends SubsystemBase {
 
   private final static DutyCycleEncoder enc = new DutyCycleEncoder(Constants.ManipulatorConstants.armEncoderPort);
   
-  private double runningAverage = 0.0;
+  public double runningAverage = 0.0;
   private double voltage = 0.0;
   private double integral = 0.0;
   private double derivative = 0.0;
@@ -79,7 +79,7 @@ public class Arm extends SubsystemBase {
 
     voltage += proportional + integral + derivative;
 
-    System.out.println(encPos + " | " + setPoint + " | " + error + " | " + voltage);
+    //System.out.println(encPos + " | " + setPoint + " | " + error + " | " + voltage);
 
     oldError = error;
     // makes the lower limit -3.0 and upper 1 

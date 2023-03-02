@@ -30,6 +30,8 @@ public class Drive extends SubsystemBase {
   private static double LeftDistance = 0;
   private static double rightDistance = 0;
 
+  private int count = 0;
+
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
@@ -40,8 +42,7 @@ public class Drive extends SubsystemBase {
   private final static MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
   private final static MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
 
-  //private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
-
+  private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
   private final static RelativeEncoder leftEncoder = leftLeader.getEncoder();
   private final static RelativeEncoder rightEncoder = rightLeader.getEncoder();
 
@@ -106,6 +107,16 @@ public class Drive extends SubsystemBase {
   public void SetSpeed(double leftSpeed, double rightSpeed) {
     leftMotors.set(leftSpeed);
     rightMotors.set(rightSpeed);
+    drive.setSafetyEnabled(true);
+    drive.feed();
+    //System.out.println("left speed " + leftSpeed + "right speed " + rightSpeed);
+  }
+
+  public void setDriveVolts(double leftVolts, double rightVolts){
+    leftMotors.setVoltage(leftVolts);
+    rightMotors.setVoltage(rightVolts);
+    drive.setSafetyEnabled(true);
+    drive.feed();
   }
 
   public void resetEncoders(){
@@ -117,14 +128,17 @@ public class Drive extends SubsystemBase {
     ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
     ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
   }
+  public void shiftDown() {
+    if (ShifterL.get() != DoubleSolenoid.Value.kReverse) { 
+      ShifterL.set(DoubleSolenoid.Value.kReverse); 
+    }
+    if (ShifterR.get() != DoubleSolenoid.Value.kReverse) { 
+      ShifterR.set(DoubleSolenoid.Value.kReverse); 
+    }
+  }
 
   public static double clamp(double val, double min, double max) {
     return Math.max(min, Math.min(max, val));
-  }
-
-  public void setDriveVolts(double leftVolts, double rightVolts){
-    leftMotors.setVoltage(leftVolts);
-    rightMotors.setVoltage(rightVolts);
   }
 
   public double angleToVolts(double tilt) {
@@ -187,7 +201,7 @@ public class Drive extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),rightEncoder.getVelocity());
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),-rightEncoder.getVelocity());
   }
 
   public double[] getWheelSpeedsDouble() {
@@ -197,7 +211,7 @@ public class Drive extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), pose);
+    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition(), pose);
   }
 
   public void zeroHeading(){
