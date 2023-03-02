@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    
+    RobotContainer.turnLightColor2();
 
   }
 
@@ -96,6 +96,8 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    RobotContainer.turnLightColor1();
   }
 
   /** This function is called periodically during test mode. */

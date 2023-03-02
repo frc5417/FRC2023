@@ -32,11 +32,15 @@ public class RobotContainer {
   private static final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   private static final Drive m_drive = new Drive();
   private static final NavXGyro m_NavXGyro = new NavXGyro();
+  private static final LightsControl m_lightsControl = new LightsControl();
 
   private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
   private static final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
   private static final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, m_drive, m_photonsubsystem);
   private static TankDrive tankDrive = new TankDrive(m_drive, ahrs, m_pPhotonCommand, m_NavXGyroCommand);
+  private static final SetLightConfig lightConfigOff = new SetLightConfig(m_lightsControl, 0);
+  private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
+  private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
   private final PhotonCamera camera = m_photonsubsystem.PhotonCameraWrapper();
 
@@ -49,9 +53,12 @@ public class RobotContainer {
   private static final CommandXboxController m_driverController =
       new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
 
+    private static final CommandXboxController m_manipulatorController =
+      new CommandXboxController(1);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings\
+    // Configure the trigger bindings
     configureBindings();
   }
 
@@ -68,6 +75,10 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
+
+    m_manipulatorController.povUp().onTrue(lightConfigOff);
+    m_manipulatorController.povUpLeft().onTrue(lightConfigColor1);
+    m_manipulatorController.povUpRight().onTrue(lightConfigColor2);
   }
 
   public static CommandXboxController getDriverController() {
@@ -109,5 +120,13 @@ public class RobotContainer {
   public void getAutonomousCommand() {
     // An example command will be run in autonomous
     // return m;
+  }
+
+  public static void turnLightColor1() {
+    lightConfigColor1.schedule();
+  }
+
+  public static void turnLightColor2() {
+    lightConfigColor2.schedule();
   }
 }
