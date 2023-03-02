@@ -9,9 +9,9 @@ public class SequentialAuton extends SequentialCommandGroup {
         addCommands(
             new ShiftDown(drive),
             new AutoArmSetPos(0.998, arm),
-            new AutoStack1(drive).getRamseteCommand(),
+            new ForwardAutoConeScore(drive).getRamseteCommand(),
             new ManipulatorOutAuton(manipulator, 2000),
-            new AutoStack2(drive).getRamseteCommand(),
+            new BackwardAutoConeScore(drive).getRamseteCommand(),
             new AutoArmSetPos(0.998, arm)
         );
     }

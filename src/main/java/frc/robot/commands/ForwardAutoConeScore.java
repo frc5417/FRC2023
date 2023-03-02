@@ -23,12 +23,12 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class AutoStack2 extends CommandBase {
+public class ForwardAutoConeScore extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
   Trajectory translatedMoveBack;
 
-  public AutoStack2(Drive drive) {
+  public ForwardAutoConeScore(Drive drive) {
     try {
       this.drive = drive;
       //reset odometry to be zero here
@@ -41,16 +41,14 @@ public class AutoStack2 extends CommandBase {
 
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
-          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
+          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
     //first step is to move back slightly, old moveBack
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(-0.25,0),
-        new Translation2d(-0.6,0),
-        new Translation2d(-1.0,0)
+        new Translation2d(0.25,0)
       ), 
-      new Pose2d(-1.5,0, new Rotation2d(0)), 
+      new Pose2d(0.58,0, new Rotation2d(0)), 
       config);
     
     

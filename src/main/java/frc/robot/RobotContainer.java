@@ -39,8 +39,8 @@ public class RobotContainer {
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
   private static final ShiftDown shiftDown = new ShiftDown(m_drive);
   //private static final Autos chargeAutons = new Autos(m_drive);
-  private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
-  private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
+  private static final ForwardAutoConeScore ForwardAutoConeScore = new ForwardAutoConeScore(m_drive);
+  private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
 
   private final SequentialAuton sequentialAuton = new SequentialAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
@@ -112,21 +112,6 @@ public class RobotContainer {
     return sequentialAuton;
   }
 
-   //public Command getAutonomousCommand() {
-  //  return Commands.sequence(shiftDown, armSetPointThirdScore);
-    /*return shiftDown
-                  .andThen(armSetPointThirdScore)
-                  .andThen(autoStack1.getRamseteCommand());*/
-                              //.andThen(manipulatorOutAuton1)
-                              //.andThen(autoStack2.getRamseteCommand())
-                              //.andThen(armSetPointIntake);
-    /*return autoStack1.getRamseteCommand()
-                     .andThen(armSetPointSecondScore)
-                     .andThen(manipulatorOutAuton1)
-                     .andThen(armSetPointIntake)
-                     .andThen(autoStack2.getRamseteCommand());*/
-  //}
-
   public static void setDriverRumble(double rumbleVal) {
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, rumbleVal);
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
@@ -171,10 +156,6 @@ public class RobotContainer {
 
     return value;
   }
-
-  /*public Command getAutonomousCommand() {
-    
-  }*/
 
   public static void initArmMovement() {
     armManualCommand.schedule();
