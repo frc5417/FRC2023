@@ -14,6 +14,7 @@ public class ArmSetPos extends CommandBase {
 
   private final double setPoint;
   private boolean doFinish = false;
+  private static boolean isAuton = false;
 
   /** Creates a new ArmCommand. */
   public ArmSetPos(double pos, Arm subsystem) {
@@ -27,6 +28,10 @@ public class ArmSetPos extends CommandBase {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(manipulatorSubsystem);
+  }
+
+  public static void setIsAuton(boolean val) {
+    isAuton = val;
   }
 
   // Called when the command is initially scheduled.
@@ -53,6 +58,6 @@ public class ArmSetPos extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (isAuton && doFinish);
   }
 }

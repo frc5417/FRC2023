@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ArmSetPos;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -62,6 +63,8 @@ public class Robot extends TimedRobot {
     //m_autonomousCommand = robotContainer.getAutonomousCommand();
     m_autonomousCommand = robotContainer.sequentialAutonomousCommand();
 
+    ArmSetPos.setIsAuton(true);
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -76,6 +79,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    ArmSetPos.setIsAuton(false);
     
     RobotContainer.setCoastMode();
     RobotContainer.initArmMovement();
