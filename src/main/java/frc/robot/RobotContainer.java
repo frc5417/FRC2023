@@ -42,7 +42,7 @@ public class RobotContainer {
   private static final AutoStack1 autoStack1 = new AutoStack1(m_drive);
   private static final AutoStack2 autoStack2 = new AutoStack2(m_drive);
 
-  private final SequentialAuton sequentialAuton = new SequentialAuton(m_drive, armSubsystem);
+  private final SequentialAuton sequentialAuton = new SequentialAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
@@ -85,7 +85,7 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_AutoBalance);
     m_driverController.x().toggleOnTrue(driveBreak);
     m_driverController.b().whileTrue(shiftDrivetrain);
-    //m_driverController.leftBumper().onTrue(getAutonomousCommand());
+    m_driverController.y().whileTrue(sequentialAuton);
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);

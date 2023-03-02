@@ -31,7 +31,7 @@ public class ShiftDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.initTeleopCommand(); 
+    //RobotContainer.initTeleopCommand(); 
     System.out.println("shifting down done");
   }
 

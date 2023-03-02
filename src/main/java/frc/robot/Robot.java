@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
     //m_autonomousCommand = robotContainer.getAutonomousCommand();
     m_autonomousCommand = robotContainer.sequentialAutonomousCommand();
 
-    ArmSetPos.setIsAuton(true);
+    //ArmSetPos.setIsAuton(true);
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    ArmSetPos.setIsAuton(false);
+    //ArmSetPos.setIsAuton(false);
     
     RobotContainer.setCoastMode();
     RobotContainer.initArmMovement();

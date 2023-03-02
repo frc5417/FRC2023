@@ -9,33 +9,15 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
-public class ArmSetPos extends CommandBase {
+public class AutoArmSetPos extends CommandBase {
   private final Arm manipulatorSubsystem;
 
   private final double setPoint;
   private boolean doFinish = false;
-  private boolean isAuton = false;
+  private int counter = 0;
 
-  
-
-  /** Creates a new ArmCommand. */
-  public ArmSetPos(double pos, Arm subsystem, boolean isAuton) {
+  public AutoArmSetPos(double pos, Arm subsystem) {
     manipulatorSubsystem = subsystem;
-    this.isAuton = isAuton;
-
-    if (pos < Constants.ManipulatorConstants.minSetPoint) {
-      pos = Constants.ManipulatorConstants.minSetPoint;
-    }
-    
-    setPoint = pos;
-
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(manipulatorSubsystem);
-  }
-
-  public ArmSetPos(double pos, Arm subsystem) {
-    manipulatorSubsystem = subsystem;
-    this.isAuton = false;
 
     if (pos < Constants.ManipulatorConstants.minSetPoint) {
       pos = Constants.ManipulatorConstants.minSetPoint;
@@ -49,11 +31,13 @@ public class ArmSetPos extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (counter++ % 10 == 0) { System.out.println(Math.abs(manipulatorSubsystem.runningAverage - setPoint)); }
     if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05) {
       doFinish = true;
     }
@@ -64,13 +48,13 @@ public class ArmSetPos extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     manipulatorSubsystem.setArm(0.0d);
-    RobotContainer.initArmMovement();
+    //RobotContainer.initArmMovement();
     System.out.println("ending set position");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (this.isAuton && doFinish);
+    return doFinish;
   }
 }

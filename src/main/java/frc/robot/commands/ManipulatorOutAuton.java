@@ -13,6 +13,7 @@ public class ManipulatorOutAuton extends CommandBase {
   private final Manipulator manipulatorSubsystem;
   private int codeSleep;
   private long startTime;
+  private int count = 0;
 
   private boolean doFinish = false;
 
@@ -29,13 +30,13 @@ public class ManipulatorOutAuton extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    manipulatorSubsystem.setIntake(ManipulatorConstants.manipulatorSpeed);
+    manipulatorSubsystem.setIntake(-ManipulatorConstants.manipulatorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (System.currentTimeMillis() - startTime > codeSleep) {
+    if (count++ >= 50) {
       doFinish = true;
     }
   }
