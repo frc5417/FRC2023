@@ -74,7 +74,7 @@ public class TankDrive extends CommandBase {
     }
     if (Math.abs(RobotContainer.getDriverLeftJoystick()) > 0.1 || Math.abs(RobotContainer.getDriverRightJoystick()) > 0.1) {
       m_NavXGyroCommand.cancel();
-      // drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
+      drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
     } else {
       drive.setPower(0, 0);
       // m_NavXGyro.resetGyroAngle(ahrs);
