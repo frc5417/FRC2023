@@ -109,7 +109,6 @@ public class Drive extends SubsystemBase {
     rightMotors.set(rightSpeed);
     drive.setSafetyEnabled(true);
     drive.feed();
-    //System.out.println("left speed " + leftSpeed + "right speed " + rightSpeed);
   }
 
   public void setDriveVolts(double leftVolts, double rightVolts){
