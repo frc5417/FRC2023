@@ -97,9 +97,8 @@ public class RobotContainer {
     m_manipulatorController.povRight().onTrue(clawConfig2);
     m_manipulatorController.povDown().onTrue(clawConfig3);
 
-    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
-    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
-
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);
     System.out.println("Buttons Configured");
   }
 
