@@ -36,7 +36,7 @@ public class AutoBalance extends CommandBase {
   public void end(boolean interrupted) {
     drive.SetSpeed(0,0);
     drive.setDriveBreak();
-    RobotContainer.initTeleopCommand();
+    //RobotContainer.initTeleopCommand();
   }
 
   // Returns true when the command should end.

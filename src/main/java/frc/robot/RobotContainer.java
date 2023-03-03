@@ -44,6 +44,7 @@ public class RobotContainer {
 
   private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
@@ -108,6 +109,10 @@ public class RobotContainer {
 
   public Command dockAutonomousCommand() {
     return dockAuton;
+  }
+
+  public Command engageAutonomousCommand() {
+    return engageAuton;
   }
 
   public static void setDriverRumble(double rumbleVal) {

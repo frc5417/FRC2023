@@ -23,12 +23,12 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class BackwardDockAutoConeScore extends CommandBase {
+public class BackwardEngageAutoConeScore extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
   Trajectory translatedMoveBack;
 
-  public BackwardDockAutoConeScore(Drive drive) {
+  public BackwardEngageAutoConeScore(Drive drive) {
     try {
       this.drive = drive;
       //reset odometry to be zero here
@@ -82,6 +82,6 @@ public class BackwardDockAutoConeScore extends CommandBase {
 
   public Command getRamseteCommand (){
     //return new StopAuton(drive);
-    return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0)).andThen(() -> drive.setDriveBreak());
+    return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0));
   }
 }
