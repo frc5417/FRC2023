@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
 
     switch(autoSelected) {
       case "Scoring Auto":
-        m_autonomousCommand = robotContainer.sequentialAutonomousCommand();
+        m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
         break;
       case "Docking Auto":
         m_autonomousCommand = robotContainer.dockAutonomousCommand();
