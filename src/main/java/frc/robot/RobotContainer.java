@@ -28,10 +28,12 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private static final LightsControl m_lightsControl = new LightsControl();
   private static final Drive m_drive = new Drive();
   private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
+  
   private static final TankDrive tankDrive = new TankDrive(m_drive);
   private final AutoBalance m_AutoBalance =  new AutoBalance(m_drive);
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
@@ -57,6 +59,10 @@ public class RobotContainer {
   private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
+  
+  private static final SetLightConfig lightConfigOff = new SetLightConfig(m_lightsControl, 0);
+  private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
+  private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -100,6 +106,11 @@ public class RobotContainer {
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);
+
+    m_manipulatorController.povUp().onTrue(lightConfigOff);
+    m_manipulatorController.povLeft().onTrue(lightConfigColor1);
+    m_manipulatorController.povRight().onTrue(lightConfigColor2);
+
     System.out.println("Buttons Configured");
   }
 
