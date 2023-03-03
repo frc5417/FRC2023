@@ -15,9 +15,11 @@ public class AutoArmSetPos extends CommandBase {
   private final double setPoint;
   private boolean doFinish = false;
   private int counter = 0;
+  private boolean endFlag = false;
 
-  public AutoArmSetPos(double pos, Arm subsystem) {
+  public AutoArmSetPos(double pos, Arm subsystem, boolean eventuallyStop) {
     manipulatorSubsystem = subsystem;
+    endFlag = eventuallyStop;
 
     if (pos < Constants.ManipulatorConstants.minSetPoint) {
       pos = Constants.ManipulatorConstants.minSetPoint;
@@ -37,8 +39,8 @@ public class AutoArmSetPos extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (counter++ % 10 == 0) { System.out.println(Math.abs(manipulatorSubsystem.runningAverage - setPoint)); }
-    if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05) {
+    //if (counter++ % 10 == 0) { System.out.println(Math.abs(manipulatorSubsystem.runningAverage - setPoint)); }
+    if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05 && endFlag) {
       doFinish = true;
     }
     manipulatorSubsystem.setArmPos(setPoint);
@@ -48,13 +50,13 @@ public class AutoArmSetPos extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     manipulatorSubsystem.setArm(0.0d);
-    //RobotContainer.initArmMovement();
-    System.out.println("ending set position");
+    //System.out.println("ending set position");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("arm: "+doFinish);
     return doFinish;
   }
 }

@@ -48,7 +48,7 @@ public class ForwardAutoConeScore extends CommandBase {
       List.of(
         new Translation2d(0.25,0)
       ), 
-      new Pose2d(0.58,0, new Rotation2d(0)), 
+      new Pose2d(0.40,0, new Rotation2d(0)), 
       config);
     
     
