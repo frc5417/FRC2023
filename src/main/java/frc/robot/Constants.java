@@ -45,7 +45,9 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double autoMaxSpeed = 1.5; // m/s
     public static final double autoMaxAcceleration = 0.5;//m/s^2
-    //values for lower-shifted gear
+    //values for charging station
+    public static final double chargeMaxSpeed = 0.3; // m/s
+    public static final double chargeMaxAcceleration = 0.5;//m/s^2
   }
 
   public static class ManipulatorConstants {
@@ -85,6 +87,5 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double lowGearClamp = 4.0;
     public static final double voltageDeadband = 0.1;
-
   }
 }

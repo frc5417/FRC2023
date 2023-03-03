@@ -42,7 +42,8 @@ public class RobotContainer {
   private static final ForwardAutoConeScore ForwardAutoConeScore = new ForwardAutoConeScore(m_drive);
   private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
 
-  private final SequentialAuton sequentialAuton = new SequentialAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
@@ -85,7 +86,6 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_AutoBalance);
     m_driverController.x().toggleOnTrue(driveBreak);
     m_driverController.b().whileTrue(shiftDrivetrain);
-    m_driverController.y().whileTrue(sequentialAuton);
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
@@ -108,7 +108,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command sequentialAutonomousCommand() {
-    return sequentialAuton;
+    return dockAuton;
   }
 
   public static void setDriverRumble(double rumbleVal) {
