@@ -189,4 +189,8 @@ public class RobotContainer {
   public static void setLEDsOff() {
     m_lightsControl.setLightConfig(3);
   }
+
+  public static void setLEDsOn() {
+    m_lightsControl.setLightConfig(0);
+  }
 }
