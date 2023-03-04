@@ -60,7 +60,8 @@ public class RobotContainer {
   private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
   private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
   
-  private static final SetLightConfig lightConfigOff = new SetLightConfig(m_lightsControl, 0);
+  private static final SetLightConfig lightConfigRed = new SetLightConfig(m_lightsControl, 0);
+  private static final SetLightConfig lightConfigBlue = new SetLightConfig(m_lightsControl, 4);
   private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
   private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
@@ -100,14 +101,15 @@ public class RobotContainer {
     m_manipulatorController.x().whileTrue(armSetPointHumanCone);
     m_manipulatorController.rightBumper().whileTrue(armSetPointThirdScore);
 
-    m_manipulatorController.povUp().onTrue(clawConfig1);
-    m_manipulatorController.povRight().onTrue(clawConfig2);
-    m_manipulatorController.povDown().onTrue(clawConfig3);
+    // m_manipulatorController.povUp().onTrue(clawConfig1);
+    // m_manipulatorController.povRight().onTrue(clawConfig2);
+    // m_manipulatorController.povDown().onTrue(clawConfig3);
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);
 
-    m_manipulatorController.povUp().onTrue(lightConfigOff);
+    m_manipulatorController.povUp().onTrue(lightConfigRed);
+    m_manipulatorController.povDown().onTrue(lightConfigBlue);
     m_manipulatorController.povLeft().onTrue(lightConfigColor1);
     m_manipulatorController.povRight().onTrue(lightConfigColor2);
 
@@ -182,5 +184,9 @@ public class RobotContainer {
 
   public static void setCoastMode() {
     m_drive.setDriveCoast();
+  }
+
+  public static void setLEDsOff() {
+    m_lightsControl.setLightConfig(3);
   }
 }
