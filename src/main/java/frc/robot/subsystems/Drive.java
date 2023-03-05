@@ -180,7 +180,6 @@ public class Drive extends SubsystemBase {
     //updates roughly every 3 times per second
     if (counter++ % 15 == 0) { 
       lastSpeed = combinedSpeed;
-      System.out.println("left" + leftLeader.get() + "right" + rightMotors.get()); 
     }  
     if (firstRun) { firstRun = false; }
     else {

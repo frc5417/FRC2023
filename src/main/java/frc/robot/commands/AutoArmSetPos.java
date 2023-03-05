@@ -39,7 +39,6 @@ public class AutoArmSetPos extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //if (counter++ % 10 == 0) { System.out.println(Math.abs(manipulatorSubsystem.runningAverage - setPoint)); }
     if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05 && endFlag) {
       doFinish = true;
     }
@@ -50,7 +49,6 @@ public class AutoArmSetPos extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     manipulatorSubsystem.setArm(0.0d);
-    //System.out.println("ending set position");
   }
 
   // Returns true when the command should end.

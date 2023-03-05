@@ -49,7 +49,6 @@ public class ManipulatorOutAutonCube extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    System.out.println("out: "+doFinish);
     return doFinish;
   }
 }

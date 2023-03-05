@@ -48,7 +48,6 @@ public class Manipulator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //System.out.println(claw1.get());
   }
   
   public boolean cancelIfLimitTriggered() {
