@@ -28,6 +28,8 @@ public class Arm extends SubsystemBase {
   private double derivative = 0.0;
   private double oldError = 0.0;
 
+  private int counter = 0;
+
   /** Creates a new Arm. */
   public Arm() {
     armMotor1 = new CANSparkMax(Constants.ManipulatorConstants.armLeaderPort, MotorType.kBrushless);
@@ -66,8 +68,6 @@ public class Arm extends SubsystemBase {
   }
 
   public double PID(double setPoint) {
-    // System.out.println(setPoint + ", " + enc.getAbsolutePosition() + ", " + (setPoint - enc.getAbsolutePosition()));
-
     double encPos = enc.getAbsolutePosition();
     if (encPos >= 0 && encPos <= 0.1) encPos += 1;
 
@@ -79,7 +79,6 @@ public class Arm extends SubsystemBase {
 
     voltage += proportional + integral + derivative;
 
-    //System.out.println(encPos + " | " + setPoint + " | " + error + " | " + voltage);
 
     oldError = error;
     // makes the lower limit -3.0 and upper 1 
@@ -95,7 +94,7 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //System.out.println(runningAverage);
     filteredAbsolutePosition();
+  
   }
 }

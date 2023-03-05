@@ -31,8 +31,6 @@ public class BackwardEngageAutoConeScore extends CommandBase {
   public BackwardEngageAutoConeScore(Drive drive) {
     try {
       this.drive = drive;
-      //reset odometry to be zero here
-      //drive.resetOdometry(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0)));
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
@@ -53,14 +51,7 @@ public class BackwardEngageAutoConeScore extends CommandBase {
       new Pose2d(-1.05,0, new Rotation2d(0)),
       config);
     
-    
-    //drive.resetOdometry(moveBack.getInitialPose());
-
     RamseteController ramseteControl1 = new RamseteController();
-
-    //reset the pose:
-    //Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
-    //drive.resetOdometry(resetPose);
     
     ramseteCommand1 = new RamseteCommand(
       moveBack, 

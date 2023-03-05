@@ -102,8 +102,7 @@ public class Drive extends SubsystemBase {
   }
 
   public void SetSpeed(double leftSpeed, double rightSpeed) {
-    leftMotors.set(leftSpeed);
-    rightMotors.set(rightSpeed);
+    drive.tankDrive(leftSpeed, rightSpeed);
     drive.setSafetyEnabled(true);
     drive.feed();
   }
@@ -111,7 +110,7 @@ public class Drive extends SubsystemBase {
   public void setDriveVolts(double leftVolts, double rightVolts){
     leftMotors.setVoltage(leftVolts);
     rightMotors.setVoltage(rightVolts);
-    drive.setSafetyEnabled(true);
+    drive.setSafetyEnabled(false);
     drive.feed();
   }
 
@@ -175,10 +174,14 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    drive.feed();
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
     double combinedSpeed = (getWheelSpeedsDouble()[0] + getWheelSpeedsDouble()[1]) / 2.0;
     //updates roughly every 3 times per second
-    if (counter++ % 15 == 0) { lastSpeed = combinedSpeed; }  
+    if (counter++ % 15 == 0) { 
+      lastSpeed = combinedSpeed;
+      System.out.println("left" + leftLeader.get() + "right" + rightMotors.get()); 
+    }  
     if (firstRun) { firstRun = false; }
     else {
       calculatedAcceleration = combinedSpeed - lastSpeed;

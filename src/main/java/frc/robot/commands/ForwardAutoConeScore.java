@@ -32,7 +32,6 @@ public class ForwardAutoConeScore extends CommandBase {
     try {
       this.drive = drive;
       //reset odometry to be zero here
-      //drive.resetOdometry(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0)));
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(

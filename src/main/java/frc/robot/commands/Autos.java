@@ -40,15 +40,6 @@ public class Autos extends CommandBase {
       new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
 
-    /*Trajectory extendedSCurve = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(0)), 
-      List.of(
-        new Translation2d(2,-1),
-        new Translation2d(3,0),
-        new Translation2d(4,1)
-      ), 
-      new Pose2d(6,0, new Rotation2d(0)), 
-      config);*/
       //chargeb is for auton on blue side
         //chargeb1 drives from the right side starting point to the left spot on the charging station
         //chargeb2 is the safest and drives from the middle starting point on to the charging station
@@ -58,8 +49,6 @@ public class Autos extends CommandBase {
         //charger2 is the safest and drives from the middle starting point on to the charging station
         //charger3 drives from the left side starting point to the right spot on the charging station
     Trajectory chargeStationOnly = PathPlanner.loadPath("chargeb1", Constants.maxSpeed, Constants.maxAcceleration);
-
-    //drive.resetOdometry(chargeStationOnly.getInitialPose());
 
     RamseteController ramseteControl = new RamseteController();
 
