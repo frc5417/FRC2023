@@ -18,7 +18,7 @@ import org.photonvision.PhotonCamera;
 
 public class NavXGyroCommandFollow extends CommandBase {
   /** Creates a new NavXGyroCommand. */
-
+/*
   NavXGyro m_NavXGyro;
   AHRS ahrs;
   Drive drive;
@@ -140,7 +140,7 @@ public class NavXGyroCommandFollow extends CommandBase {
     drive.setPower(0, 0);
     // System.out.println("Droppped out of loop");
   }*/
-  public void setAngle(double set_point) {
+  /*public void setAngle(double set_point) {
       m_NavXGyro.resetGyroAngle(ahrs);
       this.setAnglePassed = set_point*0.1 + this.setAnglePassed*0.9;
       // System.out.printf("Setpoint inside PID %f \n", set_point);
@@ -148,5 +148,5 @@ public class NavXGyroCommandFollow extends CommandBase {
       pid.setTolerance(5, 1); // stops at <= 25 deg/s error
       // pid.enableContinuousInput(-90, 90);
 
-  }
+  }*/
 }

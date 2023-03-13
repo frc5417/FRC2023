@@ -44,9 +44,8 @@ public class NavXGyroCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    // m_NavXGyro = new NavXGyro();
-    camera = pcw.PhotonCameraWrapper();
+  public void initialize() { 
+    setAngle(90.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

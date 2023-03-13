@@ -34,25 +34,17 @@ public class RobotContainer {
   private static final NavXGyro m_NavXGyro = new NavXGyro();
   private static final LightsControl m_lightsControl = new LightsControl();
 
-  private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
-  private static final PhotonCommand m_pPhotonCommand = new PhotonCommand(m_photonsubsystem);
+  //private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
   private static final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, m_drive, m_photonsubsystem);
-  private static TankDrive tankDrive = new TankDrive(m_drive, ahrs, m_pPhotonCommand, m_NavXGyroCommand);
+  private static final TankDrive tankDrive = new TankDrive(m_drive, m_photonsubsystem, ahrs, m_NavXGyroCommand);
   private static final SetLightConfig lightConfigOff = new SetLightConfig(m_lightsControl, 0);
   private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
   private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
-  private final PhotonCamera camera = m_photonsubsystem.PhotonCameraWrapper();
-
-
-  
-  
-  
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private static final CommandXboxController m_driverController =
       new CommandXboxController(Constants.OperatorConstants.kDriverControllerPort);
-
+  
     private static final CommandXboxController m_manipulatorController =
       new CommandXboxController(1);
 
@@ -74,7 +66,8 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
+    //m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
+    m_driverController.x().whileTrue(m_NavXGyroCommand);
 
     m_manipulatorController.povUp().onTrue(lightConfigOff);
     m_manipulatorController.povUpLeft().onTrue(lightConfigColor1);

@@ -12,7 +12,7 @@ import org.photonvision.PhotonCamera;
 
 public class PhotonDirectDrive extends CommandBase {
   /** Creates a new PhotonCommand. */
-  public PhotonSubsystem pcw;
+  /*public PhotonSubsystem pcw;
   public Drive drive;
   public PhotonCamera camera;
 
@@ -75,5 +75,5 @@ public class PhotonDirectDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
-  }
+  }*/
 }
