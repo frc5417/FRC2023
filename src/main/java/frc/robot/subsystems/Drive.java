@@ -27,8 +27,6 @@ public class Drive extends SubsystemBase {
   private static double LeftDistance = 0;
   private static double rightDistance = 0;
 
-  private int count = 0;
-
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
@@ -145,6 +143,27 @@ public class Drive extends SubsystemBase {
     return outputVolts;
   }
 
+  public void rumble(){
+    double combinedSpeed = (getWheelSpeedsDouble()[0] + getWheelSpeedsDouble()[1]) / 2.0;
+    //updates roughly every 3 times per second
+    if (counter++ % 15 == 0) { 
+      lastSpeed = combinedSpeed;
+    }  
+    if (firstRun) { 
+      firstRun = false;
+    }
+    else {
+      calculatedAcceleration = combinedSpeed - lastSpeed;
+      double rumble = (calculatedAcceleration / Constants.maxAcceleration) * Constants.maxRumble;
+      if (calculatedAcceleration < 0.2) {
+        RobotContainer.setDriverRumble(0.0);
+      } if (rumble > Constants.maxAcceleration) {
+        rumble = Constants.maxRumble;
+      }
+      RobotContainer.setDriverRumble(rumble);
+    }
+  }
+
   public boolean pidBalance() {
     //if current gyro roll is positive then we want to set motor power forward to correct for the error
     double leftPower = angleToVolts(-balancePID.calculate(GyroRoll()));
@@ -176,22 +195,13 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     drive.feed();
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
-    double combinedSpeed = (getWheelSpeedsDouble()[0] + getWheelSpeedsDouble()[1]) / 2.0;
-    //updates roughly every 3 times per second
-    if (counter++ % 15 == 0) { 
-      lastSpeed = combinedSpeed;
-    }  
-    if (firstRun) { firstRun = false; }
-    else {
-      calculatedAcceleration = combinedSpeed - lastSpeed;
-      double rumble = (calculatedAcceleration / Constants.maxAcceleration) * Constants.maxRumble;
-      if (calculatedAcceleration < 0.2) {
-        RobotContainer.setDriverRumble(0.0);
-      } if (rumble > Constants.maxAcceleration) {
-        rumble = Constants.maxRumble;
-      }
-      RobotContainer.setDriverRumble(rumble);
+    if(counter++ % 50 == 0){
+      // System.out.println("left encoder velocity conversion: " + leftLeader.getEncoder().getVelocityConversionFactor() +
+                          // "right encoder velocity conversion: " + rightLeader.getEncoder().getVelocityConversionFactor());
+                          System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
     }
+    
+    rumble();    
   }
 
   public Pose2d getPose(){

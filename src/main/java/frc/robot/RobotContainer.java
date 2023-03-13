@@ -30,7 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final LightsControl m_lightsControl = new LightsControl();
   private static final Drive m_drive = new Drive();
-  private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+  private static final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
   
@@ -131,7 +131,6 @@ public class RobotContainer {
 
   public static void setDriverRumble(double rumbleVal) {
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, rumbleVal);
-    m_driverController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
   }
 
   public static double getDriverLeftJoystick() {
