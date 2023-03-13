@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
 
-    String[] autoList = { "Scoring Auto", "Docking Auto", "Engaging Auto" };
+    String[] autoList = { "Scoring Auto", "Docking Auto", "Engaging Auto", "No Auton" };
     SmartDashboard.putStringArray("Auto List", autoList);
   }
 
@@ -73,6 +73,7 @@ public class Robot extends TimedRobot {
     switch(autoSelected) {
       case "No Auton":
         m_autonomousCommand = robotContainer.blankAuton();
+        break;
       case "Scoring Auto":
         m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
         break;
