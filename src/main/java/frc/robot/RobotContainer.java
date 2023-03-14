@@ -36,7 +36,7 @@ public class RobotContainer {
 
   //private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);
   private static final NavXGyroCommand m_NavXGyroCommand = new NavXGyroCommand(m_NavXGyro, ahrs, m_drive, m_photonsubsystem);
-  private static final TankDrive tankDrive = new TankDrive(m_drive, m_photonsubsystem, ahrs, m_NavXGyroCommand);
+  public static final TankDrive tankDrive = new TankDrive(m_drive, m_photonsubsystem, ahrs, m_NavXGyroCommand);
   private static final SetLightConfig lightConfigOff = new SetLightConfig(m_lightsControl, 0);
   private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
   private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
@@ -67,7 +67,7 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.rightBumper().whileTrue(m_photonDirectDriveCommand);
-    m_driverController.x().whileTrue(m_NavXGyroCommand);
+    m_driverController.x().onTrue(m_NavXGyroCommand);
 
     m_manipulatorController.povUp().onTrue(lightConfigOff);
     m_manipulatorController.povUpLeft().onTrue(lightConfigColor1);

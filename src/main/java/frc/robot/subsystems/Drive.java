@@ -22,7 +22,7 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     leftMotors.setInverted(false);
-    rightMotors.setInverted(true);
+    rightMotors.setInverted(false);
     
     leftmotors1.setIdleMode(IdleMode.kCoast);
     leftmotors2.setIdleMode(IdleMode.kCoast);

@@ -51,10 +51,17 @@ public class TankDrive extends CommandBase {
   public void execute() {
     if (counter++ % 10 == 0) { pcw.updatePose(); }
 
+    if (RobotContainer.getButtonA()) {
+      m_NavXGyroCommand.setAngle(90);
+    }
+
     if (Math.abs(RobotContainer.getDriverLeftJoystick()) > 0.1 || Math.abs(RobotContainer.getDriverRightJoystick()) > 0.1) {
       drive.setPower(RobotContainer.getDriverLeftJoystick(), RobotContainer.getDriverRightJoystick());
-    } else {
+      m_NavXGyroCommand.setAngle(0);
+    } else if (RobotContainer.getButtonX() != true) {
       drive.setPower(0, 0);
+    } else {
+
     }
   }
 

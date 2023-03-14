@@ -44,7 +44,7 @@ public final class Constants {
     public static final double kDriveI = 0.0;
   }
 
-  public static final double tankDriveSpeed = 0.8d;
+  public static final double tankDriveSpeed = 0.2d;
 
   public static final double driveMinCommand = 0.1;
 
