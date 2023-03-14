@@ -52,13 +52,13 @@ public class NavXGyroCommand extends CommandBase {
   @Override
   public void execute() {
     if (this.setAnglePassed != 0 && !pid.atSetpoint()) {
-      if (Math.abs(Math.abs(m_NavXGyro.getGyroAngle(ahrs)) - Math.abs(this.setAnglePassed)) < 2.5) {
+      if (Math.abs(Math.abs(m_NavXGyro.getGyroAngle()) - Math.abs(this.setAnglePassed)) < 2.5) {
         drive.setPower(0, 0);
         this.setAngle(0);
         System.out.println("STOP");
       }
-      double leftPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
-      double rightPower = pid.calculate(m_NavXGyro.getGyroAngle(ahrs));
+      double leftPower = pid.calculate(m_NavXGyro.getGyroAngle());
+      double rightPower = pid.calculate(m_NavXGyro.getGyroAngle());
       
       drive.setPower(-MathUtil.clamp(leftPower, -0.8, 0.8), MathUtil.clamp(rightPower, -0.8, 0.8));
     } 
@@ -77,7 +77,7 @@ public class NavXGyroCommand extends CommandBase {
   }
 
   public void setAngle(double set_point) {
-      m_NavXGyro.resetGyroAngle(ahrs);
+      m_NavXGyro.resetGyro();
       this.setAnglePassed = set_point*0.1 + this.setAnglePassed*0.9;
       pid.setSetpoint(this.setAnglePassed);
       pid.setTolerance(5, 1); // stops at <= 25 deg/s error

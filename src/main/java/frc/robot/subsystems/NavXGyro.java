@@ -5,29 +5,20 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.kauailabs.navx.frc.AHRS;
 
-
-
 public class NavXGyro extends SubsystemBase {
-  /** Creates a new NavXGyro. */
+  public AHRS ahrs; 
 
-  public NavXGyro() {}
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public NavXGyro(AHRS gyro) {
+    ahrs = gyro;
   }
 
-  public void printGyro(AHRS ahrs) {
-    System.out.print("NavX Gyro: ");
-    System.out.println(ahrs.getAngle());
-  }
-  public double getGyroAngle(AHRS ahrs) {
+  public double getGyroAngle() {
     return ahrs.getAngle();
   }
-  public void resetGyroAngle(AHRS ahrs) {
+
+  public void resetGyro() {
     ahrs.reset();
   }
 

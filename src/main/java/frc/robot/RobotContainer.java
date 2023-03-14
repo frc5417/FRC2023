@@ -31,7 +31,7 @@ public class RobotContainer {
 
   private static final PhotonSubsystem m_photonsubsystem = new PhotonSubsystem();
   private static final Drive m_drive = new Drive();
-  private static final NavXGyro m_NavXGyro = new NavXGyro();
+  private static final NavXGyro m_NavXGyro = new NavXGyro(ahrs);
   private static final LightsControl m_lightsControl = new LightsControl();
 
   //private final PhotonDirectDrive m_photonDirectDriveCommand = new PhotonDirectDrive(m_photonsubsystem, m_drive);

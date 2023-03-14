@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -22,16 +21,14 @@ public class TankDrive extends CommandBase {
 
   private final Drive drive;
   private final PhotonSubsystem pcw;
-  private PhotonCamera camera;
 
-  public static AHRS ahrs; /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
+  public AHRS ahrs; /* Alternatives:  SPI.Port.kMXP, I2C.Port.kMXP or SerialPort.Port.kUSB */
 
   private int counter = 0;
   
   public TankDrive(Drive drivetrain, PhotonSubsystem photon, AHRS ahrs_passed, NavXGyroCommand gyro_command_passed) {
     drive = drivetrain;
     pcw = photon;
-    camera = photon.getCamera();
 
     ahrs = ahrs_passed;
     m_NavXGyroCommand = gyro_command_passed;
@@ -45,10 +42,8 @@ public class TankDrive extends CommandBase {
   public void initialize() {
     ahrs.reset();
     ahrs.calibrate();
-    m_NavXGyroCommand.setAngle(0);
-    CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
-    // m_NavXGyroCommand.setAngle(90);
-    // CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
+    //m_NavXGyroCommand.setAngle(0);
+    //CommandScheduler.getInstance().schedule(m_NavXGyroCommand);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
