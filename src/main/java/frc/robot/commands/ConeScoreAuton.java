@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class ConeScoreAuton extends SequentialCommandGroup {
     public ConeScoreAuton(Drive drive, Arm arm, Manipulator manipulator) {
         addCommands(
-            new AutoShiftDown(drive),
             new AutoArmSetPos(0.720, arm, true),
             new ParallelRaceGroup(
                 new AutoArmSetPos(0.720, arm, false),

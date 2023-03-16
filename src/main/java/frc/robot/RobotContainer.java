@@ -30,17 +30,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private static final LightsControl m_lightsControl = new LightsControl();
   private static final Drive m_drive = new Drive();
-  private static final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
   
   private static final TankDrive tankDrive = new TankDrive(m_drive);
   private final AutoBalance m_AutoBalance =  new AutoBalance(m_drive);
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
-  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
-  private static final ShiftDown shiftDown = new ShiftDown(m_drive);
-  //private static final Autos chargeAutons = new Autos(m_drive);
+
   private static final ForwardAutoConeScore ForwardAutoConeScore = new ForwardAutoConeScore(m_drive);
   private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
 
@@ -54,6 +52,7 @@ public class RobotContainer {
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.767, armSubsystem);
+  
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
@@ -74,8 +73,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    compressor.enableDigital();
-
     // Configure the trigger bindings
     configureBindings();
   }
@@ -94,7 +91,6 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.a().whileTrue(m_AutoBalance);
     m_driverController.x().toggleOnTrue(driveBreak);
-    m_driverController.b().whileTrue(shiftDrivetrain);
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
