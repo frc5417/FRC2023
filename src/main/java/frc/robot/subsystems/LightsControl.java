@@ -16,6 +16,8 @@ public class LightsControl extends SubsystemBase {
   private static int config = 0;
   private static int animFrame = 0;
   private static int animDir = 1;
+  private static int animStage = 1;
+  private static int skipFrame = 0;
 
   private static AddressableLEDBuffer ledBuffer;
 
@@ -74,19 +76,50 @@ public class LightsControl extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if (config == 0 || config == 4) {
-      for (var i = 0; i < ledBuffer.getLength(); i++) {
-        // Sets the specified LED to the RGB values for black
-        ledBuffer.setRGB(i, 0, 0, 0);
+      // Animation One: Up and Down
+      if (animStage == 0) {
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+          // Sets the specified LED to the RGB values for black
+          ledBuffer.setRGB(i, 0, 0, 0);
+        }
+
+        for (var i = 0; i < animFrame; i++) {
+          // Sets the specified LED to the RGB values for red
+          ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
+        }
+
+        animFrame += animDir;
+        if(animFrame >= ledBuffer.getLength() || animFrame < 1) {
+          animDir *= -1;
+        }
       }
 
-      for (var i = 0; i < animFrame; i++) {
-        // Sets the specified LED to the RGB values for red
-        ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
-      }
+      // Animation Two: Moving white sections on background
+      else if (animStage == 1) {
+        if (skipFrame < 5) {
+          skipFrame += 1;
+        }
+        skipFrame = 0;
+        
+        for (var i = 0; i < ledBuffer.getLength(); i++) {
+          // Sets the specified LED to the RGB values for red
+          ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
+        }
 
-      animFrame += animDir;
-      if(animFrame >= ledBuffer.getLength() || animFrame < 1) {
-        animDir *= -1;
+        var i = animFrame % 8;
+        while (i < ledBuffer.getLength() - 3)
+        {
+          for (int j = 0; j < 3; j++) {
+            ledBuffer.setRGB(i + j, 255, 255, 255);
+          }
+          i += 12;
+        }
+
+        animFrame += 1;
+        if (animFrame >= 800)
+        {
+          animFrame = 0;
+        }
       }
 
       led.setData(ledBuffer);
