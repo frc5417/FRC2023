@@ -69,8 +69,6 @@ public class Drive extends SubsystemBase {
 
     odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
 
-    ShifterL.set(DoubleSolenoid.Value.kReverse);
-    ShifterR.set(DoubleSolenoid.Value.kReverse);
     ahrs.calibrate();
     
     //set balance PID controller setpoint to 0 and have a max degrees allowed set in Constants
@@ -115,19 +113,6 @@ public class Drive extends SubsystemBase {
   public void resetEncoders(){
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
-  }
-
-  public void shiftToggle() {
-    ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-    ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-  }
-  public void shiftDown() {
-    if (ShifterL.get() != DoubleSolenoid.Value.kReverse) { 
-      ShifterL.set(DoubleSolenoid.Value.kReverse); 
-    }
-    if (ShifterR.get() != DoubleSolenoid.Value.kReverse) { 
-      ShifterR.set(DoubleSolenoid.Value.kReverse); 
-    }
   }
 
   public static double clamp(double val, double min, double max) {
@@ -196,9 +181,7 @@ public class Drive extends SubsystemBase {
     drive.feed();
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
     if(counter++ % 50 == 0){
-      // System.out.println("left encoder velocity conversion: " + leftLeader.getEncoder().getVelocityConversionFactor() +
-                          // "right encoder velocity conversion: " + rightLeader.getEncoder().getVelocityConversionFactor());
-                          System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
+      System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
     }
     
     rumble();    

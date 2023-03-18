@@ -29,9 +29,14 @@ public class BackwardEngageAutoConeScore extends CommandBase {
   Trajectory translatedMoveBack;
 
   public BackwardEngageAutoConeScore(Drive drive) {
-    try {
-      this.drive = drive;
-    SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
+    this.drive = drive;
+    
+    SimpleMotorFeedforward motorFF = 
+      new SimpleMotorFeedforward(
+        Constants.AutonConstants.kS,
+        Constants.AutonConstants.kV, 
+        Constants.AutonConstants.kA);
+
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
         motorFF, 
@@ -44,11 +49,9 @@ public class BackwardEngageAutoConeScore extends CommandBase {
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(-0.25,0),
-        new Translation2d(-0.6, 0),
-        new Translation2d(-0.8, 0)
+        new Translation2d(-0.5,0)
       ), 
-      new Pose2d(-1.05,0, new Rotation2d(0)),
+      new Pose2d(-1,0, new Rotation2d(0)),
       config);
     
     RamseteController ramseteControl1 = new RamseteController();
@@ -64,11 +67,6 @@ public class BackwardEngageAutoConeScore extends CommandBase {
       new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD),
       drive::setDriveVolts, 
       drive);
-    }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
-    
   }
 
   public Command getRamseteCommand (){

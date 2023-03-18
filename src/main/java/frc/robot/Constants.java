@@ -39,7 +39,7 @@ public final class Constants {
     public static final double kS = 0.34001;
     public static final double kV = 0.18778;
     public static final double kA = 0.10588;
-    public static final double kP = 4.8456*Math.pow(10,-6);
+    public static final double kP = 0.022276;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double autoMaxSpeed = 1.5; // m/s

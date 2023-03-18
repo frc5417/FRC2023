@@ -45,9 +45,8 @@ public class RobotContainer {
   private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
-  private final BlankAuton blankAuton = new BlankAuton();
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.94, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.945, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
@@ -119,10 +118,6 @@ public class RobotContainer {
 
   public Command engageAutonomousCommand() {
     return engageAuton;
-  }
-
-  public Command blankAuton(){
-    return blankAuton;
   }
 
   public static void setDriverRumble(double rumbleVal) {
