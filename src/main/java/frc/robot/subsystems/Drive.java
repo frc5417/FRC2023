@@ -198,7 +198,7 @@ public class Drive extends SubsystemBase {
     if(counter++ % 50 == 0){
       // System.out.println("left encoder velocity conversion: " + leftLeader.getEncoder().getVelocityConversionFactor() +
                           // "right encoder velocity conversion: " + rightLeader.getEncoder().getVelocityConversionFactor());
-                          System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
+                          // System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
     }
     
     rumble();    

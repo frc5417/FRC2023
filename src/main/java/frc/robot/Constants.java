@@ -34,7 +34,7 @@ public final class Constants {
     //public static final double kTreadLength = 1.0;
   }
   
-  public static class AutonConstants{
+  public static class AutonConstants {
     //values for higher-shifted gear
     public static final double kS = 0.14161;
     public static final double kV = 3.3727;
@@ -55,7 +55,7 @@ public final class Constants {
     public static final double kManipulatorControllerDeadZone = 0.1;
 
     public static final double armMaxSpeed = 0.3;
-    public static final double manipulatorSpeed = 0.75;
+    public static final double manipulatorSpeed = 0.5;
 
     public static final int armLeaderPort = 21;
     public static final int armFollower1Port = 22;
@@ -71,10 +71,10 @@ public final class Constants {
     public static final int armEncoderPort = 0;
 
     public static final double maxVoltage = 4.0;
-    public static final double cycleTime = 50.0;
-    public static final double kArmP = 0.20;
-    public static final double kArmI = 0;
-    public static final double kArmD = 1150.0;
+    public static final double cycleTime = 20.0;
+    public static final double kArmP = 0.125; //0.2
+    public static final double kArmI = 0.01;
+    public static final double kArmD = 500; // 500
 
     public static final double minSetPoint = 0.1d;
   }

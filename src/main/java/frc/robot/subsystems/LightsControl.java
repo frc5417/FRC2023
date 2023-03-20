@@ -96,9 +96,11 @@ public class LightsControl extends SubsystemBase {
 
       // Animation Two: Moving white sections on background
       else if (animStage == 1) {
-        if (skipFrame < 5) {
+        if (skipFrame < 2) {
           skipFrame += 1;
+          return;
         }
+
         skipFrame = 0;
         
         for (var i = 0; i < ledBuffer.getLength(); i++) {
@@ -106,12 +108,12 @@ public class LightsControl extends SubsystemBase {
           ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
         }
 
-        var i = animFrame % 8;
-        while (i < ledBuffer.getLength() - 3)
+        var i = animFrame % 12;
+        while (i < ledBuffer.getLength())
         {
-          for (int j = 0; j < 3; j++) {
-            ledBuffer.setRGB(i + j, 255, 255, 255);
-          }
+          ledBuffer.setRGB(i, 255, 255, 255);
+          if (i + 1 < ledBuffer.getLength())
+            ledBuffer.setRGB(i + 1, 255, 255, 255);
           i += 12;
         }
 

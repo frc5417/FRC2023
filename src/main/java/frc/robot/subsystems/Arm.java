@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase {
   public void setArm(double speed) {
     if (armLimitSwitch.get() || (runningAverage < 0.7 && runningAverage >= 0.4)) { 
       armMotor1.set(0.0); 
-    } else { 
+    } else {
       armMotor1.set(speed);
     }
   }
@@ -73,8 +73,12 @@ public class Arm extends SubsystemBase {
 
     double error = setPoint - encPos;
 
+    if (counter++ % 10 == 0) {
+      System.out.println(enc.getAbsolutePosition() + " " + error);
+    }
+
     double proportional = error * Constants.ManipulatorConstants.kArmP;
-    integral += error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime;
+    integral = (integral * 0.9) + (error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime) * 0.1;
     derivative = Constants.ManipulatorConstants.kArmD * (error - oldError) / Constants.ManipulatorConstants.cycleTime;
 
     voltage += proportional + integral + derivative;
@@ -95,6 +99,5 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     filteredAbsolutePosition();
-  
   }
 }

@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
     
     RobotContainer.setLEDsOn();
     RobotContainer.setCoastMode();
+    // RobotContainer.setBrakeMode();
     RobotContainer.initArmMovement();
     RobotContainer.initTeleopCommand();
   }

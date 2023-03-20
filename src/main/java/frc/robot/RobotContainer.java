@@ -49,7 +49,7 @@ public class RobotContainer {
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final BlankAuton blankAuton = new BlankAuton();
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.94, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.95, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
@@ -184,6 +184,10 @@ public class RobotContainer {
 
   public static void setCoastMode() {
     m_drive.setDriveCoast();
+  }
+
+  public static void setBrakeMode() {
+    m_drive.setDriveBreak();
   }
 
   public static void setLEDsOff() {
