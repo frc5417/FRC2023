@@ -67,13 +67,11 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    String autoSelected = SmartDashboard.getString("Auto Selector", "Scoring Auto");//"Engaging Auto"; //;
+    /*
+    String autoSelected = "Engaging Auto"; //SmartDashboard.getString("Auto Selector", "Scoring Auto");
     System.out.println("Auto selected: " + autoSelected);
 
     switch(autoSelected) {
-      case "No Auton":
-        m_autonomousCommand = robotContainer.blankAuton();
-        break;
       case "Scoring Auto":
         m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
         break;
@@ -85,7 +83,9 @@ public class Robot extends TimedRobot {
         break;
       default:
         break;
-    }
+        */
+        m_autonomousCommand = robotContainer.engageAutonomousCommand();
+    
 
     //ArmSetPos.setIsAuton(true);
 

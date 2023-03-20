@@ -43,8 +43,6 @@ public class Drive extends SubsystemBase {
 
   private static DifferentialDriveOdometry odometry;
 
-  private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
-  private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
 
   //initializes PID controller for balancing
@@ -59,7 +57,7 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     
-    rightMotors.setInverted(true);
+    rightMotors.setInverted(false);
     leftMotors.setInverted(false);
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
@@ -69,8 +67,6 @@ public class Drive extends SubsystemBase {
 
     odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
 
-    ShifterL.set(DoubleSolenoid.Value.kReverse);
-    ShifterR.set(DoubleSolenoid.Value.kReverse);
     ahrs.calibrate();
     
     //set balance PID controller setpoint to 0 and have a max degrees allowed set in Constants
@@ -108,26 +104,12 @@ public class Drive extends SubsystemBase {
   public void setDriveVolts(double leftVolts, double rightVolts){
     leftMotors.setVoltage(leftVolts);
     rightMotors.setVoltage(rightVolts);
-    drive.setSafetyEnabled(false);
     drive.feed();
   }
 
   public void resetEncoders(){
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
-  }
-
-  public void shiftToggle() {
-    ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-    ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-  }
-  public void shiftDown() {
-    if (ShifterL.get() != DoubleSolenoid.Value.kReverse) { 
-      ShifterL.set(DoubleSolenoid.Value.kReverse); 
-    }
-    if (ShifterR.get() != DoubleSolenoid.Value.kReverse) { 
-      ShifterR.set(DoubleSolenoid.Value.kReverse); 
-    }
   }
 
   public static double clamp(double val, double min, double max) {
@@ -179,12 +161,6 @@ public class Drive extends SubsystemBase {
     } else {
       balanceCount = 0;
     }
-    
-    
-    if (ShifterL.get() == DoubleSolenoid.Value.kForward && ShifterR.get() == DoubleSolenoid.Value.kForward) {
-      ShifterL.set(DoubleSolenoid.Value.kReverse);
-      ShifterR.set(DoubleSolenoid.Value.kReverse);
-    }
 
     //if greater than degreesAllowed in Constants then move based on PID calculations
     setDriveVolts(leftPower, rightPower);
@@ -196,9 +172,7 @@ public class Drive extends SubsystemBase {
     drive.feed();
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
     if(counter++ % 50 == 0){
-      // System.out.println("left encoder velocity conversion: " + leftLeader.getEncoder().getVelocityConversionFactor() +
-                          // "right encoder velocity conversion: " + rightLeader.getEncoder().getVelocityConversionFactor());
-                          // System.out.printf("Encoders (L|R): %f | %f\n", leftEncoder.getPosition(), rightEncoder.getPosition());
+      System.out.println(getPose());
     }
     
     rumble();    
