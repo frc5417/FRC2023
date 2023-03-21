@@ -8,6 +8,9 @@ import java.util.concurrent.TimeUnit.*;
 
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -179,6 +182,10 @@ public class RobotContainer {
 
   public static void setBrakeMode() {
     m_drive.setDriveBreak();
+  }
+
+  public static void resetOdometry() {
+    m_drive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d()));
   }
 
   public static void setLEDsOff() {

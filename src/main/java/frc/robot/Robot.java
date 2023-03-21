@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     RobotContainer.setLEDsOff();
+    RobotContainer.setBrakeMode();
   }
 
   @Override
@@ -67,8 +68,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    /*
-    String autoSelected = "Engaging Auto"; //SmartDashboard.getString("Auto Selector", "Scoring Auto");
+    String autoSelected = SmartDashboard.getString("Auto Selector", "Scoring Auto");
     System.out.println("Auto selected: " + autoSelected);
 
     switch(autoSelected) {
@@ -83,12 +83,15 @@ public class Robot extends TimedRobot {
         break;
       default:
         break;
-        */
-        m_autonomousCommand = robotContainer.engageAutonomousCommand();
+    }
+
+      // m_autonomousCommand = robotContainer.engageAutonomousCommand();
     
 
     //ArmSetPos.setIsAuton(true);
 
+    RobotContainer.resetOdometry();
+    RobotContainer.setCoastMode();
     RobotContainer.setLEDsOn();
 
     if (m_autonomousCommand != null) {

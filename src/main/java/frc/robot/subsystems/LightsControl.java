@@ -11,12 +11,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LightsControl extends SubsystemBase {
 
   private static AddressableLED led;
-  private static AddressableLED led2;
+  // private static AddressableLED led2;
 
   private static int config = 0;
   private static int animFrame = 0;
   private static int animDir = 1;
-  private static int animStage = 1;
+  private static int animRunCount = 0;
+  private static int animStage = 2;
   private static int skipFrame = 0;
 
   private static AddressableLEDBuffer ledBuffer;
@@ -118,14 +119,55 @@ public class LightsControl extends SubsystemBase {
         }
 
         animFrame += 1;
-        if (animFrame >= 800)
-        {
+        if (animFrame >= 800) {
           animFrame = 0;
+        }
+      }
+
+      else if (animStage == 2) {
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+          int r = getR(ledBuffer, i);
+          int g = getG(ledBuffer, i);
+          int b = getB(ledBuffer, i);
+          if (r >= 10) r -= 10; else r = 0;
+          if (g >= 20) g -= 20; else g = 0;
+          if (b >= 20) b -= 20; else b = 0;
+          ledBuffer.setRGB(i, r, g, b);
+        }
+        //m_ledBuffer[m_currentPixel].SetTrue_R_G_B(64, 64, 64);
+        ledBuffer.setRGB(animFrame, 120, 120, 120);
+        // m_ledB.SetData(m_ledBuffer);
+        
+        animFrame += animDir;
+        if ((animFrame <= 0) || (animFrame >= ledBuffer.getLength() - 1)) {
+          // Ensure valid even when switching modes
+          if (animFrame < 0) animFrame = 0;
+          if (animFrame > ledBuffer.getLength() - 1) animFrame = ledBuffer.getLength() - 1;
+          animDir = -animDir;
+        }
+      }
+
+      animRunCount += 1;
+      if (animRunCount >= 800) {
+        animRunCount = 0;
+        animStage += 1;
+        if (animStage > 2) {
+          animStage = 0;
         }
       }
 
       led.setData(ledBuffer);
     }
 
+  }
+
+  private int getR(AddressableLEDBuffer m_ledBuffer, int i) {
+    return (int) m_ledBuffer.getLED(i).red;
+  }
+  private int getG(AddressableLEDBuffer m_ledBuffer, int i) {
+    return (int) m_ledBuffer.getLED(i).blue;
+  }
+  private int getB(AddressableLEDBuffer m_ledBuffer, int i) {
+    return (int) m_ledBuffer.getLED(i).green;
   }
 }

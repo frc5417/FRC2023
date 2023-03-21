@@ -37,7 +37,7 @@ public class BackwardDockAutoConeScore extends CommandBase {
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
         motorFF, 
-        Constants.kinematics,10);
+        Constants.kinematics, 10);
 
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed, Constants.AutonConstants.chargeMaxAcceleration)
@@ -50,7 +50,7 @@ public class BackwardDockAutoConeScore extends CommandBase {
         new Translation2d(-0.6, 0),
         new Translation2d(-0.8, 0)
       ), 
-      new Pose2d(-3,0, new Rotation2d(0)),
+      new Pose2d(-1.05, 0, new Rotation2d(0)),
       config);
     
     

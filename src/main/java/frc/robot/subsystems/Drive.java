@@ -57,7 +57,7 @@ public class Drive extends SubsystemBase {
 
   public Drive() {
     
-    rightMotors.setInverted(false);
+    rightMotors.setInverted(true);
     leftMotors.setInverted(false);
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
@@ -170,12 +170,12 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     drive.feed();
-    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition());
     if(counter++ % 50 == 0){
-      System.out.println(getPose());
+      // System.out.println(leftEncoder.getPosition());
+      // System.out.println(odometry.getPoseMeters().getX() + " | " + odometry.getPoseMeters().getY());
     }
-    
-    rumble();    
+    //rumble();
   }
 
   public Pose2d getPose(){
@@ -183,7 +183,7 @@ public class Drive extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),-rightEncoder.getVelocity());
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), -rightEncoder.getVelocity());
   }
 
   public double[] getWheelSpeedsDouble() {

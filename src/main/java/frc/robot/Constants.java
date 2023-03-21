@@ -30,22 +30,22 @@ public final class Constants {
 
     public static final double kDriveP = 0.5;
 
-    public static final double kTreadLength = 0.1524 * Math.PI;
-    //public static final double kTreadLength = 1.0;
+    //public static final double kTreadLength = 0.0778 * 0.1524 * Math.PI;
+    public static final double kTreadLength = 0.1524 * 0.16 * Math.PI; // Diameter * Gear Ratio * PI
   }
   
   public static class AutonConstants {
     //values for higher-shifted gear
-    public static final double kS = 0.24575;
-    public static final double kV = 1.6892;
-    public static final double kA = 0.36159;
-    public static final double kP = 0.65509 * 0.0;
+    public static final double kS = 0.20164;
+    public static final double kV = 1.6742;
+    public static final double kA = 0.37068;
+    public static final double kP = 0.0009898;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double autoMaxSpeed = 1.5; // m/s
     public static final double autoMaxAcceleration = 0.5;//m/s^2
     //values for charging station
-    public static final double chargeMaxSpeed = 0.3; // m/s
+    public static final double chargeMaxSpeed = 1.0; // m/s
     public static final double chargeMaxAcceleration = 0.5;//m/s^2
   }
 

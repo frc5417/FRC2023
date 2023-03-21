@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class EngageAuton extends SequentialCommandGroup {
     public EngageAuton(Drive drive, Arm arm, Manipulator manipulator) {
         addCommands(
-            //new AutoArmSetPos(0.80, arm, true),
-            //new ManipulatorOutAutonCube(manipulator, 375),
-            new BackwardDockAutoConeScore(drive).getRamseteCommand()
-            // new AutoBalance(drive)
+            new AutoArmSetPos(0.80, arm, true),
+            new ManipulatorOutAutonCube(manipulator, 500),
+            new BackwardEngageAutoConeScore(drive).getRamseteCommand(),
+            new AutoBalance(drive)
         );
     }
 }

@@ -12,7 +12,6 @@ import frc.robot.subsystems.Manipulator;
 public class ManipulatorOutAutonCube extends CommandBase {
   private final Manipulator manipulatorSubsystem;
   private int codeSleep = 375; //ms
-  private long startTime;
   private int count = 0;
 
   private boolean doFinish = false;
@@ -20,7 +19,6 @@ public class ManipulatorOutAutonCube extends CommandBase {
   /** Creates a new ManipulatorToggle. */
   public ManipulatorOutAutonCube(Manipulator subsystem, int sleepTime) {
     manipulatorSubsystem = subsystem;
-    startTime = System.currentTimeMillis();
     codeSleep = sleepTime;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,15 +28,18 @@ public class ManipulatorOutAutonCube extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    doFinish = false;
     manipulatorSubsystem.setIntake(ManipulatorConstants.manipulatorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (count++ >= (codeSleep/20)) {
+    if (count++ >= (codeSleep / 20)) {
       doFinish = true;
     }
+
+    System.out.println("Manipulator Out Auton Cube execute()");
   }
 
   // Called once the command ends or is interrupted.
