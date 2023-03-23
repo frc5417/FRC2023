@@ -49,9 +49,9 @@ public class RobotContainer {
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.945, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.955, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.736, armSubsystem);
   private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.767, armSubsystem);
   

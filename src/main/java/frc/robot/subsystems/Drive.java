@@ -154,10 +154,11 @@ public class Drive extends SubsystemBase {
     if (balancePID.atSetpoint()) {
       //if less than degreesAllowed in Constants then stop moving
       balanceCount++;
-      if (balanceCount == 25) {
+      if (balanceCount >= 15) {
         setDriveVolts(0.0, 0.0);
+        setDriveBreak();
+        return true;
       }
-      return true;
     } else {
       balanceCount = 0;
     }

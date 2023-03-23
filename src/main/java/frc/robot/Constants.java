@@ -81,7 +81,7 @@ public final class Constants {
   public static class BalanceConstants {
     public static final double balanceMaxVoltage = 4.0;
     public static final double degreesAllowed = 3.75;
-    public static final double kP = 0.6;
+    public static final double kP = 0.7;
     public static final double kI = 0.001; //0.005
     public static final double kD = 0.1;
     public static final double lowGearClamp = 4.0;
