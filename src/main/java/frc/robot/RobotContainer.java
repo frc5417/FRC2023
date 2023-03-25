@@ -59,9 +59,6 @@ public class RobotContainer {
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
   
   private static final SetLightConfig lightConfigRed = new SetLightConfig(m_lightsControl, 0);
   private static final SetLightConfig lightConfigBlue = new SetLightConfig(m_lightsControl, 4);

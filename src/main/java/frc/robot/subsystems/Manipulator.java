@@ -15,38 +15,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
 
 public class Manipulator extends SubsystemBase {
+  private double counter = 0;
   private final static CANSparkMax manipulatorMotor = new CANSparkMax(ManipulatorConstants.manipulatorPort, MotorType.kBrushless);
   private final static DigitalInput manipulatorSwitch = new DigitalInput(ManipulatorConstants.intakeLimitPort);
-  private final static DoubleSolenoid claw1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw1Solenoid, ManipulatorConstants.kClaw2Solenoid);
-  private final static DoubleSolenoid claw2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, ManipulatorConstants.kClaw3Solenoid, ManipulatorConstants.kClaw4Solenoid);
 
   /** Creates a new Manipulator. */
   public Manipulator() {
     manipulatorMotor.setIdleMode(IdleMode.kBrake);
-
-    claw1.set(DoubleSolenoid.Value.kReverse);
-    claw2.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void setIntake(double speed) {
     manipulatorMotor.set(speed); 
   }
 
-  public void setClaw(int configType) {
-    if (configType == 1) {
-      claw1.set(DoubleSolenoid.Value.kForward);
-      claw2.set(DoubleSolenoid.Value.kReverse);
-    } else if (configType == 2) {
-      claw1.set(DoubleSolenoid.Value.kForward);
-      claw2.set(DoubleSolenoid.Value.kForward);
-    } if (configType == 3) {
-      claw1.set(DoubleSolenoid.Value.kReverse);
-      claw2.set(DoubleSolenoid.Value.kForward);
-    }
-  }
-
   @Override
   public void periodic() {
+    if(counter++ % 10 == 0){
+      System.out.printf("%f | %f \n", manipulatorMotor.getOutputCurrent(), manipulatorMotor.getMotorTemperature());
+    }
     // This method will be called once per scheduler run
   }
   
