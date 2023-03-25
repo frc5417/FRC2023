@@ -12,7 +12,6 @@ import frc.robot.subsystems.Manipulator;
 public class ManipulatorOutAuton extends CommandBase {
   private final Manipulator manipulatorSubsystem;
   private int codeSleep;
-  private long startTime;
   private int count = 0;
 
   private boolean doFinish = false;
@@ -20,7 +19,6 @@ public class ManipulatorOutAuton extends CommandBase {
   /** Creates a new ManipulatorToggle. */
   public ManipulatorOutAuton(Manipulator subsystem, int sleepTime) {
     manipulatorSubsystem = subsystem;
-    startTime = System.currentTimeMillis();
     codeSleep = sleepTime;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,13 +28,14 @@ public class ManipulatorOutAuton extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    count = 0;
     manipulatorSubsystem.setIntake(-ManipulatorConstants.manipulatorSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (count++ >= 50) {
+    if (count++ >= (codeSleep / 20)) {
       doFinish = true;
     }
   }

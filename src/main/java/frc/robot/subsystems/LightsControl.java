@@ -47,9 +47,9 @@ public class LightsControl extends SubsystemBase {
   public void setLightConfig(int configNum) {
     config = configNum;
 
-    if (configNum == 0 || configNum == 4) {
+    if (configNum == 0 || configNum == 4 || configNum == 3) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
-        // Sets the specified LED to the RGB values for black
+        // Sets the specified LED to the RGB values for black/off
         ledBuffer.setRGB(i, 0, 0, 0);
       }
     } else if (configNum == 1) {
@@ -61,11 +61,6 @@ public class LightsControl extends SubsystemBase {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
         // Sets the specified LED to the RGB values for purple
         ledBuffer.setRGB(i, 191, 64, 191);
-      }
-    } else if (configNum == 3) {
-      for (var i = 0; i < ledBuffer.getLength(); i++) {
-        // Sets the specified LED to the RGB values for off
-        ledBuffer.setRGB(i, 0, 0, 0);
       }
     }
 
@@ -85,7 +80,7 @@ public class LightsControl extends SubsystemBase {
         }
 
         for (var i = 0; i < animFrame; i++) {
-          // Sets the specified LED to the RGB values for red
+          // Sets the specified LED to the RGB values for red/blue
           ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
         }
 
@@ -124,19 +119,20 @@ public class LightsControl extends SubsystemBase {
         }
       }
 
+      // Animation Three trailing lights
       else if (animStage == 2) {
         for (int i = 0; i < ledBuffer.getLength(); i++) {
-          int r = getR(ledBuffer, i);
-          int g = getG(ledBuffer, i);
-          int b = getB(ledBuffer, i);
-          if (r >= 10) r -= 10; else r = 0;
-          if (g >= 20) g -= 20; else g = 0;
-          if (b >= 20) b -= 20; else b = 0;
+          int r = getR(i);
+          int g = getG(i);
+          int b = getB(i);
+
+          if (r >= 15) r -= 15; else r = 0;
+          if (g >= 15) g -= 15; else g = 0;
+          if (b >= 15) b -= 15; else b = 0;
           ledBuffer.setRGB(i, r, g, b);
         }
-        //m_ledBuffer[m_currentPixel].SetTrue_R_G_B(64, 64, 64);
-        ledBuffer.setRGB(animFrame, 120, 120, 120);
-        // m_ledB.SetData(m_ledBuffer);
+
+        ledBuffer.setRGB(animFrame, (config == 0 ? 240 : 0), 0, (config == 4 ? 240 : 0));
         
         animFrame += animDir;
         if ((animFrame <= 0) || (animFrame >= ledBuffer.getLength() - 1)) {
@@ -161,13 +157,13 @@ public class LightsControl extends SubsystemBase {
 
   }
 
-  private int getR(AddressableLEDBuffer m_ledBuffer, int i) {
-    return (int) m_ledBuffer.getLED(i).red;
+  private int getR(int i) {
+    return (int) (ledBuffer.getLED(i).red * 255.0);
   }
-  private int getG(AddressableLEDBuffer m_ledBuffer, int i) {
-    return (int) m_ledBuffer.getLED(i).blue;
+  private int getG(int i) {
+    return (int) (ledBuffer.getLED(i).green * 255.0);
   }
-  private int getB(AddressableLEDBuffer m_ledBuffer, int i) {
-    return (int) m_ledBuffer.getLED(i).green;
+  private int getB(int i) {
+    return (int) (ledBuffer.getLED(i).blue * 255.0);
   }
 }

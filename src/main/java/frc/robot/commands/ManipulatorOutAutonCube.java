@@ -29,6 +29,7 @@ public class ManipulatorOutAutonCube extends CommandBase {
   @Override
   public void initialize() {
     doFinish = false;
+    count = 0;
     manipulatorSubsystem.setIntake(ManipulatorConstants.manipulatorSpeed);
   }
 

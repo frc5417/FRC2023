@@ -43,11 +43,11 @@ public class ForwardAutoConeScore extends CommandBase {
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
     //first step is to move back slightly, old moveBack
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0,0,new Rotation2d(0)), 
+      new Pose2d(0, 0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(0.25/2,0)
+        new Translation2d(0.45,0)
       ), 
-      new Pose2d(0.40/2,0, new Rotation2d(0)), 
+      new Pose2d(0.9, 0, new Rotation2d(0)), 
       config);
     
     

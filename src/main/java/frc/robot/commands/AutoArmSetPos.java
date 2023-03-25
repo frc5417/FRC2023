@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 
 public class AutoArmSetPos extends CommandBase {
-  private final Arm manipulatorSubsystem;
+  private final Arm armSubsystem;
 
   private final double setPoint;
   private boolean doFinish = false;
@@ -18,7 +18,7 @@ public class AutoArmSetPos extends CommandBase {
   private boolean endFlag = false;
 
   public AutoArmSetPos(double pos, Arm subsystem, boolean eventuallyStop) {
-    manipulatorSubsystem = subsystem;
+    armSubsystem = subsystem;
     endFlag = eventuallyStop;
 
     if (pos < Constants.ManipulatorConstants.minSetPoint) {
@@ -28,34 +28,40 @@ public class AutoArmSetPos extends CommandBase {
     setPoint = pos;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(manipulatorSubsystem);
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     doFinish = false;
+    counter = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(manipulatorSubsystem.runningAverage - setPoint) < 0.05 && endFlag) {
-      doFinish = true;
+    if (Math.abs(armSubsystem.runningAverage - setPoint) < 0.05 && endFlag) {
+      counter++;
+      if (counter > 15) {
+        doFinish = true;
+      }
+    } else {
+      counter = 0;
     }
-    manipulatorSubsystem.setArmPos(setPoint);
+    
+    if (!armSubsystem.setArmPos(setPoint)) doFinish = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    manipulatorSubsystem.setArm(0.0d);
+    armSubsystem.setArm(0.0d);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("arm: "+doFinish);
     return doFinish;
   }
 }

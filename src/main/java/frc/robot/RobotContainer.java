@@ -49,11 +49,11 @@ public class RobotContainer {
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.955, armSubsystem);
-  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.736, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.767, armSubsystem);
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(Constants.ManipulatorConstants.armIntakePoint, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(Constants.ManipulatorConstants.armSecondScorePoint, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(Constants.ManipulatorConstants.armThirdScorePoint, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(Constants.ManipulatorConstants.armHumanConePoint, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(Constants.ManipulatorConstants.armHumanCubePoint, armSubsystem);
   
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
   private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
@@ -96,9 +96,9 @@ public class RobotContainer {
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
-    m_manipulatorController.y().whileTrue(armSetPointHumanCube) ;
-    m_manipulatorController.x().whileTrue(armSetPointHumanCone);
-    m_manipulatorController.rightBumper().whileTrue(armSetPointThirdScore);
+    m_manipulatorController.y().whileTrue(armSetPointThirdScore);
+    m_manipulatorController.rightBumper().whileTrue(armSetPointHumanCube) ;
+    // m_manipulatorController.x().whileTrue(armSetPointHumanCone);
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);

@@ -56,15 +56,18 @@ public class Arm extends SubsystemBase {
     runningAverage = enc.getAbsolutePosition() * 0.1 + runningAverage * 0.9;
   }
 
-  public void setArmPos(double pos) {
+  public boolean setArmPos(double pos) {
     if(enc.getAbsolutePosition() < 0.7 && enc.getAbsolutePosition() >= 0.4) {
-      armMotor1.set(0);
+      armMotor1.setVoltage(0.0);
+      return false;
     } else if (armLimitSwitch.get()) { 
       armMotor1.setVoltage(0.0); 
+      return false;
     }
     else { 
       armMotor1.setVoltage(PID(pos)); 
     }
+    return true;
   }
 
   public double PID(double setPoint) {
@@ -73,9 +76,9 @@ public class Arm extends SubsystemBase {
 
     double error = setPoint - encPos;
 
-    if (counter++ % 10 == 0) {
-      System.out.println(enc.getAbsolutePosition() + " " + error);
-    }
+    // if (counter++ % 10 == 0) {
+    //   System.out.println(enc.getAbsolutePosition() + " " + error);
+    // }
 
     double proportional = error * Constants.ManipulatorConstants.kArmP;
     integral = (integral * 0.9) + (error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime) * 0.1;
@@ -97,7 +100,10 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println(enc.getAbsolutePosition());
+    if (counter++ % 30 == 0) {
+      System.out.println(enc.getAbsolutePosition());
+    }
+
     // This method will be called once per scheduler run
     filteredAbsolutePosition();
   }
