@@ -81,7 +81,7 @@ public final class Constants {
     public static final double armSecondScorePoint = 0.787;
     public static final double armThirdScorePoint = 0.736;
     public static final double armHumanCubePoint = 0.759;
-    public static final double armHumanConePoint = 0.765;
+    public static final double armHumanConePoint = 0.8;
 
   }
 

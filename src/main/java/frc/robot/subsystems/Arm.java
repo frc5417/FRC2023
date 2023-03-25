@@ -76,10 +76,6 @@ public class Arm extends SubsystemBase {
 
     double error = setPoint - encPos;
 
-    // if (counter++ % 10 == 0) {
-    //   System.out.println(enc.getAbsolutePosition() + " " + error);
-    // }
-
     double proportional = error * Constants.ManipulatorConstants.kArmP;
     integral = (integral * 0.9) + (error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime) * 0.1;
     derivative = Constants.ManipulatorConstants.kArmD * (error - oldError) / Constants.ManipulatorConstants.cycleTime;
@@ -100,8 +96,7 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (counter++ % 30 == 0) {
-      System.out.println(enc.getAbsolutePosition());
+    if (counter++ % 100 == 0) {
     }
 
     // This method will be called once per scheduler run

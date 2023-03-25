@@ -172,11 +172,7 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     drive.feed();
     odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition());
-    if(counter++ % 50 == 0){
-      // System.out.println(leftEncoder.getPosition());
-      // System.out.println(odometry.getPoseMeters().getX() + " | " + odometry.getPoseMeters().getY());
-    }
-    //rumble();
+    if(counter++ % 50 == 0){}
   }
 
   public Pose2d getPose(){
