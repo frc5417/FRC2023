@@ -46,9 +46,11 @@ public class RobotContainer {
   private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
 
   private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final ConeScoreMoveAuton coneScoreMoveAuton = new ConeScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageScoreAuton engageScoreAuton = new EngageScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final EngageScoreMoveAuton engageScoreMoveAuton = new EngageScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
 
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(Constants.ManipulatorConstants.armIntakePoint, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(Constants.ManipulatorConstants.armSecondScorePoint, armSubsystem);
@@ -113,6 +115,10 @@ public class RobotContainer {
     return coneScoreAuton;
   }
 
+  public Command coneScoreMoveAutonomousCommand() {
+    return coneScoreMoveAuton;
+  }
+
   public Command dockAutonomousCommand() {
     return dockAuton;
   }
@@ -123,6 +129,10 @@ public class RobotContainer {
 
   public Command engageScoreAutonomousCommand() {
     return engageScoreAuton;
+  }
+
+  public Command engageScoreMoveAutonomousCommand() {
+    return engageScoreMoveAuton;
   }
 
   public static void setDriverRumble(double rumbleVal) {

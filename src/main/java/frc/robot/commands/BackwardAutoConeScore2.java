@@ -23,27 +23,22 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class BackwardEngageAutoConeScore2 extends CommandBase {
+public class BackwardAutoConeScore2 extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
   Trajectory translatedMoveBack;
 
-  public BackwardEngageAutoConeScore2(Drive drive) {
+  public BackwardAutoConeScore2(Drive drive) {
+    try {
     this.drive = drive;
-    
-    SimpleMotorFeedforward motorFF = 
-      new SimpleMotorFeedforward(
-        Constants.AutonConstants.kS,
-        Constants.AutonConstants.kV, 
-        Constants.AutonConstants.kA);
-
+    SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
         motorFF, 
         Constants.kinematics, 10);
 
     TrajectoryConfig config = 
-      new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed, Constants.AutonConstants.chargeMaxAcceleration)
+      new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
     //first step is to move back slightly, old moveBack
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
@@ -51,7 +46,7 @@ public class BackwardEngageAutoConeScore2 extends CommandBase {
       List.of(
         new Translation2d(-0.2,0)
       ), 
-      new Pose2d(-0.5,0, new Rotation2d(0)),
+      new Pose2d(-0.6, 0, new Rotation2d(0)),
       config);
     
     RamseteController ramseteControl1 = new RamseteController();
@@ -67,10 +62,14 @@ public class BackwardEngageAutoConeScore2 extends CommandBase {
       new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD),
       drive::setDriveVolts, 
       drive);
+    }
+    catch (Exception e) {
+      //System.out.println("auto stack error: "+ e);
+    }
+    
   }
 
   public Command getRamseteCommand (){
-    //return new StopAuton(drive);
-    return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0));
+    return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
   }
 }
