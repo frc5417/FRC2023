@@ -23,12 +23,12 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
-public class BackwardEngageAutoConeScore2 extends CommandBase {
+public class BackwardEngageAutoConeScore4 extends CommandBase {
   RamseteCommand ramseteCommand1;
   Drive drive;
   Trajectory translatedMoveBack;
 
-  public BackwardEngageAutoConeScore2(Drive drive) {
+  public BackwardEngageAutoConeScore4(Drive drive) {
     this.drive = drive;
     
     SimpleMotorFeedforward motorFF = 
@@ -43,15 +43,19 @@ public class BackwardEngageAutoConeScore2 extends CommandBase {
         Constants.kinematics, 10);
 
     TrajectoryConfig config = 
-      new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed2, Constants.AutonConstants.chargeMaxAcceleration)
+      new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed3, Constants.AutonConstants.chargeMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
     //first step is to move back slightly, old moveBack
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(-0.2,0)
+        new Translation2d(-0.7,0),
+        new Translation2d(-1.4,0),
+        new Translation2d(-1.7,0),
+        new Translation2d(-2.4,0),
+        new Translation2d(-2.9,0)
       ), 
-      new Pose2d(-0.5,0, new Rotation2d(0)),
+      new Pose2d(-3.2,0, new Rotation2d(0)),
       config);
     
     RamseteController ramseteControl1 = new RamseteController();

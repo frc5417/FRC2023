@@ -39,15 +39,17 @@ public class ForwardEngageAutoConeScore2 extends CommandBase {
         Constants.kinematics, 10);
 
     TrajectoryConfig config = 
-      new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed2, Constants.AutonConstants.autoMaxAcceleration)
+      new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed2, Constants.AutonConstants.autoMaxAcceleration2)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
     //first step is to move back slightly, old moveBack
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0,new Rotation2d(0)), 
       List.of(
-        new Translation2d(0.45,0)
+        new Translation2d(0.45,0),
+        new Translation2d(1.1,0),
+        new Translation2d(1.6,0)
       ), 
-      new Pose2d(0.9, 0, new Rotation2d(0)), 
+      new Pose2d(1.9, 0, new Rotation2d(0)), 
       config);
     
     

@@ -38,7 +38,7 @@ public class BackwardAutoConeScore3 extends CommandBase {
         motorFF, 
         Constants.kinematics, 10);
 
-    Trajectory moveBack = PathPlanner.loadPath("reverseMove", Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration, false);
+    Trajectory moveBack = PathPlanner.loadPath("reverseMove2", Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration, false);
     
     RamseteController ramseteControl1 = new RamseteController();
     

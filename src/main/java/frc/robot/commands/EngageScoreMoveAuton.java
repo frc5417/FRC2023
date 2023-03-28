@@ -18,13 +18,15 @@ public class EngageScoreMoveAuton extends SequentialCommandGroup {
                 new ManipulatorOutAuton(manipulator, 500)
             ),
             new ParallelRaceGroup(
-                new AutoArmSetPos(ManipulatorConstants.armIntakePoint, arm, false),
+                new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
                 new BackwardEngageAutoConeScore2(drive).getRamseteCommand()
             ),
+            new DriveBreakAuton(drive),
             new ParallelRaceGroup(
-                new AutoArmSetPos(1.1, arm, false),
-                new BackwardEngageAutoConeScore3(drive).getRamseteCommand()
+                new AutoArmSetPos(ManipulatorConstants.armIntakePoint, arm, false),
+                new BackwardEngageAutoConeScore4(drive).getRamseteCommand()
             ),
+            new DriveCoastAuton(drive),
             new ForwardEngageAutoConeScore2(drive).getRamseteCommand(),
             new AutoBalance(drive)
         );
