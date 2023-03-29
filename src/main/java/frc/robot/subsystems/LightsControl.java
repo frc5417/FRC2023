@@ -19,8 +19,9 @@ public class LightsControl extends SubsystemBase {
   private static int animRunCount = 0;
   private static int animStage = 2;
   private static int skipFrame = 0;
-
+  private static boolean topWhite = true;
   private static AddressableLEDBuffer ledBuffer;
+  private static int top;
 
   /** Creates a new LightsControl. */
   public LightsControl() {
@@ -29,6 +30,7 @@ public class LightsControl extends SubsystemBase {
 
     ledBuffer = new AddressableLEDBuffer(30*2);
     led.setLength(ledBuffer.getLength());
+    top = ledBuffer.getLength();
     // led2.setLength(ledBuffer.getLength());
 
     for (var i = 0; i < ledBuffer.getLength(); i++) {
@@ -46,7 +48,6 @@ public class LightsControl extends SubsystemBase {
 
   public void setLightConfig(int configNum) {
     config = configNum;
-
     if (configNum == 0 || configNum == 4 || configNum == 3) {
       for (var i = 0; i < ledBuffer.getLength(); i++) {
         // Sets the specified LED to the RGB values for black/off
@@ -74,20 +75,21 @@ public class LightsControl extends SubsystemBase {
     if (config == 0 || config == 4) {
       // Animation One: Up and Down
       if (animStage == 0) {
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-          // Sets the specified LED to the RGB values for black
-          ledBuffer.setRGB(i, 0, 0, 0);
-        }
 
-        for (var i = 0; i < animFrame; i++) {
-          // Sets the specified LED to the RGB values for red/blue
-          ledBuffer.setRGB(i, (config == 0 ? 255 : 0), 0, (config == 4 ? 255 : 0));
+        // For every pixel
+        for (int i = 0; i < ledBuffer.getLength(); i++) {
+          ledBuffer.setRGB(i, (int) (255.0 / ((animFrame / 4.0) + 1)), 0, 0);
         }
 
         animFrame += animDir;
-        if(animFrame >= ledBuffer.getLength() || animFrame < 1) {
+        if (animFrame >= 100) {
+          animFrame -= 1;
+          animDir *= -1;
+        } else if (animFrame < 0) {
+          animFrame += 1;
           animDir *= -1;
         }
+
       }
 
       // Animation Two: Moving white sections on background
@@ -126,9 +128,9 @@ public class LightsControl extends SubsystemBase {
           int g = getG(i);
           int b = getB(i);
 
-          if (r >= 15) r -= 15; else r = 0;
-          if (g >= 15) g -= 15; else g = 0;
-          if (b >= 15) b -= 15; else b = 0;
+          if (r > 15) r -= 15; else r = (config == 0 ? 15 : 0);
+          if (g > 15) g -= 15; else g = 0;
+          if (b > 15) b -= 15; else b = (config == 4 ? 15 : 0);
           ledBuffer.setRGB(i, r, g, b);
         }
 
