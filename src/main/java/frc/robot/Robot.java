@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
 
-    String[] autoList = { "Scoring Auto", "Score Move Auto", "Docking Auto", "Engaging Auto", "Engage Scoring Auto", "Engage Score Move Auto", "No Auton" };
+    String[] autoList = {"High Score Mobility", "Docking", "Engaging Low Score", "Engaging High Score"};
     SmartDashboard.putStringArray("Auto List", autoList);
   }
 
@@ -72,24 +72,24 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + autoSelected);
 
     switch(autoSelected) {
-      case "Scoring Auto":
+      case "High Score Mobility":
         m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
         break;
-      case "Score Move Auto":
-        m_autonomousCommand = robotContainer.coneScoreMoveAutonomousCommand();
-        break;
-      case "Docking Auto":
+      // case "Score Move Auto":
+      //   m_autonomousCommand = robotContainer.coneScoreMoveAutonomousCommand();
+      //   break;
+      case "Docking":
         m_autonomousCommand = robotContainer.dockAutonomousCommand();
         break;
-      case "Engaging Auto":
+      case "Engaging Low Score":
         m_autonomousCommand = robotContainer.engageAutonomousCommand();
         break;
-      case "Engage Scoring Auto":
+      case "Engaging High Score":
         m_autonomousCommand = robotContainer.engageScoreAutonomousCommand();
         break;
-      case "Engage Score Move Auto":
-        m_autonomousCommand = robotContainer.engageScoreMoveAutonomousCommand();
-        break;
+      // case "Engage Score Move Auto":
+      //   m_autonomousCommand = robotContainer.engageScoreMoveAutonomousCommand();
+      //   break;
       default:
         break;
     }
