@@ -16,6 +16,7 @@ import frc.robot.Constants.ManipulatorConstants;
 
 public class Manipulator extends SubsystemBase {
   private double counter = 0;
+  private double oldAmperage = 0;
   private final static CANSparkMax manipulatorMotor = new CANSparkMax(ManipulatorConstants.manipulatorPort, MotorType.kBrushless);
   private final static DigitalInput manipulatorSwitch = new DigitalInput(ManipulatorConstants.intakeLimitPort);
 
@@ -30,15 +31,22 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(counter++ % 10 == 0){
-      System.out.printf("%f | %f \n", manipulatorMotor.getOutputCurrent(), manipulatorMotor.getMotorTemperature());
+
+    
+    if (((manipulatorMotor.getOutputCurrent() + oldAmperage)/2) > 40){
+      manipulatorMotor.set(0);
     }
+
+    oldAmperage = manipulatorMotor.getOutputCurrent();
+
+    //if(counter++ % 10 == 0){}
+    
     // This method will be called once per scheduler run
   }
   
   public boolean cancelIfLimitTriggered() {
     if(!manipulatorSwitch.get()){
-      manipulatorMotor.set(0);
+      //manipulatorMotor.set(0);
       return true;
     }
     return false;

@@ -46,6 +46,7 @@ public class RobotContainer {
   private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
 
   private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final LowMobility lowMobility = new LowMobility(m_drive, armSubsystem, manipulatorSubsystem);
   private final ConeScoreMoveAuton coneScoreMoveAuton = new ConeScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
@@ -113,6 +114,10 @@ public class RobotContainer {
 
   public Command coneScoreAutonomousCommand() {
     return coneScoreAuton;
+  }
+
+  public Command lowMobilityAutonomouCommand(){
+    return lowMobility;
   }
 
   public Command coneScoreMoveAutonomousCommand() {

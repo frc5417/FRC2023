@@ -10,7 +10,6 @@ public class EngageScoreAuton extends SequentialCommandGroup {
             new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, true),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
-                //TODO - increase how much it goes forward before competition
                 new ForwardEngageAutoConeScore(drive).getRamseteCommand()
             ),
             new ParallelRaceGroup(

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ManipulatorConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -17,6 +18,7 @@ public class EngageScoreMoveAuton extends SequentialCommandGroup {
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
                 new ManipulatorOutAuton(manipulator, 500)
             ),
+            new WaitCommand(3.0),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
                 new BackwardEngageAutoConeScore2(drive).getRamseteCommand()

@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
 
-    String[] autoList = {"High Score Mobility", "Docking", "Engaging Low Score", "Engaging High Score"};
+    String[] autoList = {"High Score Mobility", "Low Scoring Mobility", "Docking", "Engaging Low Score", "Engaging High Score"};
     SmartDashboard.putStringArray("Auto List", autoList);
   }
 
@@ -86,6 +86,9 @@ public class Robot extends TimedRobot {
         break;
       case "Engaging High Score":
         m_autonomousCommand = robotContainer.engageScoreAutonomousCommand();
+        break;
+      case "Low Score Mobility":
+        m_autonomousCommand = robotContainer.lowMobilityAutonomouCommand();
         break;
       // case "Engage Score Move Auto":
       //   m_autonomousCommand = robotContainer.engageScoreMoveAutonomousCommand();
