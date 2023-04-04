@@ -57,10 +57,10 @@ public class Arm extends SubsystemBase {
   public void setArmPos(double pos) {
     if(runningAverage < 0.7 && runningAverage >= 0.4) {
       armMotor1.set(0);
-    } else if (armLimitSwitch.get()) { 
+    } else if (armLimitSwitch.get()) {
       armMotor1.setVoltage(0.0); 
     }
-    else { 
+    else {
       armMotor1.setVoltage(PID(pos)); 
     }
   }
