@@ -16,7 +16,7 @@ public class ConeScoreAuton extends SequentialCommandGroup {
             ),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
-                new ManipulatorOutAuton(manipulator, 1500)
+                new ManipulatorOutAutonCube(manipulator, 1500)
             ),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),

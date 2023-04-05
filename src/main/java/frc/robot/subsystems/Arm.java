@@ -96,7 +96,7 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (counter++ % 100 == 0) {
+    if (counter++ % 10 == 0) {
     }
 
     // This method will be called once per scheduler run
