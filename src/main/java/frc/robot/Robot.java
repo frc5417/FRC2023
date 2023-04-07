@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
       case "Engaging High Score":
         m_autonomousCommand = robotContainer.engageScoreAutonomousCommand();
         break;
-      case "Low Score Mobility":
+      case "Low Scoring Mobility":
         m_autonomousCommand = robotContainer.lowMobilityAutonomouCommand();
         break;
       // case "Engage Score Move Auto":

@@ -14,7 +14,7 @@ public class EngageScoreAuton extends SequentialCommandGroup {
             ),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
-                new ManipulatorOutAutonCube(manipulator, 1500)
+                new ManipulatorOutAutonCube(manipulator, 500)
             ),
             new ParallelRaceGroup(
                 new AutoArmSetPos(ManipulatorConstants.armThirdScorePoint, arm, false),
