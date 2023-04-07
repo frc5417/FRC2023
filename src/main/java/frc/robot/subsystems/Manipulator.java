@@ -31,15 +31,15 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+/*
     
     if (((manipulatorMotor.getOutputCurrent() + oldAmperage)/2) > 40){
       manipulatorMotor.set(0);
     }
 
     oldAmperage = manipulatorMotor.getOutputCurrent();
-
-    //if(counter++ % 10 == 0){}
+*/    
+  //+  if(counter++ % 30 == 0){ System.out.println(manipulatorMotor.getOutputCurrent());}
     
     // This method will be called once per scheduler run
   }

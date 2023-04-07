@@ -7,7 +7,7 @@ public class LowMobility extends SequentialCommandGroup {
     public LowMobility(Drive drive, Arm arm, Manipulator manipulator) {
         addCommands(
             new AutoArmSetPos(ManipulatorConstants.armIntakePoint, arm, true),
-            new ManipulatorOutAutonCube(manipulator, 500),
+            new ManipulatorOutAutonCube(manipulator, 1500),
             new BackwardAutoConeScore(drive).getRamseteCommand()
         );
     }

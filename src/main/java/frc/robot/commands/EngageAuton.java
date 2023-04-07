@@ -7,7 +7,7 @@ public class EngageAuton extends SequentialCommandGroup {
     public EngageAuton(Drive drive, Arm arm, Manipulator manipulator) {
         addCommands(
             new AutoArmSetPos(ManipulatorConstants.armIntakePoint, arm, true),
-            new ManipulatorOutAutonCube(manipulator, 500),
+            new ManipulatorOutAutonCube(manipulator, 300),
             new BackwardEngageAutoConeScore(drive).getRamseteCommand(),
             new AutoBalance(drive)
         );
