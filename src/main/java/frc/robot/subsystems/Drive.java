@@ -17,16 +17,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
-  private static double LeftDistance = 0;
-  private static double rightDistance = 0;
-
+  
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
