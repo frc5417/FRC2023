@@ -58,7 +58,7 @@ public final class Constants {
     public static final double kManipulatorControllerDeadZone = 0.1;
 
     public static final double armMaxSpeed = 0.3;
-    public static final double manipulatorSpeed = 0.5;
+    public static final double manipulatorSpeed = 1;
 
     public static final int armLeaderPort = 21;
     public static final int armFollower1Port = 22;
