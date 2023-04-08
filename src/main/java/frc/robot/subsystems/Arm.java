@@ -96,7 +96,8 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (counter++ % 10 == 0) {
+    if (counter++ % 10== 0) {
+      // System.out.println(runningAverage);
     }
 
     // This method will be called once per scheduler run
