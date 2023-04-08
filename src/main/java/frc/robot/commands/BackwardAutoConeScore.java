@@ -29,7 +29,7 @@ public class BackwardAutoConeScore extends CommandBase {
   Trajectory translatedMoveBack;
 
   public BackwardAutoConeScore(Drive drive) {
-    try {
+     
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
@@ -40,7 +40,7 @@ public class BackwardAutoConeScore extends CommandBase {
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
-    //first step is to move back slightly, old moveBack
+ 
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
@@ -64,11 +64,6 @@ public class BackwardAutoConeScore extends CommandBase {
       drive::setDriveVolts, 
       drive);
     }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
-    
-  }
 
   public Command getRamseteCommand (){
     return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));

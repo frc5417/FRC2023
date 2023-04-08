@@ -45,7 +45,7 @@ public class BackwardEngageAutoConeScore4 extends CommandBase {
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed3, Constants.AutonConstants.chargeMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
-    //first step is to move back slightly, old moveBack
+ 
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
@@ -74,7 +74,6 @@ public class BackwardEngageAutoConeScore4 extends CommandBase {
   }
 
   public Command getRamseteCommand (){
-    //return new StopAuton(drive);
-    return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0));
+     return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0));
   }
 }

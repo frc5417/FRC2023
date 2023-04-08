@@ -29,7 +29,6 @@ public class BackwardAutoConeScore2 extends CommandBase {
   Trajectory translatedMoveBack;
 
   public BackwardAutoConeScore2(Drive drive) {
-    try {
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
@@ -40,7 +39,7 @@ public class BackwardAutoConeScore2 extends CommandBase {
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
-    //first step is to move back slightly, old moveBack
+ 
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
@@ -62,10 +61,6 @@ public class BackwardAutoConeScore2 extends CommandBase {
       new PIDController(Constants.AutonConstants.kP, Constants.AutonConstants.kI, Constants.AutonConstants.kD),
       drive::setDriveVolts, 
       drive);
-    }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
     
   }
 

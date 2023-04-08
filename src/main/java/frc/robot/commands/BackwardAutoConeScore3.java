@@ -5,8 +5,6 @@
 package frc.robot.commands;
 import frc.robot.Constants;
 
-import java.util.List;
-
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -14,15 +12,8 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import com.pathplanner.lib.PathPlanner;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 public class BackwardAutoConeScore3 extends CommandBase {
   RamseteCommand ramseteCommand1;
@@ -30,13 +21,9 @@ public class BackwardAutoConeScore3 extends CommandBase {
   Trajectory translatedMoveBack;
 
   public BackwardAutoConeScore3(Drive drive) {
-    try {
+     
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
-    var autoVoltageConstraint = 
-      new DifferentialDriveVoltageConstraint(
-        motorFF, 
-        Constants.kinematics, 10);
 
     Trajectory moveBack = PathPlanner.loadPath("reverseMove2", Constants.AutonConstants.autoMaxSpeed, Constants.AutonConstants.autoMaxAcceleration, false);
     
@@ -54,12 +41,6 @@ public class BackwardAutoConeScore3 extends CommandBase {
       drive::setDriveVolts, 
       drive);
     }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
-    
-  }
-
   public Command getRamseteCommand (){
     return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
   }

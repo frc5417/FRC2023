@@ -99,7 +99,6 @@ public class RobotContainer {
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
     m_manipulatorController.y().whileTrue(armSetPointThirdScore);
     m_manipulatorController.rightBumper().whileTrue(armSetPointHumanCube) ;
-    // m_manipulatorController.x().whileTrue(armSetPointHumanCone);
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);

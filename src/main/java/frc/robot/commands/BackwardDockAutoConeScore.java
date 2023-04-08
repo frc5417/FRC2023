@@ -29,11 +29,10 @@ public class BackwardDockAutoConeScore extends CommandBase {
   Trajectory translatedMoveBack;
 
   public BackwardDockAutoConeScore(Drive drive) {
-    try {
+     
       this.drive = drive;
-      //reset odometry to be zero here
-      //drive.resetOdometry(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0)));
-    SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
+ 
+     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
         motorFF, 
@@ -42,7 +41,7 @@ public class BackwardDockAutoConeScore extends CommandBase {
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.chargeMaxSpeed, Constants.AutonConstants.chargeMaxAcceleration)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint).setReversed(true);
-    //first step is to move back slightly, old moveBack
+ 
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0,0,new Rotation2d(0)), 
       List.of(
@@ -54,14 +53,9 @@ public class BackwardDockAutoConeScore extends CommandBase {
       config);
     
     
-    //drive.resetOdometry(moveBack.getInitialPose());
-
+ 
     RamseteController ramseteControl1 = new RamseteController();
-
-    //reset the pose:
-    //Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
-    //drive.resetOdometry(resetPose);
-    
+ 
     ramseteCommand1 = new RamseteCommand(
       moveBack, 
       drive::getPose,
@@ -74,14 +68,8 @@ public class BackwardDockAutoConeScore extends CommandBase {
       drive::setDriveVolts, 
       drive);
     }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
-    
-  }
 
   public Command getRamseteCommand (){
-    //return new StopAuton(drive);
-    return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0)).andThen(() -> drive.setDriveBreak());
+     return ramseteCommand1.andThen(() -> drive.SetSpeed(0.0, 0.0)).andThen(() -> drive.setDriveBreak());
   }
 }

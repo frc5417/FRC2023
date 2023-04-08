@@ -29,9 +29,9 @@ public class ForwardEngageAutoConeScore2 extends CommandBase {
   Trajectory translatedMoveBack;
 
   public ForwardEngageAutoConeScore2(Drive drive) {
-    try {
+     
       this.drive = drive;
-      //reset odometry to be zero here
+ 
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
     var autoVoltageConstraint = 
       new DifferentialDriveVoltageConstraint(
@@ -41,7 +41,7 @@ public class ForwardEngageAutoConeScore2 extends CommandBase {
     TrajectoryConfig config = 
       new TrajectoryConfig(Constants.AutonConstants.autoMaxSpeed2, Constants.AutonConstants.autoMaxAcceleration2)
           .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
-    //first step is to move back slightly, old moveBack
+ 
     Trajectory moveBack = TrajectoryGenerator.generateTrajectory(
       new Pose2d(0, 0,new Rotation2d(0)), 
       List.of(
@@ -52,15 +52,8 @@ public class ForwardEngageAutoConeScore2 extends CommandBase {
       new Pose2d(1.9, 0, new Rotation2d(0)), 
       config);
     
-    
-    //drive.resetOdometry(moveBack.getInitialPose());
-
     RamseteController ramseteControl1 = new RamseteController();
-
-    //reset the pose:
-    //Pose2d resetPose = new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0,0.0));
-    //drive.resetOdometry(resetPose);
-    
+   
     ramseteCommand1 = new RamseteCommand(
       moveBack, 
       drive::getPose,
@@ -73,14 +66,8 @@ public class ForwardEngageAutoConeScore2 extends CommandBase {
       drive::setDriveVolts, 
       drive);
     }
-    catch (Exception e) {
-      //System.out.println("auto stack error: "+ e);
-    }
-    
-  }
-
+  
   public Command getRamseteCommand (){
-    //return new StopAuton(drive);
-    return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
+     return ramseteCommand1.andThen(() -> drive.SetSpeed(0, 0));
   }
 }

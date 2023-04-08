@@ -75,9 +75,6 @@ public class Robot extends TimedRobot {
       case "High Score Mobility":
         m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
         break;
-      // case "Score Move Auto":
-      //   m_autonomousCommand = robotContainer.coneScoreMoveAutonomousCommand();
-      //   break;
       case "Docking":
         m_autonomousCommand = robotContainer.dockAutonomousCommand();
         break;
@@ -90,17 +87,9 @@ public class Robot extends TimedRobot {
       case "Low Scoring Mobility":
         m_autonomousCommand = robotContainer.lowMobilityAutonomouCommand();
         break;
-      // case "Engage Score Move Auto":
-      //   m_autonomousCommand = robotContainer.engageScoreMoveAutonomousCommand();
-      //   break;
       default:
         break;
     }
-
-      // m_autonomousCommand = robotContainer.engageAutonomousCommand();
-    
-
-    //ArmSetPos.setIsAuton(true);
 
     RobotContainer.resetOdometry();
     RobotContainer.setCoastMode();
@@ -122,11 +111,9 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    //ArmSetPos.setIsAuton(false);
     
     RobotContainer.setLEDsOn();
     RobotContainer.setCoastMode();
-    // RobotContainer.setBrakeMode();
     RobotContainer.initArmMovement();
     RobotContainer.initTeleopCommand();
   }
