@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreAuton;
 import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreMoveAuton;
 import frc.robot.commands.Autonomous.AutonomousGroups.DockAuton;

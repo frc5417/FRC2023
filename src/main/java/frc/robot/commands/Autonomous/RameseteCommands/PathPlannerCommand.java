@@ -14,8 +14,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 
 public class PathPlannerCommand extends CommandBase {
   RamseteCommand ramseteCommand;
@@ -24,14 +22,6 @@ public class PathPlannerCommand extends CommandBase {
   public PathPlannerCommand(Drive drive) {
     this.drive = drive;
     SimpleMotorFeedforward motorFF = new SimpleMotorFeedforward(Constants.AutonConstants.kS, Constants.AutonConstants.kV, Constants.AutonConstants.kA);
-    var autoVoltageConstraint = 
-      new DifferentialDriveVoltageConstraint(
-        motorFF, 
-        Constants.kinematics, Constants.maxVoltage);
-
-    TrajectoryConfig config = 
-      new TrajectoryConfig(Constants.maxSpeed, Constants.maxAcceleration)
-          .setKinematics(Constants.kinematics).addConstraint(autoVoltageConstraint);
 
       //chargeb is for auton on blue side
         //chargeb1 drives from the right side starting point to the left spot on the charging station
