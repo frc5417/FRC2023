@@ -30,7 +30,6 @@ public final class Constants {
 
     public static final double kDriveP = 0.5;
 
-    //public static final double kTreadLength = 0.0778 * 0.1524 * Math.PI;
     public static final double kTreadLength = 0.1524 * 0.16 * Math.PI; // Diameter * Gear Ratio * PI
   }
   
@@ -42,10 +41,10 @@ public final class Constants {
     public static final double kP = 0.0009898;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double autoMaxSpeed = 2.0; // 1.5 m/s
+    public static final double autoMaxSpeed = 2.0; // m/s
     public static final double autoMaxSpeed2 = 1.0; // m/s
-    public static final double autoMaxAcceleration = 1.0;// 0.5 m/s^2
-    public static final double autoMaxAcceleration2 = 0.5;// 0.5 m/s^2
+    public static final double autoMaxAcceleration = 1.0;// m/s^2
+    public static final double autoMaxAcceleration2 = 0.5;// m/s^2
     //values for charging station
     public static final double chargeMaxSpeed = 1.0; // m/s
     public static final double chargeMaxSpeed2 = 1.0; // m/s
@@ -75,14 +74,14 @@ public final class Constants {
 
     public static final double maxVoltage = 4.0;
     public static final double cycleTime = 20.0;
-    public static final double kArmP = 0.125; //0.2
+    public static final double kArmP = 0.125; 
     public static final double kArmI = 0.01;
-    public static final double kArmD = 500; // 500
+    public static final double kArmD = 500;
 
     public static final double minSetPoint = 0.1d;
 
     public static final double armIntakePoint = 0.9919;
-    public static final double armSecondScorePoint = 0.787; //fix later
+    public static final double armSecondScorePoint = 0.787;
     public static final double armThirdScorePoint = 0.787;
     public static final double armHumanCubePoint = 0.759;
     public static final double armHumanConePoint = 0.8;
@@ -93,7 +92,7 @@ public final class Constants {
     public static final double balanceMaxVoltage = 4.0;
     public static final double degreesAllowed = 3.75;
     public static final double kP = 0.84;
-    public static final double kI = 0.001; //0.005
+    public static final double kI = 0.001;
     public static final double kD = 0.1;
     public static final double lowGearClamp = 4.0;
     public static final double voltageDeadband = 0.1;

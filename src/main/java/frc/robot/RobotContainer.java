@@ -4,20 +4,28 @@
 
 package frc.robot;
 
-import java.util.concurrent.TimeUnit.*;
-
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.commands.*;
+import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreMoveAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.DockAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageScoreAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageScoreMoveAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.LowMobility;
+import frc.robot.commands.Teleop.ArmManualMovement;
+import frc.robot.commands.Teleop.ArmSetPos;
+import frc.robot.commands.Teleop.AutoBalance;
+import frc.robot.commands.Teleop.DriveBreakToggle;
+import frc.robot.commands.Teleop.ManipulatorIn;
+import frc.robot.commands.Teleop.ManipulatorOut;
+import frc.robot.commands.Teleop.SetLightConfig;
+import frc.robot.commands.Teleop.TankDrive;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,9 +50,6 @@ public class RobotContainer {
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
-  private static final ForwardAutoConeScore ForwardAutoConeScore = new ForwardAutoConeScore(m_drive);
-  private static final BackwardAutoConeScore BackwardAutoConeScore = new BackwardAutoConeScore(m_drive);
-
   private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
   private final LowMobility lowMobility = new LowMobility(m_drive, armSubsystem, manipulatorSubsystem);
   private final ConeScoreMoveAuton coneScoreMoveAuton = new ConeScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
@@ -56,11 +61,9 @@ public class RobotContainer {
   private final static ArmSetPos armSetPointIntake = new ArmSetPos(Constants.ManipulatorConstants.armIntakePoint, armSubsystem);
   private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(Constants.ManipulatorConstants.armSecondScorePoint, armSubsystem);
   private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(Constants.ManipulatorConstants.armThirdScorePoint, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(Constants.ManipulatorConstants.armHumanConePoint, armSubsystem);
   private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(Constants.ManipulatorConstants.armHumanCubePoint, armSubsystem);
   
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
-  private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
   
   private static final SetLightConfig lightConfigRed = new SetLightConfig(m_lightsControl, 0);
@@ -99,7 +102,6 @@ public class RobotContainer {
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
     m_manipulatorController.y().whileTrue(armSetPointThirdScore);
     m_manipulatorController.rightBumper().whileTrue(armSetPointHumanCube) ;
-    // m_manipulatorController.x().whileTrue(armSetPointHumanCone);
 
     m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
     m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);

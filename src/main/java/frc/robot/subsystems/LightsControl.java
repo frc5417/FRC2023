@@ -19,20 +19,14 @@ public class LightsControl extends SubsystemBase {
   private static int animRunCount = 0;
   private static int animStage = 2;
   private static int skipFrame = 0;
-  private static boolean topWhite = true;
   private static AddressableLEDBuffer ledBuffer;
-  private static int top;
-
+  
   /** Creates a new LightsControl. */
   public LightsControl() {
     led = new AddressableLED(9);
-    // led2 = new AddressableLED(8);
 
     ledBuffer = new AddressableLEDBuffer(30*2);
     led.setLength(ledBuffer.getLength());
-    top = ledBuffer.getLength();
-    // led2.setLength(ledBuffer.getLength());
-
     for (var i = 0; i < ledBuffer.getLength(); i++) {
         // Sets the specified LED to the RGB values for red
         ledBuffer.setRGB(i, 255, 0, 0);
@@ -40,10 +34,8 @@ public class LightsControl extends SubsystemBase {
 
     // Set the data
     led.setData(ledBuffer);
-    // led2.setData(ledBuffer);
 
     led.start();
-    // led2.start();
   }
 
   public void setLightConfig(int configNum) {
@@ -66,7 +58,6 @@ public class LightsControl extends SubsystemBase {
     }
 
     led.setData(ledBuffer);
-    // led2.setData(ledBuffer);
   }
 
   @Override

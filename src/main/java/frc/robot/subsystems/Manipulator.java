@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipulatorConstants;
 
 public class Manipulator extends SubsystemBase {
-  private double counter = 0;
   private double oldAmperage = 0;
   private final static CANSparkMax manipulatorMotor = new CANSparkMax(ManipulatorConstants.manipulatorPort, MotorType.kBrushless);
   private final static DigitalInput manipulatorSwitch = new DigitalInput(ManipulatorConstants.intakeLimitPort);
@@ -31,17 +30,15 @@ public class Manipulator extends SubsystemBase {
 
   @Override
   public void periodic() {
-/*
-    
+
+    //Unnecessary Amp limit on intake
+    /*    
     if (((manipulatorMotor.getOutputCurrent() + oldAmperage)/2) > 40){
       manipulatorMotor.set(0);
     }
 
     oldAmperage = manipulatorMotor.getOutputCurrent();
-*/    
-  //+  if(counter++ % 30 == 0){ System.out.println(manipulatorMotor.getOutputCurrent());}
-    
-    // This method will be called once per scheduler run
+  */    
   }
   
   public boolean cancelIfLimitTriggered() {
