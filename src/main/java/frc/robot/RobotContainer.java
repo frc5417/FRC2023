@@ -4,17 +4,28 @@
 
 package frc.robot;
 
-import java.util.concurrent.TimeUnit.*;
-
 import frc.robot.Constants.ManipulatorConstants;
 import frc.robot.Constants.DriverConstants;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import frc.robot.commands.*;
+import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.ConeScoreMoveAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.DockAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageScoreAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.EngageScoreMoveAuton;
+import frc.robot.commands.Autonomous.AutonomousGroups.LowMobility;
+import frc.robot.commands.Teleop.ArmManualMovement;
+import frc.robot.commands.Teleop.ArmSetPos;
+import frc.robot.commands.Teleop.AutoBalance;
+import frc.robot.commands.Teleop.DriveBreakToggle;
+import frc.robot.commands.Teleop.ManipulatorIn;
+import frc.robot.commands.Teleop.ManipulatorOut;
+import frc.robot.commands.Teleop.SetLightConfig;
+import frc.robot.commands.Teleop.TankDrive;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -28,27 +39,37 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private static final LightsControl m_lightsControl = new LightsControl();
   private static final Drive m_drive = new Drive();
-  private static final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+
   private final static Arm armSubsystem = new Arm();
   private final static Manipulator manipulatorSubsystem = new Manipulator();
+  
   private static final TankDrive tankDrive = new TankDrive(m_drive);
   private final AutoBalance m_AutoBalance =  new AutoBalance(m_drive);
   private final DriveBreakToggle driveBreak = new DriveBreakToggle(m_drive);
-  private static final ShiftDrivetrain shiftDrivetrain = new ShiftDrivetrain(m_drive);
   private final static ArmManualMovement armManualCommand = new ArmManualMovement(armSubsystem);
 
-  private final static ArmSetPos armSetPointIntake = new ArmSetPos(0.998, armSubsystem);
-  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(0.787, armSubsystem);
-  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(0.720, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCone = new ArmSetPos(0.759, armSubsystem);
-  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(0.767, armSubsystem);
+  private final ConeScoreAuton coneScoreAuton = new ConeScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final LowMobility lowMobility = new LowMobility(m_drive, armSubsystem, manipulatorSubsystem);
+  private final ConeScoreMoveAuton coneScoreMoveAuton = new ConeScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final DockAuton dockAuton = new DockAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final EngageAuton engageAuton = new EngageAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final EngageScoreAuton engageScoreAuton = new EngageScoreAuton(m_drive, armSubsystem, manipulatorSubsystem);
+  private final EngageScoreMoveAuton engageScoreMoveAuton = new EngageScoreMoveAuton(m_drive, armSubsystem, manipulatorSubsystem);
+
+  private final static ArmSetPos armSetPointIntake = new ArmSetPos(Constants.ManipulatorConstants.armIntakePoint, armSubsystem);
+  private final static ArmSetPos armSetPointSecondScore = new ArmSetPos(Constants.ManipulatorConstants.armSecondScorePoint, armSubsystem);
+  private final static ArmSetPos armSetPointThirdScore = new ArmSetPos(Constants.ManipulatorConstants.armThirdScorePoint, armSubsystem);
+  private final static ArmSetPos armSetPointHumanCube = new ArmSetPos(Constants.ManipulatorConstants.armHumanCubePoint, armSubsystem);
+  
   private final static ManipulatorOut manipulatorOut = new ManipulatorOut(manipulatorSubsystem);
-  private final static ManipulatorOutAuton manipulatorOutAuton1 = new ManipulatorOutAuton(manipulatorSubsystem, 750);
   private final static ManipulatorIn manipulatorIn = new ManipulatorIn(manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig1 = new SolenoidClaw(1, manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig2 = new SolenoidClaw(2, manipulatorSubsystem);
-  private final static SolenoidClaw clawConfig3 = new SolenoidClaw(3, manipulatorSubsystem);
+  
+  private static final SetLightConfig lightConfigRed = new SetLightConfig(m_lightsControl, 0);
+  private static final SetLightConfig lightConfigBlue = new SetLightConfig(m_lightsControl, 4);
+  private static final SetLightConfig lightConfigColor1 = new SetLightConfig(m_lightsControl, 1);
+  private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final static CommandXboxController m_driverController =
@@ -58,8 +79,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    compressor.enableDigital();
-
     // Configure the trigger bindings
     configureBindings();
   }
@@ -78,32 +97,53 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.a().whileTrue(m_AutoBalance);
     m_driverController.x().toggleOnTrue(driveBreak);
-    m_driverController.b().whileTrue(shiftDrivetrain);
     
     m_manipulatorController.a().whileTrue(armSetPointIntake);
     m_manipulatorController.b().whileTrue(armSetPointSecondScore);
-    m_manipulatorController.y().whileTrue(armSetPointHumanCube) ;
-    m_manipulatorController.x().whileTrue(armSetPointHumanCone);
-    m_manipulatorController.rightBumper().whileTrue(armSetPointThirdScore);
+    m_manipulatorController.y().whileTrue(armSetPointThirdScore);
+    m_manipulatorController.rightBumper().whileTrue(armSetPointHumanCube) ;
 
-    m_manipulatorController.povUp().onTrue(clawConfig1);
-    m_manipulatorController.povRight().onTrue(clawConfig2);
-    m_manipulatorController.povDown().onTrue(clawConfig3);
+    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);
+    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);
 
-    m_manipulatorController.leftTrigger().whileTrue(manipulatorOut);//.onFalse(manipulatorSpeedOff);
-    m_manipulatorController.rightTrigger().whileTrue(manipulatorIn);//.onFalse(manipulatorSpeedOff);
+    m_manipulatorController.povUp().onTrue(lightConfigRed);
+    m_manipulatorController.povDown().onTrue(lightConfigBlue);
+    m_manipulatorController.povLeft().onTrue(lightConfigColor1);
+    m_manipulatorController.povRight().onTrue(lightConfigColor2);
 
     System.out.println("Buttons Configured");
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  public Command coneScoreAutonomousCommand() {
+    return coneScoreAuton;
+  }
+
+  public Command lowMobilityAutonomouCommand(){
+    return lowMobility;
+  }
+
+  public Command coneScoreMoveAutonomousCommand() {
+    return coneScoreMoveAuton;
+  }
+
+  public Command dockAutonomousCommand() {
+    return dockAuton;
+  }
+
+  public Command engageAutonomousCommand() {
+    return engageAuton;
+  }
+
+  public Command engageScoreAutonomousCommand() {
+    return engageScoreAuton;
+  }
+
+  public Command engageScoreMoveAutonomousCommand() {
+    return engageScoreMoveAuton;
+  }
+
   public static void setDriverRumble(double rumbleVal) {
     m_driverController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, rumbleVal);
-    m_driverController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, rumbleVal);
   }
 
   public static double getDriverLeftJoystick() {
@@ -146,10 +186,6 @@ public class RobotContainer {
     return value;
   }
 
-  /*public Command getAutonomousCommand() {
-    
-  }*/
-
   public static void initArmMovement() {
     armManualCommand.schedule();
   }
@@ -161,5 +197,21 @@ public class RobotContainer {
 
   public static void setCoastMode() {
     m_drive.setDriveCoast();
+  }
+
+  public static void setBrakeMode() {
+    m_drive.setDriveBreak();
+  }
+
+  public static void resetOdometry() {
+    m_drive.resetOdometry(new Pose2d(new Translation2d(), new Rotation2d()));
+  }
+
+  public static void setLEDsOff() {
+    m_lightsControl.setLightConfig(3);
+  }
+
+  public static void setLEDsOn() {
+    m_lightsControl.setLightConfig(0);
   }
 }

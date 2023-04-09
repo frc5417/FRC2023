@@ -10,26 +10,19 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants;
 
 public class Drive extends SubsystemBase {
-  private static double LeftDistance = 0;
-  private static double rightDistance = 0;
-
+  
   private final static AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
 
   private final static CANSparkMax leftLeader = new CANSparkMax(Constants.DriveLeftLeader, MotorType.kBrushless);
@@ -40,19 +33,17 @@ public class Drive extends SubsystemBase {
   private final static MotorControllerGroup leftMotors = new MotorControllerGroup(leftLeader, leftFollower);
   private final static MotorControllerGroup rightMotors = new MotorControllerGroup(rightLeader, rightFollower);
 
-  //private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
-
+  private final static DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
   private final static RelativeEncoder leftEncoder = leftLeader.getEncoder();
   private final static RelativeEncoder rightEncoder = rightLeader.getEncoder();
 
   private static DifferentialDriveOdometry odometry;
 
-  private final static DoubleSolenoid ShifterL = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
-  private final static DoubleSolenoid ShifterR = new DoubleSolenoid(PneumaticsModuleType.REVPH, 5, 4);
   /** Creates a new Drive. */
 
   //initializes PID controller for balancing
   private final static PIDController balancePID = new PIDController(Constants.BalanceConstants.kP,Constants.BalanceConstants.kI,Constants.BalanceConstants.kD);
+  private static int balanceCount = 0;
 
   //used for determining the acceleraton for controller rumble
   private static double lastSpeed = 0.0;
@@ -72,8 +63,6 @@ public class Drive extends SubsystemBase {
 
     odometry = new DifferentialDriveOdometry(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
 
-    ShifterL.set(DoubleSolenoid.Value.kReverse);
-    ShifterR.set(DoubleSolenoid.Value.kReverse);
     ahrs.calibrate();
     
     //set balance PID controller setpoint to 0 and have a max degrees allowed set in Constants
@@ -103,8 +92,15 @@ public class Drive extends SubsystemBase {
   }
 
   public void SetSpeed(double leftSpeed, double rightSpeed) {
-    leftMotors.set(leftSpeed);
-    rightMotors.set(rightSpeed);
+    drive.tankDrive(leftSpeed, rightSpeed);
+    drive.setSafetyEnabled(true);
+    drive.feed();
+  }
+
+  public void setDriveVolts(double leftVolts, double rightVolts){
+    leftMotors.setVoltage(leftVolts);
+    rightMotors.setVoltage(rightVolts);
+    drive.feed();
   }
 
   public void resetEncoders(){
@@ -112,18 +108,8 @@ public class Drive extends SubsystemBase {
     rightEncoder.setPosition(0);
   }
 
-  public void shiftToggle() {
-    ShifterL.set(ShifterL.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-    ShifterR.set(ShifterR.get() == DoubleSolenoid.Value.kReverse ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
-  }
-
   public static double clamp(double val, double min, double max) {
     return Math.max(min, Math.min(max, val));
-  }
-
-  public void setDriveVolts(double leftVolts, double rightVolts){
-    leftMotors.setVoltage(leftVolts);
-    rightMotors.setVoltage(rightVolts);
   }
 
   public double angleToVolts(double tilt) {
@@ -135,33 +121,15 @@ public class Drive extends SubsystemBase {
     return outputVolts;
   }
 
-  public boolean pidBalance() {
-    //if current gyro roll is positive then we want to set motor power forward to correct for the error
-    double leftPower = angleToVolts(-balancePID.calculate(GyroRoll()));
-    double rightPower = leftPower;
-
-    if (balancePID.atSetpoint()) {
-      //if less than degreesAllowed in Constants then stop moving
-      return true;
-    }
-    
-    if (ShifterL.get() == DoubleSolenoid.Value.kForward && ShifterR.get() == DoubleSolenoid.Value.kForward) {
-      ShifterL.set(DoubleSolenoid.Value.kReverse);
-      ShifterR.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    //if greater than degreesAllowed in Constants then move based on PID calculations
-    setDriveVolts(leftPower, rightPower);
-    return false;
-  }
-
-  @Override
-  public void periodic() {
-    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition());
+  public void rumble(){
     double combinedSpeed = (getWheelSpeedsDouble()[0] + getWheelSpeedsDouble()[1]) / 2.0;
     //updates roughly every 3 times per second
-    if (counter++ % 15 == 0) { lastSpeed = combinedSpeed; }  
-    if (firstRun) { firstRun = false; }
+    if (counter++ % 15 == 0) { 
+      lastSpeed = combinedSpeed;
+    }  
+    if (firstRun) { 
+      firstRun = false;
+    }
     else {
       calculatedAcceleration = combinedSpeed - lastSpeed;
       double rumble = (calculatedAcceleration / Constants.maxAcceleration) * Constants.maxRumble;
@@ -174,12 +142,41 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public boolean pidBalance() {
+    //if current gyro roll is positive then we want to set motor power forward to correct for the error
+    double leftPower = angleToVolts(-balancePID.calculate(GyroRoll()));
+    double rightPower = leftPower;
+
+    if (balancePID.atSetpoint()) {
+      //if less than degreesAllowed in Constants then stop moving
+      balanceCount++;
+      if (balanceCount >= 15) {
+        setDriveVolts(0.0, 0.0);
+        setDriveBreak();
+        return true;
+      }
+    } else {
+      balanceCount = 0;
+    }
+
+    //if greater than degreesAllowed in Constants then move based on PID calculations
+    setDriveVolts(leftPower, rightPower);
+    return false;
+  }
+
+  @Override
+  public void periodic() {
+    drive.feed();
+    odometry.update(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition());
+    if(counter++ % 50 == 0){}
+  }
+
   public Pose2d getPose(){
     return odometry.getPoseMeters();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(),rightEncoder.getVelocity());
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getVelocity(), -rightEncoder.getVelocity());
   }
 
   public double[] getWheelSpeedsDouble() {
@@ -189,7 +186,7 @@ public class Drive extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), rightEncoder.getPosition(), pose);
+    odometry.resetPosition(ahrs.getRotation2d(), leftEncoder.getPosition(), -rightEncoder.getPosition(), pose);
   }
 
   public void zeroHeading(){

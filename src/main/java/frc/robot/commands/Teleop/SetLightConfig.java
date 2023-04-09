@@ -2,30 +2,33 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Drive;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+package frc.robot.commands.Teleop;
 
-public class TankDrive extends CommandBase {
-  private final Drive drive;
-  /** Creates a new TankDrive. */
-  public TankDrive(Drive subsystem) {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.LightsControl;
+
+public class SetLightConfig extends CommandBase {
+  private final LightsControl lightsControl;
+  private int configNum;
+
+  /** Creates a new SetLightConfig. */
+  public SetLightConfig(LightsControl subsystem, int configNum) {
+    this.lightsControl = subsystem;
+    this.configNum = configNum;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    drive = subsystem;
-    addRequirements(drive);
-    
+    addRequirements(lightsControl);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    lightsControl.setLightConfig(configNum);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    drive.SetSpeed(-RobotContainer.getDriverLeftJoystick(), -RobotContainer.getDriverRightJoystick());
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -37,4 +40,3 @@ public class TankDrive extends CommandBase {
     return false;
   }
 }
-

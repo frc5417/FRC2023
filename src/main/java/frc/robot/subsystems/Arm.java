@@ -22,11 +22,13 @@ public class Arm extends SubsystemBase {
 
   private final static DutyCycleEncoder enc = new DutyCycleEncoder(Constants.ManipulatorConstants.armEncoderPort);
   
-  private double runningAverage = 0.0;
+  public double runningAverage = 0.0;
   private double voltage = 0.0;
   private double integral = 0.0;
   private double derivative = 0.0;
   private double oldError = 0.0;
+
+  private int counter = 0;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -45,7 +47,7 @@ public class Arm extends SubsystemBase {
   public void setArm(double speed) {
     if (armLimitSwitch.get() || (runningAverage < 0.7 && runningAverage >= 0.4)) { 
       armMotor1.set(0.0); 
-    } else { 
+    } else {
       armMotor1.set(speed);
     }
   }
@@ -54,32 +56,32 @@ public class Arm extends SubsystemBase {
     runningAverage = enc.getAbsolutePosition() * 0.1 + runningAverage * 0.9;
   }
 
-  public void setArmPos(double pos) {
-    if(runningAverage < 0.7 && runningAverage >= 0.4) {
-      armMotor1.set(0);
-    } else if (armLimitSwitch.get()) {
+  public boolean setArmPos(double pos) {
+    if(enc.getAbsolutePosition() < 0.7 && enc.getAbsolutePosition() >= 0.4) {
+      armMotor1.setVoltage(0.0);
+      return false;
+    } else if (armLimitSwitch.get()) { 
       armMotor1.setVoltage(0.0); 
+      return false;
     }
     else {
       armMotor1.setVoltage(PID(pos)); 
     }
+    return true;
   }
 
   public double PID(double setPoint) {
-    // System.out.println(setPoint + ", " + enc.getAbsolutePosition() + ", " + (setPoint - enc.getAbsolutePosition()));
-
     double encPos = enc.getAbsolutePosition();
     if (encPos >= 0 && encPos <= 0.1) encPos += 1;
 
     double error = setPoint - encPos;
 
     double proportional = error * Constants.ManipulatorConstants.kArmP;
-    integral += error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime;
+    integral = (integral * 0.9) + (error * Constants.ManipulatorConstants.kArmI * Constants.ManipulatorConstants.cycleTime) * 0.1;
     derivative = Constants.ManipulatorConstants.kArmD * (error - oldError) / Constants.ManipulatorConstants.cycleTime;
 
     voltage += proportional + integral + derivative;
 
-    System.out.println(encPos + " | " + setPoint + " | " + error + " | " + voltage);
 
     oldError = error;
     // makes the lower limit -3.0 and upper 1 
@@ -94,8 +96,11 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (counter++ % 10== 0) {
+      // System.out.println(runningAverage);
+    }
+
     // This method will be called once per scheduler run
-    //System.out.println(runningAverage);
     filteredAbsolutePosition();
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -31,6 +32,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
+
+    String[] autoList = {"High Score Mobility", "Low Scoring Mobility", "Docking", "Engaging Low Score", "Engaging High Score"};
+    SmartDashboard.putStringArray("Auto List", autoList);
   }
 
   /**
@@ -51,7 +55,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    RobotContainer.setLEDsOff();
+    RobotContainer.setBrakeMode();
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -59,7 +66,32 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = RobotContainer.getAutonomousCommand();
+    String autoSelected = SmartDashboard.getString("Auto Selector", "Scoring Auto");
+    System.out.println("Auto selected: " + autoSelected);
+
+    switch(autoSelected) {
+      case "High Score Mobility":
+        m_autonomousCommand = robotContainer.coneScoreAutonomousCommand();
+        break;
+      case "Docking":
+        m_autonomousCommand = robotContainer.dockAutonomousCommand();
+        break;
+      case "Engaging Low Score":
+        m_autonomousCommand = robotContainer.engageAutonomousCommand();
+        break;
+      case "Engaging High Score":
+        m_autonomousCommand = robotContainer.engageScoreAutonomousCommand();
+        break;
+      case "Low Scoring Mobility":
+        m_autonomousCommand = robotContainer.lowMobilityAutonomouCommand();
+        break;
+      default:
+        break;
+    }
+
+    RobotContainer.resetOdometry();
+    RobotContainer.setCoastMode();
+    RobotContainer.setLEDsOn();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -68,14 +100,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void teleopInit() {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
     
+    RobotContainer.setLEDsOn();
     RobotContainer.setCoastMode();
     RobotContainer.initArmMovement();
     RobotContainer.initTeleopCommand();
