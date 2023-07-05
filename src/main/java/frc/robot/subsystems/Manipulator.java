@@ -25,7 +25,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public void setIntake(double speed) {
-    manipulatorMotor.set(speed); 
+    manipulatorMotor.set(0.8 * speed); 
   }
 
   @Override
