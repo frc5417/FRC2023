@@ -52,7 +52,7 @@ public class BackwardEngageAutoConeScore3 extends CommandBase {
         new Translation2d(-1.45,0),
         new Translation2d(-1.7,0)
       ), 
-      new Pose2d(-2.0,0, new Rotation2d(0)),
+      new Pose2d(-2.7,0, new Rotation2d(0)),
       config);
     
     RamseteController ramseteControl1 = new RamseteController();

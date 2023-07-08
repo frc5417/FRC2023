@@ -27,6 +27,7 @@ import frc.robot.commands.Teleop.ManipulatorOut;
 import frc.robot.commands.Teleop.SetLightConfig;
 import frc.robot.commands.Teleop.TankDrive;
 import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drive;
@@ -72,6 +73,7 @@ public class RobotContainer {
   private static final SetLightConfig lightConfigColor2 = new SetLightConfig(m_lightsControl, 2);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
+
   private final static CommandXboxController m_driverController =
       new CommandXboxController(DriverConstants.kDriverControllerPort);
   private final static CommandXboxController m_manipulatorController =

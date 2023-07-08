@@ -54,7 +54,7 @@ public class Drive extends SubsystemBase {
   public Drive() {
     
     rightMotors.setInverted(true);
-    leftMotors.setInverted(false);
+    leftMotors.setInverted(true);
 
     leftEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
     rightEncoder.setPositionConversionFactor(Constants.DriverConstants.kTreadLength);
